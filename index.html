@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StreamVault — Xem Phim & Nghe Nhạc Miễn Phí</title>
+  <meta name="description" content="Nền tảng xem phim và nghe nhạc trực tuyến miễn phí từ Google Drive. Chất lượng cao, tốc độ nhanh." />
+  <meta name="theme-color" content="#7c3aed" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>" />
+</head>
+<body>
+<div id="app">
+
+  <!-- ─── Navbar ─── -->
+  <nav class="navbar" role="navigation" aria-label="Thanh điều hướng chính">
+    <div class="navbar-brand">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+        <defs>
+          <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#a78bfa"/>
+            <stop offset="100%" style="stop-color:#7c3aed"/>
+          </linearGradient>
+        </defs>
+        <path d="M15 10l4.553-2.268A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14v-4z" fill="url(#logo-grad)"/>
+        <rect x="3" y="6" width="12" height="12" rx="2" fill="url(#logo-grad)"/>
+      </svg>
+      StreamVault
+    </div>
+
+    <div class="navbar-search" role="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <input type="search" id="search-input" placeholder="Tìm phim, nhạc..." aria-label="Tìm kiếm media" autocomplete="off" />
+    </div>
+  </nav>
+
+  <!-- ─── Main Layout ─── -->
+  <div class="main-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" aria-label="Bộ lọc">
+      <div class="sidebar-section-title">Thư viện</div>
+
+      <button class="filter-btn active" data-filter="all" id="filter-all" aria-pressed="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        Tất cả
+        <span class="count">0</span>
+      </button>
+      <button class="filter-btn" data-filter="video" id="filter-video" aria-pressed="false">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 10l4.553-2.268A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14v-4z"/><rect x="3" y="6" width="12" height="12" rx="2"/></svg>
+        Phim / Video
+        <span class="count">0</span>
+      </button>
+      <button class="filter-btn" data-filter="audio" id="filter-audio" aria-pressed="false">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        Nhạc / Audio
+        <span class="count">0</span>
+      </button>
+
+      <hr class="sidebar-divider" />
+
+      <div class="sidebar-section-title">Hướng dẫn</div>
+      <div style="padding:10px 12px; font-size:0.8rem; color:var(--text-muted); line-height:1.6;">
+        Nhấn vào bất kỳ thẻ nào để phát. Hỗ trợ tua, tìm kiếm và lọc theo thể loại.
+      </div>
+    </aside>
+
+    <!-- Content -->
+    <main class="content-area" role="main">
+
+      <!-- Genre tabs -->
+      <div id="genre-tabs" class="genre-tabs" role="tablist" aria-label="Lọc theo thể loại"></div>
+
+      <!-- Section header -->
+      <div class="section-header">
+        <h1 class="section-title">Thư Viện Media</h1>
+        <span class="section-count" id="section-count">0 mục</span>
+      </div>
+
+      <!-- Grid -->
+      <div id="media-grid" class="media-grid" role="list" aria-label="Danh sách media"></div>
+
+    </main>
+  </div><!-- /main-layout -->
+
+  <!-- ─── Player Modal ─── -->
+  <div id="player-overlay" class="player-overlay" role="dialog" aria-modal="true" aria-labelledby="player-title">
+    <div class="player-modal">
+
+      <div class="player-header">
+        <div class="player-title-area">
+          <div id="player-title" class="player-title">Đang tải...</div>
+          <div id="player-subtitle" class="player-subtitle"></div>
+        </div>
+        <button id="close-player" class="close-btn" aria-label="Đóng trình phát">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <div id="player-body" class="player-body"></div>
+
+      <div class="player-footer">
+        <a id="open-new-tab" href="#" target="_blank" rel="noopener" class="open-new-tab-btn" style="display:none;" aria-label="Mở trong tab mới">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Mở tab mới
+        </a>
+        <span style="font-size:0.75rem;color:var(--text-muted);">
+          Nhấn <kbd style="background:var(--bg-card);border:1px solid var(--border);padding:2px 6px;border-radius:4px;font-size:0.7rem;">Esc</kbd> để đóng
+        </span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─── Toast Container ─── -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+</div><!-- /app -->
+<script type="module" src="app.js"></script>
+</body>
+</html>
