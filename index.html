@@ -7,7 +7,7 @@
   <meta name="description" content="Orangestream — Nền tảng xem phim và nghe nhạc trực tuyến mọng nước từ Google Drive. Trải nghiệm mượt mà, không quảng cáo." />
   <meta name="theme-color" content="#ff7a00" />
   <meta name="referrer" content="no-referrer" />
-  <link rel="stylesheet" href="style.css?v=2.7" />
+  <link rel="stylesheet" href="style.css?v=2.8" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍊</text></svg>" />
 </head>
 <body>
@@ -131,9 +131,10 @@
         <div class="game-hud">
           <span class="game-basket" title="Giỏ cam thu hoạch">🧺 <span id="game-score-count">0</span> quả</span>
           <span id="game-combo-tag" class="game-combo-tag" style="display:none;">Combo x2!</span>
+          <span id="game-status-tag" class="game-status-tag" style="display:none;">⏱️ 20s</span>
         </div>
 
-        <div class="tree-canvas-wrapper" id="tree-canvas-wrapper" title="Bấm vào cây để rung rớt cam!">
+        <div class="tree-canvas-wrapper" id="tree-canvas-wrapper" title="Bấm vào cây để biến chuột thành rổ hứng cam!">
           <!-- Compact Orange Tree SVG (Không đóng khung) -->
           <svg class="compact-tree-svg" id="compact-tree-svg" viewBox="0 0 160 120" width="120" height="90">
             <defs>
@@ -318,7 +319,13 @@
   <!-- ─── Toast Container ─── -->
   <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
+  <!-- ─── Mouse Basket Cursor for Mini Game ─── -->
+  <div id="game-basket-cursor" class="game-basket-cursor" aria-hidden="true" style="display:none;">
+    <div class="basket-cursor-glow"></div>
+    <span class="basket-cursor-icon">🧺</span>
+  </div>
+
 </div><!-- /app -->
-<script type="module" src="app.js?v=2.7"></script>
+<script type="module" src="app.js?v=2.8"></script>
 </body>
 </html>

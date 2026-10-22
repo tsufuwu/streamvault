@@ -118,7 +118,6 @@ async function fetchMediaLibrary() {
     renderFolderNavigation();
     updateSidebarCounts();
     renderGrid();
-    toast(`Đã thu hoạch ${state.allMedia.length} quả cam media tươi ngon!`, 'info');
 
   } catch (err) {
     mediaGrid.innerHTML = `
@@ -1513,141 +1512,270 @@ const shimmerStyle = document.createElement('style');
 shimmerStyle.textContent = `@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }`;
 document.head.appendChild(shimmerStyle);
 
-// ─── Mini Game: Rung Cây Hái Cam (Interactive Mini Game) ───
+// ─── Mini Game: Hứng Cam Bằng Rổ (Interactive Basket Catch Mini Game) ───
 function initOrangeMiniGame() {
   const miniGameContainer = document.getElementById('orange-mini-game');
   if (!miniGameContainer) return;
 
-  const treeSvg     = document.getElementById('compact-tree-svg');
-  const treeWrapper = document.getElementById('tree-canvas-wrapper');
-  const dropzone    = document.getElementById('tree-dropzone');
-  const scoreEl     = document.getElementById('game-score-count');
-  const comboEl     = document.getElementById('game-combo-tag');
+  const treeSvg      = document.getElementById('compact-tree-svg');
+  const treeWrapper  = document.getElementById('tree-canvas-wrapper');
+  const dropzone     = document.getElementById('tree-dropzone');
+  const scoreEl      = document.getElementById('game-score-count');
+  const comboEl      = document.getElementById('game-combo-tag');
+  const statusTag    = document.getElementById('game-status-tag');
+  const basketCursor = document.getElementById('game-basket-cursor');
 
-  // Load saved score
+  // Load saved high-score
   let score = parseInt(localStorage.getItem('orangestream_score') || '0', 10);
   if (isNaN(score)) score = 0;
   if (scoreEl) scoreEl.textContent = score;
 
+  let isPlaying = false;
+  let sessionScore = 0;
   let combo = 0;
   let comboTimer = null;
-  let isShaking = false;
+  let timeLeft = 25;
+  let timerInterval = null;
+  let spawnInterval = null;
+  let animFrameId = null;
+  let activeFruits = [];
 
-  const milestones = new Set([10, 25, 50, 100, 200, 500]);
+  let mouseX = window.innerWidth / 2;
+  let mouseY = window.innerHeight / 2;
+  let lastMouseX = mouseX;
 
-  function triggerShake(e) {
-    if (isShaking) return;
-    isShaking = true;
+  // Track mouse coordinates & update basket cursor
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
 
-    if (e && e.clientX && e.clientY) {
-      createJuiceSplash(e.clientX, e.clientY);
+    if (!isPlaying || !basketCursor) return;
+
+    basketCursor.style.left = `${mouseX}px`;
+    basketCursor.style.top  = `${mouseY}px`;
+
+    // Basket tilt physics
+    const dx = mouseX - lastMouseX;
+    if (dx > 3) {
+      basketCursor.className = 'game-basket-cursor tilt-right';
+    } else if (dx < -3) {
+      basketCursor.className = 'game-basket-cursor tilt-left';
+    } else {
+      basketCursor.className = 'game-basket-cursor';
+    }
+    lastMouseX = mouseX;
+  });
+
+  // Toggle Game Start / Stop on tree click
+  function toggleGame() {
+    if (isPlaying) {
+      stopGame(true);
+    } else {
+      startGame();
+    }
+  }
+
+  function startGame() {
+    isPlaying = true;
+    sessionScore = 0;
+    combo = 0;
+    timeLeft = 25;
+    activeFruits = [];
+
+    // Transform mouse cursor to wicker basket
+    document.body.classList.add('basket-game-active');
+    if (basketCursor) {
+      basketCursor.style.display = 'block';
+      basketCursor.style.left = `${mouseX}px`;
+      basketCursor.style.top  = `${mouseY}px`;
     }
 
-    // Shake tree
+    // Tree animation
     if (treeSvg) {
       treeSvg.classList.add('tree-shaking');
-      setTimeout(() => {
-        treeSvg.classList.remove('tree-shaking');
-        isShaking = false;
-      }, 450);
-    } else {
-      isShaking = false;
     }
 
-    // Spawn 1 to 2 falling oranges
-    const count = Math.random() < 0.65 ? 1 : 2;
-    for (let i = 0; i < count; i++) {
-      setTimeout(() => spawnFallingOrange(), i * 160);
+    // Status & Combo HUD
+    if (statusTag) {
+      statusTag.style.display = 'inline-flex';
+      statusTag.textContent = `⏱️ ${timeLeft}s`;
+      statusTag.classList.remove('urgent');
+    }
+    if (comboEl) comboEl.style.display = 'none';
+
+    // Clear old elements in dropzone
+    if (dropzone) dropzone.innerHTML = '';
+
+    // Spawn falling oranges continuously
+    spawnInterval = setInterval(spawnFallingOrange, 340);
+
+    // Game countdown timer
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      if (statusTag) {
+        statusTag.textContent = `⏱️ ${timeLeft}s`;
+        if (timeLeft <= 5) statusTag.classList.add('urgent');
+      }
+      if (timeLeft <= 0) {
+        stopGame(false);
+      }
+    }, 1000);
+
+    // Physics & Collision detection loop
+    cancelAnimationFrame(animFrameId);
+    animFrameId = requestAnimationFrame(gameLoop);
+  }
+
+  function stopGame(isManual = false) {
+    if (!isPlaying) return;
+    isPlaying = false;
+
+    clearInterval(spawnInterval);
+    clearInterval(timerInterval);
+    cancelAnimationFrame(animFrameId);
+    clearTimeout(comboTimer);
+
+    // Restore normal cursor
+    document.body.classList.remove('basket-game-active');
+    if (basketCursor) basketCursor.style.display = 'none';
+
+    if (treeSvg) treeSvg.classList.remove('tree-shaking');
+
+    if (statusTag) {
+      statusTag.classList.remove('urgent');
+      statusTag.textContent = `Xong!`;
+      setTimeout(() => {
+        if (!isPlaying) statusTag.style.display = 'none';
+      }, 2500);
+    }
+    if (comboEl) comboEl.style.display = 'none';
+
+    // Clean up remaining falling fruits
+    activeFruits.forEach(f => {
+      if (f.el && f.el.parentNode) f.el.remove();
+    });
+    activeFruits = [];
+
+    // Save final score
+    localStorage.setItem('orangestream_score', String(score));
+
+    if (sessionScore > 0) {
+      toast(`Đã hứng được ${sessionScore} quả cam vào rổ! 🧺🍊`, 'info');
     }
   }
 
   function spawnFallingOrange() {
-    if (!dropzone) return;
+    if (!isPlaying || !dropzone) return;
 
-    const orangeEl = document.createElement('div');
-    const isGolden = Math.random() < 0.22; // 22% chance of Golden Citrus!
-    orangeEl.className = `falling-fruit ${isGolden ? 'golden-fruit' : 'normal-fruit'}`;
-    orangeEl.textContent = isGolden ? '🌟' : '🍊';
-    orangeEl.setAttribute('role', 'button');
-    orangeEl.setAttribute('tabindex', '0');
-    orangeEl.setAttribute('aria-label', isGolden ? 'Bắt cam vàng!' : 'Bắt cam!');
+    const fruitEl = document.createElement('div');
+    const isGolden = Math.random() < 0.20; // 20% golden orange!
+    fruitEl.className = `falling-fruit ${isGolden ? 'golden-fruit' : 'normal-fruit'}`;
+    fruitEl.textContent = isGolden ? '🌟' : '🍊';
 
-    // Random start X around tree canopy (20px to 80px)
-    const startX = Math.floor(Math.random() * 60) + 20;
-    orangeEl.style.left = `${startX}px`;
-    orangeEl.style.top = '10px';
+    // Spawn X position: across canopy and surrounding area (-40px to +130px)
+    const startX = Math.floor(Math.random() * 170) - 40;
+    const startY = -110;
 
-    // Random trajectory (slight left or right drift)
-    const driftX = (Math.random() - 0.5) * 35;
-    orangeEl.style.setProperty('--drift-x', `${driftX}px`);
+    const fruitObj = {
+      el: fruitEl,
+      x: startX,
+      y: startY,
+      vx: (Math.random() - 0.5) * 0.9,
+      vy: 2.2 + Math.random() * 2.3, // Falling velocity
+      isGolden,
+      caught: false,
+    };
 
-    // Click handler to catch the fruit mid-air or on ground
-    function onCatch(ev) {
-      ev.stopPropagation();
-      catchFruit(orangeEl, isGolden, ev.clientX || (orangeEl.getBoundingClientRect().left + 10), ev.clientY || (orangeEl.getBoundingClientRect().top + 10));
-    }
-
-    orangeEl.addEventListener('click', onCatch);
-    orangeEl.addEventListener('keydown', (ev) => {
-      if (ev.key === 'Enter' || ev.key === ' ') onCatch(ev);
-    });
-
-    dropzone.appendChild(orangeEl);
-
-    // Automatically remove after 3.8s if not caught
-    setTimeout(() => {
-      if (orangeEl.parentNode) {
-        orangeEl.classList.add('fading');
-        setTimeout(() => orangeEl.remove(), 400);
-      }
-    }, 3500);
+    fruitEl.style.transform = `translate(${startX}px, ${startY}px)`;
+    dropzone.appendChild(fruitEl);
+    activeFruits.push(fruitObj);
   }
 
-  function catchFruit(fruitEl, isGolden, x, y) {
-    if (fruitEl.dataset.caught) return;
-    fruitEl.dataset.caught = 'true';
+  function gameLoop() {
+    if (!isPlaying) return;
 
-    // Combo system
-    combo++;
-    clearTimeout(comboTimer);
-    comboTimer = setTimeout(() => {
-      combo = 0;
-      if (comboEl) comboEl.style.display = 'none';
-    }, 3200);
+    const basketX = mouseX;
+    const basketY = mouseY;
 
-    if (combo >= 2 && comboEl) {
-      comboEl.textContent = `Combo x${combo}! 🔥`;
-      comboEl.style.display = 'inline-block';
-      comboEl.classList.remove('pulse-combo');
-      void comboEl.offsetWidth; // reflow
-      comboEl.classList.add('pulse-combo');
+    for (let i = activeFruits.length - 1; i >= 0; i--) {
+      const fruit = activeFruits[i];
+      if (fruit.caught) continue;
+
+      fruit.y += fruit.vy;
+      fruit.x += fruit.vx;
+      fruit.el.style.transform = `translate(${fruit.x}px, ${fruit.y}px) rotate(${fruit.y * 1.6}deg)`;
+
+      // Collision Detection with Basket Cursor
+      const rect = fruit.el.getBoundingClientRect();
+      const fx = rect.left + rect.width / 2;
+      const fy = rect.top + rect.height / 2;
+
+      // Distance from mouse basket center to fruit center
+      const dist = Math.hypot(basketX - fx, (basketY - 8) - fy);
+
+      // Hitbox: Basket catches fruit when near (~46px)
+      if (dist < 46) {
+        fruit.caught = true;
+
+        // Basket bump animation
+        if (basketCursor) {
+          basketCursor.classList.remove('basket-catch-bump');
+          void basketCursor.offsetWidth;
+          basketCursor.classList.add('basket-catch-bump');
+        }
+
+        // Combo system
+        combo++;
+        clearTimeout(comboTimer);
+        comboTimer = setTimeout(() => {
+          combo = 0;
+          if (comboEl) comboEl.style.display = 'none';
+        }, 2800);
+
+        if (combo >= 2 && comboEl) {
+          comboEl.textContent = `Combo x${combo}! 🔥`;
+          comboEl.style.display = 'inline-block';
+          comboEl.classList.remove('pulse-combo');
+          void comboEl.offsetWidth;
+          comboEl.classList.add('pulse-combo');
+        }
+
+        // Points
+        const pts = fruit.isGolden ? (3 * Math.min(combo, 3)) : (1 * Math.min(combo, 2));
+        score += pts;
+        sessionScore += pts;
+
+        if (scoreEl) {
+          scoreEl.textContent = score;
+          scoreEl.classList.remove('score-pop');
+          void scoreEl.offsetWidth;
+          scoreEl.classList.add('score-pop');
+        }
+
+        // Particle splash & Floating point popup
+        createJuiceSplash(fx, fy);
+        showFloatingPopup(fx, fy, `+${pts} ${fruit.isGolden ? '🌟' : '🍊'}`);
+
+        // Harvest burst
+        fruit.el.classList.add('caught');
+        setTimeout(() => {
+          if (fruit.el.parentNode) fruit.el.remove();
+        }, 250);
+        activeFruits.splice(i, 1);
+        continue;
+      }
+
+      // Check if fruit fell past the ground/screen
+      if (rect.top > window.innerHeight - 20 || fruit.y > 230) {
+        fruit.el.classList.add('fading');
+        setTimeout(() => {
+          if (fruit.el.parentNode) fruit.el.remove();
+        }, 300);
+        activeFruits.splice(i, 1);
+      }
     }
 
-    // Points
-    const points = isGolden ? (3 * Math.min(combo, 3)) : (1 * Math.min(combo, 2));
-    score += points;
-    if (scoreEl) {
-      scoreEl.textContent = score;
-      scoreEl.classList.remove('score-pop');
-      void scoreEl.offsetWidth;
-      scoreEl.classList.add('score-pop');
-    }
-    localStorage.setItem('orangestream_score', String(score));
-
-    // Particle splash
-    createJuiceSplash(x, y);
-
-    // Floating text indicator (+1 / +3)
-    showFloatingPopup(x, y, `+${points} ${isGolden ? '🌟' : '🍊'}`);
-
-    // Animate fruit harvest into basket
-    fruitEl.classList.add('caught');
-    setTimeout(() => fruitEl.remove(), 300);
-
-    // Milestones
-    if (milestones.has(score)) {
-      toast(`🎉 Đỉnh cao nông dân! Bạn đã thu hoạch được ${score} quả cam! 🧺🍊`, 'info');
-    }
+    animFrameId = requestAnimationFrame(gameLoop);
   }
 
   function showFloatingPopup(x, y, text) {
@@ -1655,13 +1783,13 @@ function initOrangeMiniGame() {
     pop.className = 'floating-score-popup';
     pop.textContent = text;
     pop.style.left = `${x || 100}px`;
-    pop.style.top = `${y || 100}px`;
+    pop.style.top  = `${y || 100}px`;
     document.body.appendChild(pop);
     setTimeout(() => pop.remove(), 850);
   }
 
   if (treeWrapper) {
-    treeWrapper.addEventListener('click', triggerShake);
+    treeWrapper.addEventListener('click', toggleGame);
   }
 }
 
