@@ -4,3 +4,9 @@
 
 [functions]
   node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/stream-media/:fileId"
+  to = "https://drive.usercontent.google.com/download?id=:fileId&export=view"
+  status = 200
+  force = true

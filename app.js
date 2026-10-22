@@ -215,7 +215,7 @@ function formatTime(sec) {
 
 // ─── Custom Orange Video Player ───────────────────────
 function initOrangeVideoPlayer(media) {
-  const streamUrl = `https://drive.usercontent.google.com/download?id=${media.fileId}&export=view`;
+  const streamUrl = `/stream-media/${media.fileId}`;
   const previewUrl = `https://drive.google.com/file/d/${media.fileId}/preview`;
 
   playerBody.innerHTML = `
@@ -448,7 +448,7 @@ function initOrangeVideoPlayer(media) {
 
 // ─── Custom Orange Audio Player ───────────────────────
 function initOrangeAudioPlayer(media) {
-  const audioUrl = `https://drive.usercontent.google.com/download?id=${media.fileId}&export=view`;
+  const audioUrl = `/stream-media/${media.fileId}`;
 
   playerBody.innerHTML = `
     <div style="padding:28px 24px;background:#140e08;border-radius:0 0 16px 16px;">
