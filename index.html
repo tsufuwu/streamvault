@@ -87,12 +87,19 @@
       </button>
       <button class="filter-btn" data-filter="video" id="filter-video" aria-pressed="false">
         <span class="filter-icon">🎬</span>
-        Phim & Video
+        Video
         <span class="count">0</span>
       </button>
       <button class="filter-btn" data-filter="audio" id="filter-audio" aria-pressed="false">
-        <span class="filter-icon">🎵</span>
-        Nhạc & Audio
+        <span class="filter-icon">
+          <!-- Quả cam không lá -->
+          <svg class="orange-no-leaf-icon" width="18" height="18" viewBox="0 0 24 24" style="vertical-align:middle;display:inline-block;">
+            <circle cx="12" cy="12" r="10" fill="#FF7A00" stroke="#FFAE34" stroke-width="1.6"/>
+            <circle cx="12" cy="12" r="7.5" fill="#FF9000"/>
+            <circle cx="12" cy="12" r="2.2" fill="#FFF" opacity="0.95"/>
+          </svg>
+        </span>
+        Audio
         <span class="count">0</span>
       </button>
 
@@ -143,8 +150,24 @@
         </div>
       </section>
 
-      <!-- Genre tabs -->
-      <div id="genre-tabs" class="genre-tabs" role="tablist" aria-label="Lọc theo thể loại"></div>
+      <!-- ─── Folder Navigation & Tabs (Hỗ trợ đa tầng thư mục) ─── -->
+      <section class="folder-browser-section" id="folder-browser-section">
+        <!-- Breadcrumbs bar (đường dẫn khi vào sâu thư mục con) -->
+        <nav class="folder-breadcrumbs" id="folder-breadcrumbs" aria-label="Đường dẫn thư mục"></nav>
+
+        <!-- Current Level Tabs (Thanh Tab thư mục) -->
+        <div class="folder-tabs-wrapper">
+          <div class="folder-tabs" id="folder-tabs" role="tablist" aria-label="Danh sách thư mục"></div>
+        </div>
+
+        <!-- Subfolder Tabs (hiện ra khi thư mục có thư mục con bên trong) -->
+        <div class="subfolder-tabs-wrapper" id="subfolder-tabs-wrapper" style="display:none;">
+          <div class="subfolder-label">
+            <span>🌿 Thư mục con:</span>
+          </div>
+          <div class="subfolder-tabs" id="subfolder-tabs" role="tablist" aria-label="Thư mục con"></div>
+        </div>
+      </section>
 
       <!-- Section header -->
       <div class="section-header">

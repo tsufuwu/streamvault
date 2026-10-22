@@ -32,30 +32,43 @@ function cleanTitle(filename) {
 }
 
 function generateMediaLibrary() {
-  const folder = DriveApp.getFolderById(FOLDER_ID);
-  const files  = folder.getFiles();
+  const rootFolder = DriveApp.getFolderById(FOLDER_ID);
   const entries = [];
   let id = 1;
 
-  while (files.hasNext()) {
-    const file = files.next();
-    const name = file.getName();
-    const type = getType(name);
-    if (!type) continue;
+  function scanFolder(folder, folderPath) {
+    const files = folder.getFiles();
+    while (files.hasNext()) {
+      const file = files.next();
+      const name = file.getName();
+      const type = getType(name);
+      if (!type) continue;
 
-    try {
-      file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-    } catch(e) {}
+      try {
+        file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+      } catch(e) {}
 
-    entries.push({
-      id: String(id++),
-      title: cleanTitle(name),
-      fileId: file.getId(),
-      type: type,
-      genre: type === 'video' ? 'Phim' : 'Nhac',
-      year: new Date().getFullYear().toString(),
-    });
+      entries.push({
+        id: String(id++),
+        title: cleanTitle(name),
+        fileId: file.getId(),
+        type: type,
+        genre: type === 'video' ? 'Video' : 'Audio',
+        year: new Date().getFullYear().toString(),
+        folderId: folder.getId(),
+        folderName: folder.getName(),
+        folderPath: folderPath,
+      });
+    }
+
+    const subfolders = folder.getFolders();
+    while (subfolders.hasNext()) {
+      const sub = subfolders.next();
+      scanFolder(sub, [...folderPath, sub.getName()]);
+    }
   }
+
+  scanFolder(rootFolder, []);
 
   entries.sort((a, b) => {
     if (a.type !== b.type) return a.type === 'video' ? -1 : 1;

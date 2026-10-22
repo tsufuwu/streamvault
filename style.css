@@ -372,32 +372,175 @@ body::after {
   to   { transform: rotate(360deg); }
 }
 
-/* ─── Genre Tabs ──────────────────────────────────── */
-.genre-tabs {
-  display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1.8rem;
+/* ─── Folder Navigation & Tabs (Đa Tầng Thư Mục) ─── */
+.folder-browser-section {
+  margin-bottom: 2rem;
+  background: rgba(25, 17, 10, 0.65);
+  border: 1px solid rgba(255, 140, 40, 0.22);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
-.genre-tag {
-  padding: 7px 16px;
+
+/* Breadcrumbs bar */
+.folder-breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 140, 40, 0.12);
+}
+.breadcrumb-crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  color: var(--orange-300);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  transition: var(--transition);
+}
+.breadcrumb-crumb:hover {
+  background: rgba(255, 122, 0, 0.15);
+  color: #FFF;
+}
+.breadcrumb-crumb.active {
+  color: #FFF;
+  cursor: default;
+  background: rgba(255, 122, 0, 0.2);
+  border: 1px solid rgba(255, 140, 40, 0.3);
+}
+.breadcrumb-sep {
+  color: rgba(255, 140, 40, 0.4);
+  font-weight: 700;
+  font-size: 0.78rem;
+}
+
+/* Folder Tabs */
+.folder-tabs-wrapper {
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.folder-tabs-wrapper::-webkit-scrollbar {
+  height: 4px;
+}
+.folder-tabs-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(255, 140, 40, 0.3);
+  border-radius: 4px;
+}
+.folder-tabs {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.folder-tab {
+  padding: 8px 16px;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 50px;
-  font-size: 0.82rem; font-weight: 500;
+  font-size: 0.84rem;
+  font-weight: 600;
   color: var(--text-secondary);
-  cursor: pointer; transition: var(--transition);
+  cursor: pointer;
+  transition: var(--transition);
   font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
 }
-.genre-tag:hover {
-  background: rgba(255, 122, 0, 0.12);
-  border-color: rgba(255, 122, 0, 0.35);
+.folder-tab:hover {
+  background: rgba(255, 122, 0, 0.15);
+  border-color: rgba(255, 140, 40, 0.45);
   color: var(--text-primary);
   transform: translateY(-2px);
 }
-.genre-tag.active {
-  background: linear-gradient(135deg, var(--orange-500), var(--orange-600));
+.folder-tab.active {
+  background: linear-gradient(135deg, var(--orange-500), #EA580C);
   border-color: var(--orange-400);
   color: #FFF;
+  font-weight: 700;
+  box-shadow: 0 4px 18px var(--orange-glow);
+}
+.folder-tab-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  color: inherit;
+}
+.folder-tab.active .folder-tab-badge {
+  background: rgba(0, 0, 0, 0.3);
+  color: #FFF;
+}
+
+/* Subfolder Tabs (Đa tầng) */
+.subfolder-tabs-wrapper {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(255, 140, 40, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: fadeInSub 0.3s ease-out;
+}
+@keyframes fadeInSub {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.subfolder-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--orange-400);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.subfolder-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.subfolder-tab {
+  padding: 6px 14px;
+  background: rgba(255, 140, 40, 0.08);
+  border: 1px solid rgba(255, 140, 40, 0.2);
+  border-radius: 8px;
+  font-size: 0.8rem;
   font-weight: 600;
-  box-shadow: 0 4px 16px var(--orange-glow);
+  color: var(--orange-300);
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.subfolder-tab:hover {
+  background: rgba(255, 122, 0, 0.2);
+  border-color: var(--orange-400);
+  color: #FFF;
+  transform: translateY(-1px);
+}
+.subfolder-tab.active {
+  background: var(--orange-500);
+  border-color: var(--orange-400);
+  color: #FFF;
+  box-shadow: 0 0 12px var(--orange-glow-sm);
 }
 
 /* ─── Section Header ──────────────────────────────── */
@@ -480,9 +623,9 @@ body::after {
   box-shadow: 0 2px 8px rgba(234, 88, 12, 0.4);
 }
 .badge-audio {
-  background: rgba(16, 185, 129, 0.85);
+  background: rgba(255, 122, 0, 0.9);
   color: #FFF;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 2px 8px rgba(255, 122, 0, 0.45);
 }
 
 /* Play Overlay with Orange Slice Play Button */
@@ -526,6 +669,19 @@ body::after {
 .card-meta-item {
   font-size: 0.74rem; color: var(--text-secondary);
   display: flex; align-items: center; gap: 4px;
+}
+.card-meta-item.meta-video {
+  color: var(--orange-300);
+  font-weight: 600;
+}
+.card-meta-item.meta-audio {
+  color: var(--orange-amber);
+  font-weight: 600;
+}
+.orange-no-leaf-icon {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
 }
 .quality-badge {
   font-size: 0.65rem; font-weight: 700;

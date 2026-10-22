@@ -7,25 +7,30 @@
 const MEDIA_LIST_API = '/.netlify/functions/get-media-list';
 
 // ─── State ──────────────────────────────────────────
+// ─── State ──────────────────────────────────────────
 let state = {
-  allMedia:  [],
-  filter:    'all',
-  genre:     'all',
-  search:    '',
+  allMedia:     [],
+  allFolders:   [],
+  filter:       'all',   // 'all' | 'video' | 'audio'
+  currentPath:  [],      // [] means root / all; ['Folder1'] means inside Folder1; ['Folder1', 'Sub2'] means deeper
+  search:       '',
   currentMedia: null,
 };
 
 // ─── DOM References ──────────────────────────────────
-const mediaGrid      = document.getElementById('media-grid');
-const sectionCount   = document.getElementById('section-count');
-const playerOverlay  = document.getElementById('player-overlay');
-const playerTitle    = document.getElementById('player-title');
-const playerSubtitle = document.getElementById('player-subtitle');
-const playerBody     = document.getElementById('player-body');
-const openNewTab     = document.getElementById('open-new-tab');
-const toastContainer = document.getElementById('toast-container');
-const searchInput    = document.getElementById('search-input');
-const genreTabs      = document.getElementById('genre-tabs');
+const mediaGrid         = document.getElementById('media-grid');
+const sectionCount      = document.getElementById('section-count');
+const playerOverlay     = document.getElementById('player-overlay');
+const playerTitle       = document.getElementById('player-title');
+const playerSubtitle    = document.getElementById('player-subtitle');
+const playerBody        = document.getElementById('player-body');
+const openNewTab        = document.getElementById('open-new-tab');
+const toastContainer    = document.getElementById('toast-container');
+const searchInput       = document.getElementById('search-input');
+const folderBreadcrumbs = document.getElementById('folder-breadcrumbs');
+const folderTabs        = document.getElementById('folder-tabs');
+const subfolderWrapper  = document.getElementById('subfolder-tabs-wrapper');
+const subfolderTabs     = document.getElementById('subfolder-tabs');
 
 // ─── Juice Splash Particle Effect ───────────────────
 function createJuiceSplash(x, y) {
@@ -78,8 +83,9 @@ async function fetchMediaLibrary() {
 
     if (!json.ok) throw new Error(json.error || 'Lỗi đọc dữ liệu từ vườn cam');
 
-    state.allMedia = json.data;
-    renderGenreTabs();
+    state.allMedia   = json.data || [];
+    state.allFolders = json.folders || [];
+    renderFolderNavigation();
     updateSidebarCounts();
     renderGrid();
     toast(`Đã thu hoạch ${json.count} quả cam media tươi ngon!`, 'info');
@@ -99,12 +105,37 @@ async function fetchMediaLibrary() {
 // ─── Filtered List ────────────────────────────────────
 function getFilteredMedia() {
   return state.allMedia.filter(m => {
-    const matchType  = state.filter === 'all' || m.type === state.filter;
-    const matchGenre = state.genre  === 'all' || m.genre === state.genre;
-    const matchSearch = !state.search ||
-      m.title.toLowerCase().includes(state.search.toLowerCase()) ||
-      (m.genre || '').toLowerCase().includes(state.search.toLowerCase());
-    return matchType && matchGenre && matchSearch;
+    // Type filter
+    const matchType = state.filter === 'all' || m.type === state.filter;
+
+    // Folder path filter (Hỗ trợ đa tầng thư mục con lồng nhau)
+    let matchFolder = true;
+    if (state.currentPath.length > 0) {
+      if (state.currentPath[0] === '__root__') {
+        matchFolder = !m.folderPath || m.folderPath.length === 0;
+      } else {
+        const mPath = m.folderPath || [];
+        if (mPath.length < state.currentPath.length) {
+          matchFolder = false;
+        } else {
+          for (let i = 0; i < state.currentPath.length; i++) {
+            if (mPath[i] !== state.currentPath[i]) {
+              matchFolder = false;
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    // Search query
+    const q = state.search.trim().toLowerCase();
+    const matchSearch = !q ||
+      m.title.toLowerCase().includes(q) ||
+      (m.folderName || '').toLowerCase().includes(q) ||
+      (m.folderPath || []).some(p => p.toLowerCase().includes(q));
+
+    return matchType && matchFolder && matchSearch;
   });
 }
 
@@ -118,8 +149,8 @@ function renderGrid() {
     mediaGrid.innerHTML = `
       <div class="empty-state" style="grid-column:1/-1">
         <span style="font-size:3rem;display:block;margin-bottom:1rem;">🍊</span>
-        <h3>Không tìm thấy quả cam nào</h3>
-        <p>Thử tìm từ khoá khác hoặc chọn lại bộ lọc</p>
+        <h3>Không tìm thấy file nào trong thư mục này</h3>
+        <p>Thử chọn tab thư mục khác hoặc xóa từ khoá tìm kiếm</p>
       </div>`;
     return;
   }
@@ -138,12 +169,23 @@ function renderGrid() {
       ? `<img src="${media.thumbnail}" alt="${media.title}" loading="lazy">`
       : isVideo
         ? `<svg class="card-default-icon" width="56" height="56" viewBox="0 0 24 24" fill="currentColor"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>`
-        : `<svg class="card-default-icon" width="56" height="56" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>`;
+        : `<svg class="card-default-icon" width="56" height="56" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" fill="#FF7A00"/><circle cx="12" cy="12" r="7.5" fill="#FF9500"/><circle cx="12" cy="12" r="2.2" fill="#FFF"/></svg>`;
+
+    const folderBadge = media.folderName && media.folderName !== 'Thư mục gốc'
+      ? `<span class="card-meta-item" style="color:var(--text-muted);" title="Đường dẫn: ${(media.folderPath || [media.folderName]).join(' / ')}"><span style="opacity:0.75;">📁</span> ${media.folderName}</span>`
+      : '';
+
+    const typeMeta = isVideo
+      ? `<span class="card-meta-item meta-video">🎬 Video</span>`
+      : `<span class="card-meta-item meta-audio">
+           <svg class="orange-no-leaf-icon" width="14" height="14" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#FF7A00" stroke="#FFAE34" stroke-width="1.5"/><circle cx="12" cy="12" r="7.5" fill="#FF9000"/><circle cx="12" cy="12" r="2.2" fill="#FFF" opacity="0.95"/></svg>
+           Audio
+         </span>`;
 
     card.innerHTML = `
       <div class="card-thumbnail">
         ${thumbContent}
-        <span class="card-type-badge badge-${media.type}">${isVideo ? 'Phim Cam' : 'Nhạc Cam'}</span>
+        <span class="card-type-badge badge-${media.type}">${isVideo ? 'Video' : 'Audio'}</span>
         <div class="card-play-overlay">
           <div class="play-circle" title="Xem ngay">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
@@ -153,8 +195,9 @@ function renderGrid() {
       <div class="card-info">
         <div class="card-title" title="${media.title}">${media.title}</div>
         <div class="card-meta">
-          ${media.quality  ? `<span class="quality-badge">${media.quality}</span>` : ''}
-          ${media.genre    ? `<span class="card-meta-item">🍃 ${media.genre}</span>` : ''}
+          ${media.quality ? `<span class="quality-badge">${media.quality}</span>` : ''}
+          ${typeMeta}
+          ${folderBadge}
         </div>
       </div>`;
 
@@ -173,25 +216,231 @@ function renderGrid() {
   });
 }
 
-// ─── Genre Tabs ───────────────────────────────────────
-function renderGenreTabs() {
-  const genres = [...new Set(state.allMedia.map(m => m.genre).filter(Boolean))].sort();
-  genreTabs.innerHTML = `<button class="genre-tag active" data-genre="all" id="genre-all">🍊 Tất cả</button>`;
-  genres.forEach(g => {
-    const btn = document.createElement('button');
-    btn.className = 'genre-tag';
-    btn.dataset.genre = g;
-    btn.textContent = g;
-    btn.id = `genre-${g.replace(/\s+/g, '-').toLowerCase()}`;
-    genreTabs.appendChild(btn);
+// ─── Folder Navigation & Tabs (Hỗ trợ đa tầng vô hạn) ──
+function setFolderPath(newPath) {
+  state.currentPath = newPath;
+  renderFolderNavigation();
+  renderGrid();
+}
+
+function renderFolderNavigation() {
+  renderBreadcrumbs();
+  renderPrimaryFolderTabs();
+  renderSubfolderTabs();
+}
+
+function renderBreadcrumbs() {
+  if (!folderBreadcrumbs) return;
+  const path = state.currentPath;
+
+  const crumbs = [];
+  const isRootActive = path.length === 0;
+  crumbs.push(`
+    <button class="breadcrumb-crumb ${isRootActive ? 'active' : ''}" data-crumb-idx="-1" title="Xem tất cả thư mục">
+      <span>🏠 Vườn Cam (Tất cả)</span>
+    </button>
+  `);
+
+  if (path.length === 1 && path[0] === '__root__') {
+    crumbs.push(`<span class="breadcrumb-sep">/</span>`);
+    crumbs.push(`<span class="breadcrumb-crumb active"><span>📄 Chưa phân loại</span></span>`);
+  } else {
+    let accumulated = [];
+    path.forEach((folderName, idx) => {
+      accumulated.push(folderName);
+      const isLast = idx === path.length - 1;
+      crumbs.push(`<span class="breadcrumb-sep">/</span>`);
+      if (isLast) {
+        crumbs.push(`
+          <span class="breadcrumb-crumb active">
+            <span>📁 ${folderName}</span>
+          </span>
+        `);
+      } else {
+        const targetPath = [...accumulated];
+        crumbs.push(`
+          <button class="breadcrumb-crumb" data-crumb-path="${encodeURIComponent(JSON.stringify(targetPath))}">
+            <span>📁 ${folderName}</span>
+          </button>
+        `);
+      }
+    });
+  }
+
+  folderBreadcrumbs.innerHTML = crumbs.join('');
+
+  folderBreadcrumbs.querySelectorAll('button[data-crumb-idx="-1"]').forEach(btn => {
+    btn.addEventListener('click', () => setFolderPath([]));
   });
-  genreTabs.addEventListener('click', e => {
-    const btn = e.target.closest('.genre-tag');
-    if (!btn) return;
-    genreTabs.querySelectorAll('.genre-tag').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    state.genre = btn.dataset.genre;
-    renderGrid();
+
+  folderBreadcrumbs.querySelectorAll('button[data-crumb-path]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      try {
+        const targetPath = JSON.parse(decodeURIComponent(btn.dataset.crumbPath));
+        setFolderPath(targetPath);
+      } catch(e) {}
+    });
+  });
+}
+
+function renderPrimaryFolderTabs() {
+  if (!folderTabs) return;
+
+  const topFoldersMap = new Map();
+  let rootFilesCount = 0;
+
+  state.allMedia.forEach(m => {
+    const p = m.folderPath || [];
+    if (p.length === 0) {
+      rootFilesCount++;
+    } else {
+      const topName = p[0];
+      topFoldersMap.set(topName, (topFoldersMap.get(topName) || 0) + 1);
+    }
+  });
+
+  // Include any discovered empty top folders from Google Drive
+  state.allFolders.forEach(f => {
+    const p = f.path || [];
+    if (p.length === 1 && !topFoldersMap.has(p[0])) {
+      topFoldersMap.set(p[0], 0);
+    }
+  });
+
+  const tabs = [];
+
+  // "Tất cả" tab
+  const isAllActive = state.currentPath.length === 0;
+  tabs.push(`
+    <button class="folder-tab ${isAllActive ? 'active' : ''}" data-folder-action="all">
+      <span>🍊 Tất cả</span>
+      <span class="folder-tab-badge">${state.allMedia.length}</span>
+    </button>
+  `);
+
+  // Uncategorized tab (files sitting directly at root folder when subfolders exist)
+  if (rootFilesCount > 0 && topFoldersMap.size > 0) {
+    const isRootActive = state.currentPath.length === 1 && state.currentPath[0] === '__root__';
+    tabs.push(`
+      <button class="folder-tab ${isRootActive ? 'active' : ''}" data-folder-action="root">
+        <span>📄 Chưa phân loại</span>
+        <span class="folder-tab-badge">${rootFilesCount}</span>
+      </button>
+    `);
+  }
+
+  // Top level folder tabs
+  Array.from(topFoldersMap.keys()).sort().forEach(folderName => {
+    const count = topFoldersMap.get(folderName) || 0;
+    const isActive = state.currentPath.length >= 1 && state.currentPath[0] === folderName;
+    tabs.push(`
+      <button class="folder-tab ${isActive ? 'active' : ''}" data-top-folder="${encodeURIComponent(folderName)}">
+        <span>📁 ${folderName}</span>
+        <span class="folder-tab-badge">${count}</span>
+      </button>
+    `);
+  });
+
+  folderTabs.innerHTML = tabs.join('');
+
+  folderTabs.querySelectorAll('button[data-folder-action="all"]').forEach(btn => {
+    btn.addEventListener('click', () => setFolderPath([]));
+  });
+
+  folderTabs.querySelectorAll('button[data-folder-action="root"]').forEach(btn => {
+    btn.addEventListener('click', () => setFolderPath(['__root__']));
+  });
+
+  folderTabs.querySelectorAll('button[data-top-folder]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const folderName = decodeURIComponent(btn.dataset.topFolder);
+      setFolderPath([folderName]);
+    });
+  });
+}
+
+function renderSubfolderTabs() {
+  if (!subfolderWrapper || !subfolderTabs) return;
+
+  // Don't show subfolders if at root level or '__root__'
+  if (state.currentPath.length === 0 || state.currentPath[0] === '__root__') {
+    subfolderWrapper.style.display = 'none';
+    return;
+  }
+
+  const currentPath  = state.currentPath;
+  const currentDepth = currentPath.length;
+
+  // Find all direct child subfolders at depth: currentDepth
+  const childFoldersMap = new Map();
+
+  state.allMedia.forEach(m => {
+    const p = m.folderPath || [];
+    if (p.length > currentDepth) {
+      let match = true;
+      for (let i = 0; i < currentDepth; i++) {
+        if (p[i] !== currentPath[i]) { match = false; break; }
+      }
+      if (match) {
+        const childName = p[currentDepth];
+        childFoldersMap.set(childName, (childFoldersMap.get(childName) || 0) + 1);
+      }
+    }
+  });
+
+  // Also include discovered empty child folders
+  state.allFolders.forEach(f => {
+    const p = f.path || [];
+    if (p.length === currentDepth + 1) {
+      let match = true;
+      for (let i = 0; i < currentDepth; i++) {
+        if (p[i] !== currentPath[i]) { match = false; break; }
+      }
+      if (match && !childFoldersMap.has(p[currentDepth])) {
+        childFoldersMap.set(p[currentDepth], 0);
+      }
+    }
+  });
+
+  if (childFoldersMap.size === 0) {
+    subfolderWrapper.style.display = 'none';
+    return;
+  }
+
+  subfolderWrapper.style.display = 'flex';
+  const lastFolder = currentPath[currentPath.length - 1];
+
+  const subTabs = [];
+  subTabs.push(`
+    <button class="subfolder-tab active" data-subfolder-action="current">
+      <span>📂 Tất cả trong ${lastFolder}</span>
+    </button>
+  `);
+
+  Array.from(childFoldersMap.keys()).sort().forEach(childName => {
+    const count = childFoldersMap.get(childName) || 0;
+    subTabs.push(`
+      <button class="subfolder-tab" data-child-name="${encodeURIComponent(childName)}">
+        <span>📂 ${childName}</span>
+        <span class="folder-tab-badge">${count}</span>
+      </button>
+    `);
+  });
+
+  subfolderTabs.innerHTML = subTabs.join('');
+
+  subfolderTabs.querySelectorAll('button[data-subfolder-action="current"]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      renderSubfolderTabs();
+      renderGrid();
+    });
+  });
+
+  subfolderTabs.querySelectorAll('button[data-child-name]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const childName = decodeURIComponent(btn.dataset.childName);
+      setFolderPath([...currentPath, childName]);
+    });
   });
 }
 
@@ -764,11 +1013,14 @@ function initOrangeAudioPlayer(media) {
     <div style="padding:28px 24px;background:#140e08;border-radius:0 0 16px 16px;">
       <div style="display:flex;align-items:center;gap:20px;margin-bottom:20px;">
         <div style="width:70px;height:70px;border-radius:14px;background:linear-gradient(135deg,#ea580c,#9a3412);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 20px rgba(255,122,0,0.3);">
-          <span style="font-size:2.2rem;">🍊</span>
+          <svg class="orange-no-leaf-icon" width="40" height="40" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#FF7A00" stroke="#FFAE34" stroke-width="1.5"/><circle cx="12" cy="12" r="7.5" fill="#FF9000"/><circle cx="12" cy="12" r="2.2" fill="#FFF" opacity="0.95"/></svg>
         </div>
         <div style="flex:1;min-width:0;">
           <div style="font-weight:700;font-size:1.15rem;margin-bottom:6px;color:#FFF7ED;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${media.title}</div>
-          <div style="font-size:0.84rem;color:#D4A373;">🍃 ${media.genre || 'Audio Cam'}</div>
+          <div style="font-size:0.84rem;color:#FFAE34;display:flex;align-items:center;gap:6px;">
+            <svg class="orange-no-leaf-icon" width="16" height="16" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#FF7A00" stroke="#FFAE34" stroke-width="1.5"/><circle cx="12" cy="12" r="7.5" fill="#FF9000"/><circle cx="12" cy="12" r="2.2" fill="#FFF" opacity="0.95"/></svg>
+            <span>Audio</span>
+          </div>
         </div>
       </div>
 
