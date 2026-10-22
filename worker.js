@@ -199,17 +199,26 @@ export default {
           headers: reqHeaders,
           redirect: 'follow',
         });
-        const resHeaders = new Headers(upstream.headers);
+        const resHeaders = new Headers();
         resHeaders.set('Access-Control-Allow-Origin', '*');
         resHeaders.set('Access-Control-Allow-Headers', 'Range, Accept, Content-Type');
-        resHeaders.set('Access-Control-Expose-Headers', 'Content-Range, Content-Length, Accept-Ranges');
+        resHeaders.set('Access-Control-Expose-Headers', 'Content-Range, Content-Length, Accept-Ranges, Content-Type');
+        resHeaders.set('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
         resHeaders.set('Accept-Ranges', 'bytes');
+        resHeaders.set('Cross-Origin-Resource-Policy', 'cross-origin');
+
+        const safeHeaders = ['content-type', 'content-length', 'content-range', 'last-modified', 'etag', 'cache-control'];
+        for (const h of safeHeaders) {
+          const v = upstream.headers.get(h);
+          if (v) resHeaders.set(h, v);
+        }
+
         return new Response(upstream.body, {
           status: upstream.status,
           headers: resHeaders,
         });
       } catch (e) {
-        return Response.redirect(targetUrl, 302);
+        return new Response('Streaming error: ' + e.message, { status: 502 });
       }
     }
 

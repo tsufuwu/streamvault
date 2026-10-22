@@ -1,2 +1,2 @@
-# Cloudflare Pages Redirects fallback
-/stream-media/:fileId https://drive.usercontent.google.com/download?id=:fileId&export=view 302
+# Cloudflare Pages Redirects
+# (Do not redirect /stream-media/ to avoid cross-origin CORP blocks; handled by functions/stream-media/[fileId].js)

@@ -3,6 +3,7 @@
  *
  * Proxies and streams media from Google Drive with full HTTP Range request support
  * for smooth video seeking, fast forward, and buffer streaming.
+ * Strips Google's CORP & CSP sandbox restrictions to allow direct HTML5 playback.
  */
 
 export async function onRequest(context) {
@@ -40,18 +41,26 @@ export async function onRequest(context) {
       redirect: 'follow',
     });
 
-    const resHeaders = new Headers(upstreamRes.headers);
+    const resHeaders = new Headers();
     resHeaders.set('Access-Control-Allow-Origin', '*');
     resHeaders.set('Access-Control-Allow-Headers', 'Range, Accept, Content-Type');
-    resHeaders.set('Access-Control-Expose-Headers', 'Content-Range, Content-Length, Accept-Ranges');
+    resHeaders.set('Access-Control-Expose-Headers', 'Content-Range, Content-Length, Accept-Ranges, Content-Type');
+    resHeaders.set('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
     resHeaders.set('Accept-Ranges', 'bytes');
+    resHeaders.set('Cross-Origin-Resource-Policy', 'cross-origin');
+
+    // Forward safe media headers only
+    const safeHeaders = ['content-type', 'content-length', 'content-range', 'last-modified', 'etag', 'cache-control'];
+    for (const h of safeHeaders) {
+      const v = upstreamRes.headers.get(h);
+      if (v) resHeaders.set(h, v);
+    }
 
     return new Response(upstreamRes.body, {
       status: upstreamRes.status,
       headers: resHeaders,
     });
   } catch (err) {
-    // If proxy fetch fails, fallback to 302 redirect
-    return Response.redirect(targetUrl, 302);
+    return new Response('Streaming error: ' + err.message, { status: 502 });
   }
 }

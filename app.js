@@ -1150,20 +1150,45 @@ function initOrangeVideoPlayer(media) {
   }
   videoBox.addEventListener('mousemove', resetControlsTimer);
 
-  // Switch to Google Drive iframe fallback player
-  switchBtn.addEventListener('click', () => {
-    video.pause();
+  // Seamless fallback to Google Drive iframe player
+  let fallbackTriggered = false;
+  function triggerFallbackToDrivePlayer(isManual = false) {
+    if (fallbackTriggered) return;
+    fallbackTriggered = true;
+    try { video.pause(); } catch (e) {}
+
     playerBody.innerHTML = `
-      <div class="player-video-wrapper">
+      <div class="player-video-wrapper" style="position:relative;">
         <iframe class="player-iframe" src="${previewUrl}" allow="autoplay; fullscreen" allowfullscreen></iframe>
+        <div style="position:absolute;top:10px;right:14px;z-index:25;display:flex;gap:8px;">
+          <button class="ctrl-btn fallback-toggle-btn" id="ctrl-retry-orange" style="background:rgba(20,14,8,0.85);border:1px solid rgba(255,140,40,0.35);padding:5px 12px;border-radius:20px;font-size:0.75rem;font-weight:600;color:#FFAE34;cursor:pointer;display:inline-flex;align-items:center;gap:5px;box-shadow:0 4px 12px rgba(0,0,0,0.5);">
+            <span>🍊 Thử lại Orange Player</span>
+          </button>
+        </div>
       </div>
     `;
-    toast('Đã chuyển sang trình phát Google Drive 🔄', 'info');
-  });
 
-  video.addEventListener('error', () => {
-    console.warn('[Orangestream] Video error:', video.error);
-    toast('Nếu video chậm hoặc không hỗ trợ, bạn có thể bấm nút "🔄 Drive Player" ở góc dưới 🍊', 'info');
+    if (isManual) {
+      toast('Đã chuyển sang trình phát Google Drive 🔄', 'info');
+    } else {
+      toast('Đang dùng trình phát Google Drive để phát mượt mà video này 🍊', 'info');
+    }
+
+    const retryBtn = document.getElementById('ctrl-retry-orange');
+    if (retryBtn) {
+      retryBtn.addEventListener('click', () => {
+        initOrangeVideoPlayer(media);
+      });
+    }
+  }
+
+  // Switch button click
+  switchBtn.addEventListener('click', () => triggerFallbackToDrivePlayer(true));
+
+  // Auto fallback if stream errors or codec unsupported
+  video.addEventListener('error', (e) => {
+    console.warn('[Orangestream] Video stream error detected, activating Drive Player fallback:', video.error);
+    triggerFallbackToDrivePlayer(false);
   });
 
   video.play().catch(() => {
