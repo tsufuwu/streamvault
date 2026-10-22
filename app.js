@@ -1,15 +1,14 @@
 /**
- * app.js — StreamVault Frontend Logic (Dynamic Version)
- * Media list is fetched live from Netlify Function (no auth needed).
+ * app.js — Orangestream Frontend Logic
+ * Dynamic, real-time media streaming from Google Drive with fresh citrus theme 🍊
  */
 
 // ─── CONFIG ─────────────────────────────────────────
-// Netlify function tự quét folder Drive công khai — không cần auth
 const MEDIA_LIST_API = '/.netlify/functions/get-media-list';
 
 // ─── State ──────────────────────────────────────────
 let state = {
-  allMedia:  [],   // fetched from Apps Script API
+  allMedia:  [],
   filter:    'all',
   genre:     'all',
   search:    '',
@@ -28,27 +27,48 @@ const toastContainer = document.getElementById('toast-container');
 const searchInput    = document.getElementById('search-input');
 const genreTabs      = document.getElementById('genre-tabs');
 
+// ─── Juice Splash Particle Effect ───────────────────
+function createJuiceSplash(x, y) {
+  if (!x || !y) return;
+  const drops = 9;
+  for (let i = 0; i < drops; i++) {
+    const el = document.createElement('div');
+    el.className = 'juice-drop';
+    const size = Math.random() * 8 + 4;
+    el.style.width = `${size}px`;
+    el.style.height = `${size}px`;
+    el.style.left = `${x}px`;
+    el.style.top = `${y}px`;
+    const angle = (Math.PI * 2 / drops) * i + (Math.random() - 0.5);
+    const distance = Math.random() * 50 + 25;
+    el.style.setProperty('--tx', `${Math.cos(angle) * distance}px`);
+    el.style.setProperty('--ty', `${Math.sin(angle) * distance}px`);
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 700);
+  }
+}
+
 // ─── Toast ───────────────────────────────────────────
 function toast(msg, type = 'info') {
   const el = document.createElement('div');
   el.className = `toast toast-${type}`;
   const icon = type === 'error'
-    ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`
-    : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
+    ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`
+    : `<span style="font-size:1.1rem;">🍊</span>`;
   el.innerHTML = `${icon}<span>${msg}</span>`;
   toastContainer.appendChild(el);
-  setTimeout(() => el.remove(), 3100);
+  setTimeout(() => el.remove(), 3200);
 }
 
-// ─── Fetch Media From Apps Script API ────────────────
+// ─── Fetch Media From Netlify API ────────────────────
 async function fetchMediaLibrary() {
-  // Show skeleton loading
+  // Show warm orange skeleton loading
   mediaGrid.innerHTML = Array(8).fill(0).map(() => `
     <div class="media-card" style="pointer-events:none;">
-      <div class="card-thumbnail" style="background:linear-gradient(90deg,#1a1b25 25%,#22243a 50%,#1a1b25 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;"></div>
+      <div class="card-thumbnail" style="background:linear-gradient(90deg,#20140b 25%,#341f11 50%,#20140b 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;"></div>
       <div class="card-info">
-        <div style="height:14px;border-radius:4px;background:#1a1b25;margin-bottom:8px;animation:shimmer 1.5s infinite;"></div>
-        <div style="height:11px;border-radius:4px;background:#1a1b25;width:60%;animation:shimmer 1.5s infinite;"></div>
+        <div style="height:15px;border-radius:4px;background:#24160d;margin-bottom:8px;animation:shimmer 1.5s infinite;"></div>
+        <div style="height:11px;border-radius:4px;background:#24160d;width:55%;animation:shimmer 1.5s infinite;"></div>
       </div>
     </div>`).join('');
 
@@ -56,23 +76,23 @@ async function fetchMediaLibrary() {
     const res  = await fetch(MEDIA_LIST_API);
     const json = await res.json();
 
-    if (!json.ok) throw new Error(json.error || 'API lỗi');
+    if (!json.ok) throw new Error(json.error || 'Lỗi đọc dữ liệu từ vườn cam');
 
     state.allMedia = json.data;
     renderGenreTabs();
     updateSidebarCounts();
     renderGrid();
-    toast(`Đã tải ${json.count} file media`, 'info');
+    toast(`Đã thu hoạch ${json.count} quả cam media tươi ngon!`, 'info');
 
   } catch (err) {
     mediaGrid.innerHTML = `
       <div class="empty-state" style="grid-column:1/-1">
         <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        <h3>Không thể tải danh sách</h3>
+        <h3>Vườn cam tạm thời bận</h3>
         <p>${err.message}</p>
-        <button onclick="fetchMediaLibrary()" style="margin-top:12px;padding:8px 16px;background:var(--accent);color:white;border:none;border-radius:8px;cursor:pointer;font-family:inherit;">Thử lại</button>
+        <button onclick="fetchMediaLibrary()" style="margin-top:14px;padding:9px 20px;background:var(--orange-500);color:white;border:none;border-radius:8px;cursor:pointer;font-family:inherit;font-weight:600;">Thử lại</button>
       </div>`;
-    toast('Không thể kết nối API: ' + err.message, 'error');
+    toast('Không thể tải vườn cam: ' + err.message, 'error');
   }
 }
 
@@ -91,15 +111,15 @@ function getFilteredMedia() {
 // ─── Render Grid ──────────────────────────────────────
 function renderGrid() {
   const items = getFilteredMedia();
-  sectionCount.textContent = `${items.length} mục`;
+  sectionCount.textContent = `${items.length} quả cam`;
   mediaGrid.innerHTML = '';
 
   if (items.length === 0) {
     mediaGrid.innerHTML = `
       <div class="empty-state" style="grid-column:1/-1">
-        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m21 21-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0z"/></svg>
-        <h3>Không tìm thấy kết quả</h3>
-        <p>Thử thay đổi bộ lọc hoặc từ khoá</p>
+        <span style="font-size:3rem;display:block;margin-bottom:1rem;">🍊</span>
+        <h3>Không tìm thấy quả cam nào</h3>
+        <p>Thử tìm từ khoá khác hoặc chọn lại bộ lọc</p>
       </div>`;
     return;
   }
@@ -111,36 +131,44 @@ function renderGrid() {
     card.setAttribute('tabindex', '0');
     card.setAttribute('aria-label', `Phát ${media.title}`);
     card.id = `card-${media.id}`;
-    card.style.animationDelay = `${i * 35}ms`;
+    card.style.animationDelay = `${i * 40}ms`;
 
     const isVideo = media.type === 'video';
     const thumbContent = media.thumbnail
       ? `<img src="${media.thumbnail}" alt="${media.title}" loading="lazy">`
       : isVideo
-        ? `<svg class="card-default-icon" width="52" height="52" viewBox="0 0 24 24" fill="currentColor"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>`
-        : `<svg class="card-default-icon" width="52" height="52" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>`;
+        ? `<svg class="card-default-icon" width="56" height="56" viewBox="0 0 24 24" fill="currentColor"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>`
+        : `<svg class="card-default-icon" width="56" height="56" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>`;
 
     card.innerHTML = `
       <div class="card-thumbnail">
         ${thumbContent}
-        <span class="card-type-badge badge-${media.type}">${isVideo ? 'Phim' : 'Nhạc'}</span>
+        <span class="card-type-badge badge-${media.type}">${isVideo ? 'Phim Cam' : 'Nhạc Cam'}</span>
         <div class="card-play-overlay">
-          <div class="play-circle">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+          <div class="play-circle" title="Xem ngay">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
           </div>
         </div>
       </div>
       <div class="card-info">
         <div class="card-title" title="${media.title}">${media.title}</div>
         <div class="card-meta">
-          ${media.duration ? `<span class="card-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${media.duration}</span>` : ''}
           ${media.quality  ? `<span class="quality-badge">${media.quality}</span>` : ''}
-          ${media.genre    ? `<span class="card-meta-item">${media.genre}</span>` : ''}
+          ${media.genre    ? `<span class="card-meta-item">🍃 ${media.genre}</span>` : ''}
         </div>
       </div>`;
 
-    card.addEventListener('click', () => openPlayer(media));
-    card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openPlayer(media); });
+    card.addEventListener('click', (e) => {
+      createJuiceSplash(e.clientX, e.clientY);
+      openPlayer(media);
+    });
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        const rect = card.getBoundingClientRect();
+        createJuiceSplash(rect.left + rect.width / 2, rect.top + rect.height / 2);
+        openPlayer(media);
+      }
+    });
     mediaGrid.appendChild(card);
   });
 }
@@ -148,7 +176,7 @@ function renderGrid() {
 // ─── Genre Tabs ───────────────────────────────────────
 function renderGenreTabs() {
   const genres = [...new Set(state.allMedia.map(m => m.genre).filter(Boolean))].sort();
-  genreTabs.innerHTML = `<button class="genre-tag active" data-genre="all" id="genre-all">Tất cả</button>`;
+  genreTabs.innerHTML = `<button class="genre-tag active" data-genre="all" id="genre-all">🍊 Tất cả</button>`;
   genres.forEach(g => {
     const btn = document.createElement('button');
     btn.className = 'genre-tag';
@@ -201,13 +229,13 @@ function openPlayer(media) {
     // Audio Player
     const audioUrl = `https://drive.usercontent.google.com/download?id=${media.fileId}&export=download`;
     playerBody.innerHTML = `
-      <div style="padding:28px 24px;background:#0a0b0f;display:flex;align-items:center;gap:20px;">
-        <div style="width:70px;height:70px;border-radius:12px;background:linear-gradient(135deg,#1e1b4b,#312e81);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="#a78bfa"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+      <div style="padding:32px 24px;background:#140e08;display:flex;align-items:center;gap:20px;">
+        <div style="width:72px;height:72px;border-radius:14px;background:linear-gradient(135deg,#ea580c,#9a3412);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 20px rgba(255,122,0,0.3);">
+          <span style="font-size:2rem;">🍊</span>
         </div>
         <div style="flex:1;min-width:0;">
-          <div style="font-weight:600;font-size:1.05rem;margin-bottom:6px;color:#f1f5f9;">${media.title}</div>
-          <div style="font-size:0.82rem;color:#94a3b8;margin-bottom:14px;">${media.genre || 'Audio'}</div>
+          <div style="font-weight:700;font-size:1.1rem;margin-bottom:6px;color:#FFF7ED;">${media.title}</div>
+          <div style="font-size:0.84rem;color:#D4A373;margin-bottom:14px;">🍃 ${media.genre || 'Audio Cam'}</div>
           <audio id="audio-player" src="${audioUrl}" controls autoplay preload="metadata"
                  style="width:100%;height:44px;" aria-label="${media.title}">
             Trình duyệt không hỗ trợ thẻ audio.
@@ -222,14 +250,14 @@ function openPlayer(media) {
 function closePlayer() {
   playerOverlay.classList.remove('active');
   document.body.style.overflow = '';
-  // Stop playback immediately by removing player elements
   playerBody.innerHTML = '';
   state.currentMedia = null;
 }
 
 // ─── Sidebar Filter ───────────────────────────────────
 document.querySelectorAll('.filter-btn[data-filter]').forEach(btn => {
-  btn.addEventListener('click', () => {
+  btn.addEventListener('click', (e) => {
+    createJuiceSplash(e.clientX, e.clientY);
     document.querySelectorAll('.filter-btn[data-filter]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     state.filter = btn.dataset.filter;
@@ -243,15 +271,33 @@ searchInput.addEventListener('input', e => {
   renderGrid();
 });
 
+// Keyboard shortcut (Ctrl+K / Cmd+K or /)
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+    e.preventDefault();
+    searchInput.focus();
+    searchInput.select();
+  }
+  if (e.key === 'Escape') closePlayer();
+});
+
 // ─── Close Player ─────────────────────────────────────
 document.getElementById('close-player').addEventListener('click', closePlayer);
 playerOverlay.addEventListener('click', e => { if (e.target === playerOverlay) closePlayer(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closePlayer(); });
 
-// ─── Shimmer animation ────────────────────────────────
+// ─── Logo Mascot Interaction ──────────────────────────
+const mascot = document.querySelector('.orange-mascot');
+if (mascot) {
+  mascot.addEventListener('click', (e) => {
+    createJuiceSplash(e.clientX, e.clientY);
+    toast('Chào mừng bạn đến với Orangestream! 🍊🌿', 'info');
+  });
+}
+
+// ─── Shimmer Style ────────────────────────────────────
 const shimmerStyle = document.createElement('style');
 shimmerStyle.textContent = `@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }`;
 document.head.appendChild(shimmerStyle);
 
-// ─── INIT ────────────────────────────────────────────
+// ─── INIT ─────────────────────────────────────────────
 fetchMediaLibrary();

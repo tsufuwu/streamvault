@@ -3,36 +3,70 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>StreamVault — Xem Phim & Nghe Nhạc Miễn Phí</title>
-  <meta name="description" content="Nền tảng xem phim và nghe nhạc trực tuyến miễn phí từ Google Drive. Chất lượng cao, tốc độ nhanh." />
-  <meta name="theme-color" content="#7c3aed" />
+  <title>Orangestream — Vườn Cam Streaming Tươi Mát 🍊</title>
+  <meta name="description" content="Orangestream — Nền tảng xem phim và nghe nhạc trực tuyến mọng nước từ Google Drive. Trải nghiệm mượt mà, không quảng cáo." />
+  <meta name="theme-color" content="#ff7a00" />
   <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍊</text></svg>" />
 </head>
 <body>
+
+<!-- ─── Floating Citrus Particles Background ─── -->
+<div class="citrus-ambient" aria-hidden="true">
+  <div class="citrus-leaf leaf-1">🍃</div>
+  <div class="citrus-slice slice-1">🍊</div>
+  <div class="citrus-leaf leaf-2">🌿</div>
+  <div class="citrus-slice slice-2">🍊</div>
+  <div class="citrus-leaf leaf-3">🍃</div>
+  <div class="citrus-slice slice-3">✨</div>
+  <div class="citrus-slice slice-4">🍊</div>
+</div>
+
 <div id="app">
 
   <!-- ─── Navbar ─── -->
   <nav class="navbar" role="navigation" aria-label="Thanh điều hướng chính">
     <div class="navbar-brand">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-        <defs>
-          <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#a78bfa"/>
-            <stop offset="100%" style="stop-color:#7c3aed"/>
-          </linearGradient>
-        </defs>
-        <path d="M15 10l4.553-2.268A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14v-4z" fill="url(#logo-grad)"/>
-        <rect x="3" y="6" width="12" height="12" rx="2" fill="url(#logo-grad)"/>
-      </svg>
-      StreamVault
+      <!-- Animated Orange Mascot Logo -->
+      <div class="orange-mascot" title="Orangestream — Mọng nước từng khung hình">
+        <svg class="orange-svg" width="34" height="34" viewBox="0 0 100 100">
+          <defs>
+            <radialGradient id="orange-body-grad" cx="35%" cy="35%" r="65%">
+              <stop offset="0%" stop-color="#FFAE34"/>
+              <stop offset="40%" stop-color="#FF7A00"/>
+              <stop offset="100%" stop-color="#E65100"/>
+            </radialGradient>
+            <linearGradient id="leaf-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#34D399"/>
+              <stop offset="100%" stop-color="#059669"/>
+            </linearGradient>
+            <filter id="orange-glow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#FF7A00" flood-opacity="0.45"/>
+            </filter>
+          </defs>
+          <!-- Leaf -->
+          <path class="orange-leaf" d="M50 24 C55 8, 78 10, 78 22 C78 34, 58 32, 50 24 Z" fill="url(#leaf-grad)"/>
+          <path class="orange-stem" d="M50 28 Q49 18 52 14" stroke="#78350F" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <!-- Orange Sphere -->
+          <circle cx="50" cy="58" r="36" fill="url(#orange-body-grad)" filter="url(#orange-glow)"/>
+          <!-- Citrus Highlights -->
+          <ellipse cx="40" cy="42" rx="14" ry="7" fill="white" opacity="0.3" transform="rotate(-30 40 42)"/>
+          <!-- Little Cute Wink / Citrus Slice Ring -->
+          <circle cx="50" cy="58" r="28" fill="none" stroke="#FFF" stroke-width="2" opacity="0.25" stroke-dasharray="4 6"/>
+          <!-- Tiny fresh sparkle -->
+          <circle cx="68" cy="46" r="2.5" fill="#FFF" opacity="0.8"/>
+        </svg>
+      </div>
+      <span class="brand-text">Orange<span class="brand-accent">stream</span></span>
+      <span class="brand-tag">vườn cam</span>
     </div>
 
     <div class="navbar-search" role="search">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
         <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
       </svg>
-      <input type="search" id="search-input" placeholder="Tìm phim, nhạc..." aria-label="Tìm kiếm media" autocomplete="off" />
+      <input type="search" id="search-input" placeholder="Tìm kiếm phim, video, nhạc cam..." aria-label="Tìm kiếm media" autocomplete="off" />
+      <span class="search-shortcut">⌘K</span>
     </div>
   </nav>
 
@@ -41,42 +75,87 @@
 
     <!-- Sidebar -->
     <aside class="sidebar" aria-label="Bộ lọc">
-      <div class="sidebar-section-title">Thư viện</div>
+      <div class="sidebar-section-title">
+        <span class="tree-icon">🌳</span> Thu Hoạch Cam
+      </div>
 
       <button class="filter-btn active" data-filter="all" id="filter-all" aria-pressed="true">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-        Tất cả
+        <span class="filter-icon">🍊</span>
+        Tất cả quả cam
         <span class="count">0</span>
       </button>
       <button class="filter-btn" data-filter="video" id="filter-video" aria-pressed="false">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 10l4.553-2.268A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14v-4z"/><rect x="3" y="6" width="12" height="12" rx="2"/></svg>
-        Phim / Video
+        <span class="filter-icon">🎬</span>
+        Phim & Video
         <span class="count">0</span>
       </button>
       <button class="filter-btn" data-filter="audio" id="filter-audio" aria-pressed="false">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-        Nhạc / Audio
+        <span class="filter-icon">🎵</span>
+        Nhạc & Audio
         <span class="count">0</span>
       </button>
 
       <hr class="sidebar-divider" />
 
-      <div class="sidebar-section-title">Hướng dẫn</div>
-      <div style="padding:10px 12px; font-size:0.8rem; color:var(--text-muted); line-height:1.6;">
-        Nhấn vào bất kỳ thẻ nào để phát. Hỗ trợ tua, tìm kiếm và lọc theo thể loại.
+      <div class="sidebar-section-title">
+        <span class="tree-icon">🍃</span> Thông Tin Vườn Cam
+      </div>
+
+      <div class="orange-guide-card">
+        <div class="guide-badge">TỰ ĐỘNG 100%</div>
+        <p class="guide-desc">
+          Mỗi khi bạn thêm video mới vào thư mục Google Drive, <strong>Orangestream</strong> sẽ tự động cập nhật ngay tức thì!
+        </p>
+        <div class="guide-footer">
+          <span>🌱 Không quảng cáo</span>
+          <span>⚡ Tốc độ mọng nước</span>
+        </div>
       </div>
     </aside>
 
     <!-- Content -->
     <main class="content-area" role="main">
 
+      <!-- ─── Hero Banner ─── -->
+      <section class="orange-hero">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span class="pulse-dot"></span> VƯỜN CAM STREAMING CHẤT LƯỢNG CAO
+          </div>
+          <h2 class="hero-title">Thưởng Thức Phim & Âm Nhạc <br/><span class="hero-gradient">Tươi Mát Từng Khung Hình</span></h2>
+          <p class="hero-subtitle">Toàn bộ kho media được truyền trực tiếp từ Google Drive với độ trễ siêu thấp và chuẩn 1080p sắc nét.</p>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="rotating-citrus-wheel">
+            <svg width="120" height="120" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="46" fill="#FF7A00" stroke="#FFD166" stroke-width="4"/>
+              <circle cx="50" cy="50" r="40" fill="#FFF" opacity="0.95"/>
+              <g fill="#FFA000">
+                <!-- 8 citrus segments -->
+                <path d="M50 50 L47 16 A36 36 0 0 1 53 16 Z" transform="rotate(0 50 50)"/>
+                <path d="M50 50 L47 16 A36 36 0 0 1 53 16 Z" transform="rotate(45 50 50)"/>
+                <path d="M50 50 L47 16 A36 36 0 0 1 53 16 Z" transform="rotate(90 50 50)"/>
+                <path d="M50 50 L47 16 A36 36 0 0 1 53 16 Z" transform="rotate(135 50 50)"/>
+                <path d="M50 50 L47 16 A36 36 0 0 1 53 16 Z" transform="rotate(180 50 50)"/>
+                <path d="M50 50 L47 16 A36 36 0 0 1 53 16 Z" transform="rotate(225 50 50)"/>
+                <path d="M50 50 L47 16 A36 36 0 0 1 53 16 Z" transform="rotate(270 50 50)"/>
+                <path d="M50 50 L47 16 A36 36 0 0 1 53 16 Z" transform="rotate(315 50 50)"/>
+              </g>
+              <circle cx="50" cy="50" r="7" fill="#FFF"/>
+            </svg>
+          </div>
+        </div>
+      </section>
+
       <!-- Genre tabs -->
       <div id="genre-tabs" class="genre-tabs" role="tablist" aria-label="Lọc theo thể loại"></div>
 
       <!-- Section header -->
       <div class="section-header">
-        <h1 class="section-title">Thư Viện Media</h1>
-        <span class="section-count" id="section-count">0 mục</span>
+        <h1 class="section-title">
+          <span class="citrus-emoji">🍊</span> Danh Sách Media
+        </h1>
+        <span class="section-count" id="section-count">Đang hái quả...</span>
       </div>
 
       <!-- Grid -->
@@ -91,11 +170,14 @@
 
       <div class="player-header">
         <div class="player-title-area">
+          <div class="player-tag">
+            <span class="citrus-bullet"></span> ĐANG PHÁT TRÊN ORANGESTREAM
+          </div>
           <div id="player-title" class="player-title">Đang tải...</div>
           <div id="player-subtitle" class="player-subtitle"></div>
         </div>
         <button id="close-player" class="close-btn" aria-label="Đóng trình phát">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
           </svg>
         </button>
@@ -106,10 +188,10 @@
       <div class="player-footer">
         <a id="open-new-tab" href="#" target="_blank" rel="noopener" class="open-new-tab-btn" style="display:none;" aria-label="Mở trong tab mới">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          Mở tab mới
+          Mở tab mới trên Google Drive
         </a>
-        <span style="font-size:0.75rem;color:var(--text-muted);">
-          Nhấn <kbd style="background:var(--bg-card);border:1px solid var(--border);padding:2px 6px;border-radius:4px;font-size:0.7rem;">Esc</kbd> để đóng
+        <span class="esc-hint">
+          Nhấn <kbd>Esc</kbd> hoặc click bên ngoài để đóng
         </span>
       </div>
 
