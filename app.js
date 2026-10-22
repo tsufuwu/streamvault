@@ -4,7 +4,11 @@
  */
 
 // ─── CONFIG ─────────────────────────────────────────
-const MEDIA_LIST_API = '/.netlify/functions/get-media-list';
+// Hỗ trợ cả Cloudflare Pages (/api/get-media-list) và Netlify (/.netlify/functions/get-media-list)
+const MEDIA_ENDPOINTS = [
+  '/api/get-media-list',
+  '/.netlify/functions/get-media-list',
+];
 
 // ─── State ──────────────────────────────────────────
 // ─── State ──────────────────────────────────────────
@@ -88,11 +92,26 @@ async function fetchMediaLibrary() {
     </div>`).join('');
 
   try {
-    // Add cache buster query parameter
-    const res  = await fetch(`${MEDIA_LIST_API}?t=${Date.now()}`);
-    const json = await res.json();
+    let json = null;
+    let lastErr = null;
 
-    if (!json.ok) throw new Error(json.error || 'Lỗi đọc dữ liệu từ vườn cam');
+    // Tự động thử endpoint Cloudflare Pages trước, sau đó fallback sang Netlify
+    for (const ep of MEDIA_ENDPOINTS) {
+      try {
+        const res = await fetch(`${ep}?t=${Date.now()}`);
+        if (res.ok) {
+          const body = await res.json();
+          if (body && body.ok) {
+            json = body;
+            break;
+          }
+        }
+      } catch (e) {
+        lastErr = e;
+      }
+    }
+
+    if (!json) throw new Error((lastErr && lastErr.message) || 'Lỗi đọc dữ liệu từ vườn cam');
 
     state.allMedia   = (json.data || []).filter(isRealMedia);
     state.allFolders = json.folders || [];

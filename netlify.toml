@@ -6,6 +6,11 @@
   node_bundler = "esbuild"
 
 [[redirects]]
+  from = "/api/get-media-list"
+  to = "/.netlify/functions/get-media-list"
+  status = 200
+
+[[redirects]]
   from = "/stream-media/:fileId"
   to = "https://drive.usercontent.google.com/download?id=:fileId&export=view"
   status = 200

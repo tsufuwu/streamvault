@@ -1,0 +1,11 @@
+/*
+  Access-Control-Allow-Origin: *
+
+/api/*
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=60
+
+/stream-media/*
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Headers: Range, Accept, Content-Type
+  Access-Control-Expose-Headers: Content-Range, Content-Length, Accept-Ranges

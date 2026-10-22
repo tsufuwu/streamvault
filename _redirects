@@ -1,0 +1,2 @@
+# Cloudflare Pages Redirects fallback
+/stream-media/:fileId https://drive.usercontent.google.com/download?id=:fileId&export=view 302
