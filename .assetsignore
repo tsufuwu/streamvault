@@ -1,0 +1,12 @@
+.git
+.wrangler
+node_modules
+netlify
+tools
+worker.js
+wrangler.toml
+package.json
+package-lock.json
+functions
+_headers
+_redirects

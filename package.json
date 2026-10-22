@@ -1,13 +1,12 @@
 {
-  "name": "streamvault",
+  "name": "orangestream",
   "version": "1.0.0",
-  "description": "Free video/audio streaming site powered by Google Drive",
+  "description": "Orangestream - Video/audio streaming site powered by Google Drive",
   "private": true,
   "scripts": {
-    "dev": "netlify dev",
-    "deploy": "netlify deploy --prod"
+    "deploy": "wrangler deploy"
   },
   "devDependencies": {
-    "netlify-cli": "^17.0.0"
+    "wrangler": "^4.152.0"
   }
 }
