@@ -215,7 +215,7 @@ function formatTime(sec) {
 
 // ─── Custom Orange Video Player ───────────────────────
 function initOrangeVideoPlayer(media) {
-  const streamUrl = `https://drive.usercontent.google.com/download?id=${media.fileId}&export=download`;
+  const streamUrl = `https://drive.usercontent.google.com/download?id=${media.fileId}&export=view`;
   const previewUrl = `https://drive.google.com/file/d/${media.fileId}/preview`;
 
   playerBody.innerHTML = `
@@ -437,20 +437,18 @@ function initOrangeVideoPlayer(media) {
   });
 
   video.addEventListener('error', () => {
-    playerBody.innerHTML = `
-      <div class="player-video-wrapper">
-        <iframe class="player-iframe" src="${previewUrl}" allow="autoplay; fullscreen" allowfullscreen></iframe>
-      </div>
-    `;
-    toast('Đang dùng trình phát Google Drive để tối ưu định dạng 🍊', 'info');
+    console.warn('[Orangestream] Video error:', video.error);
+    toast('Nếu video chậm hoặc không hỗ trợ, bạn có thể bấm nút "🔄 Drive Player" ở góc dưới 🍊', 'info');
   });
 
-  video.play().catch(() => {});
+  video.play().catch(() => {
+    bigPlayBtn.classList.remove('hidden');
+  });
 }
 
 // ─── Custom Orange Audio Player ───────────────────────
 function initOrangeAudioPlayer(media) {
-  const audioUrl = `https://drive.usercontent.google.com/download?id=${media.fileId}&export=download`;
+  const audioUrl = `https://drive.usercontent.google.com/download?id=${media.fileId}&export=view`;
 
   playerBody.innerHTML = `
     <div style="padding:28px 24px;background:#140e08;border-radius:0 0 16px 16px;">
