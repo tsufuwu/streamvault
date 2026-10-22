@@ -805,6 +805,123 @@ body::after {
   border-color: var(--orange-500);
 }
 
+.ctrl-btn.active {
+  color: var(--orange-400);
+  background: rgba(255, 122, 0, 0.2);
+}
+
+/* Theater Mode */
+.player-modal.theater {
+  max-width: 96vw;
+  width: 96vw;
+}
+.player-modal.theater .custom-orange-player {
+  aspect-ratio: auto;
+  height: 80vh;
+}
+
+/* Double-Click Seek Ripple */
+.seek-ripple-overlay {
+  position: absolute; inset: 0;
+  display: flex; pointer-events: none; z-index: 15;
+}
+.seek-ripple-side {
+  flex: 1; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.2s;
+}
+.seek-ripple-badge {
+  background: rgba(255, 122, 0, 0.55);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 140, 40, 0.7);
+  color: #FFF;
+  padding: 12px 26px;
+  border-radius: 50px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  display: flex; align-items: center; gap: 8px;
+  box-shadow: 0 0 30px var(--orange-glow);
+  transform: scale(0.8);
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.seek-ripple-side.active {
+  opacity: 1;
+}
+.seek-ripple-side.active .seek-ripple-badge {
+  transform: scale(1.15);
+}
+
+/* Speed Popover Menu */
+.speed-popover {
+  position: absolute; bottom: 58px; right: 120px;
+  background: rgba(24, 16, 10, 0.96);
+  border: 1px solid var(--border-active);
+  border-radius: var(--radius-sm);
+  padding: 6px;
+  display: flex; flex-direction: column; gap: 3px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px var(--orange-glow-sm);
+  z-index: 50;
+  backdrop-filter: blur(12px);
+  opacity: 0; visibility: hidden;
+  transform: translateY(10px);
+  transition: var(--transition);
+}
+.speed-popover.open {
+  opacity: 1; visibility: visible;
+  transform: translateY(0);
+}
+.speed-opt {
+  padding: 7px 16px;
+  border: none; background: none;
+  color: var(--text-secondary);
+  font-size: 0.82rem; font-weight: 600;
+  border-radius: 6px; cursor: pointer;
+  text-align: left; transition: var(--transition);
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+}
+.speed-opt:hover {
+  background: rgba(255, 122, 0, 0.15);
+  color: var(--orange-300);
+}
+.speed-opt.active {
+  background: var(--orange-500);
+  color: #FFF;
+}
+
+/* Keyboard Shortcuts Modal */
+.shortcuts-overlay {
+  position: fixed; inset: 0; z-index: 2500;
+  background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden; transition: var(--transition);
+}
+.shortcuts-overlay.active { opacity: 1; visibility: visible; }
+.shortcuts-card {
+  width: 90%; max-width: 480px;
+  background: #140e09;
+  border: 1px solid rgba(255, 140, 40, 0.3);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.8), 0 0 30px var(--orange-glow-sm);
+}
+.shortcuts-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.2rem; font-weight: 700; color: #FFF;
+  margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between;
+}
+.shortcuts-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+}
+.shortcut-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 12px; background: rgba(255, 140, 40, 0.06);
+  border-radius: 8px; font-size: 0.82rem; color: var(--text-secondary);
+}
+.shortcut-item kbd {
+  background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border);
+  padding: 2px 7px; border-radius: 4px; color: var(--orange-300); font-weight: 700;
+}
+
 /* Player Footer */
 .player-footer {
   padding: 14px 24px;

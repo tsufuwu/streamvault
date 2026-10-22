@@ -217,6 +217,10 @@ function formatTime(sec) {
 function initOrangeVideoPlayer(media) {
   const streamUrl = `/stream-media/${media.fileId}`;
   const previewUrl = `https://drive.google.com/file/d/${media.fileId}/preview`;
+  const items = getFilteredMedia();
+  const currentIndex = items.findIndex(m => m.id === media.id);
+  const prevMedia = currentIndex > 0 ? items[currentIndex - 1] : null;
+  const nextMedia = currentIndex < items.length - 1 ? items[currentIndex + 1] : null;
 
   playerBody.innerHTML = `
     <div class="custom-orange-player" id="orange-player-box">
@@ -225,9 +229,29 @@ function initOrangeVideoPlayer(media) {
       </video>
 
       <!-- Center Big Play Button (Orange Slice) -->
-      <button class="big-play-btn" id="big-play-btn" title="Phát video">
+      <button class="big-play-btn" id="big-play-btn" title="Phát video (Space)">
         <svg width="40" height="40" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
       </button>
+
+      <!-- Double-Click Quick Seek Ripple Overlay -->
+      <div class="seek-ripple-overlay">
+        <div class="seek-ripple-side" id="ripple-left">
+          <div class="seek-ripple-badge">⏪ 10s</div>
+        </div>
+        <div class="seek-ripple-side" id="ripple-right">
+          <div class="seek-ripple-badge">10s ⏩</div>
+        </div>
+      </div>
+
+      <!-- Speed Popover Menu -->
+      <div class="speed-popover" id="speed-popover">
+        <button class="speed-opt" data-speed="0.5">0.5x</button>
+        <button class="speed-opt" data-speed="0.75">0.75x</button>
+        <button class="speed-opt active" data-speed="1.0">1.0x (Chuẩn)</button>
+        <button class="speed-opt" data-speed="1.25">1.25x</button>
+        <button class="speed-opt" data-speed="1.5">1.5x</button>
+        <button class="speed-opt" data-speed="2.0">2.0x</button>
+      </div>
 
       <!-- Citrus Controls Overlay -->
       <div class="citrus-controls" id="citrus-controls">
@@ -248,16 +272,33 @@ function initOrangeVideoPlayer(media) {
         <!-- ─── Controls Bar ─── -->
         <div class="controls-bar">
           <div class="controls-left">
-            <button class="ctrl-btn" id="ctrl-play-pause" title="Phát / Dừng">
+            <!-- Prev Video -->
+            <button class="ctrl-btn" id="ctrl-prev" title="${prevMedia ? 'Tập trước: ' + prevMedia.title : 'Không có tập trước'}" ${!prevMedia ? 'style="opacity:0.35;pointer-events:none;"' : ''}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+            </button>
+
+            <!-- Play / Pause -->
+            <button class="ctrl-btn" id="ctrl-play-pause" title="Phát / Dừng (Space)">
               <svg id="icon-play" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
               <svg id="icon-pause" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
             </button>
-            <button class="ctrl-btn" id="ctrl-rewind" title="Tua lại 10s">
+
+            <!-- Next Video -->
+            <button class="ctrl-btn" id="ctrl-next" title="${nextMedia ? 'Tập tiếp theo: ' + nextMedia.title : 'Hết danh sách'}" ${!nextMedia ? 'style="opacity:0.35;pointer-events:none;"' : ''}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+            </button>
+
+            <!-- Rewind 10s -->
+            <button class="ctrl-btn" id="ctrl-rewind" title="Tua lùi 10s (←)">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
             </button>
-            <button class="ctrl-btn" id="ctrl-forward" title="Tua tới 10s">
+
+            <!-- Forward 10s -->
+            <button class="ctrl-btn" id="ctrl-forward" title="Tua tới 10s (→)">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
             </button>
+
+            <!-- Time Display -->
             <div class="time-display">
               <span id="time-current">0:00</span>
               <span class="time-sep">/</span>
@@ -266,17 +307,43 @@ function initOrangeVideoPlayer(media) {
           </div>
 
           <div class="controls-right">
+            <!-- Volume -->
             <div class="volume-container">
-              <button class="ctrl-btn" id="ctrl-volume" title="Âm lượng">
+              <button class="ctrl-btn" id="ctrl-volume" title="Âm lượng (M)">
                 <svg id="icon-vol" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
               </button>
               <input type="range" class="volume-slider" id="ctrl-vol-slider" min="0" max="1" step="0.05" value="1">
             </div>
 
-            <button class="ctrl-btn speed-btn" id="ctrl-speed" title="Tốc độ">1.0x</button>
-            <button class="ctrl-btn" id="ctrl-fullscreen" title="Toàn màn hình">
+            <!-- Loop Toggle -->
+            <button class="ctrl-btn" id="ctrl-loop" title="Bật/Tắt Lặp lại video (R)">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+            </button>
+
+            <!-- Speed Selector Popover Button -->
+            <button class="ctrl-btn speed-btn" id="ctrl-speed" title="Chọn tốc độ phát">1.0x</button>
+
+            <!-- Picture in Picture (PiP) -->
+            <button class="ctrl-btn" id="ctrl-pip" title="Thu nhỏ xem nổi (PiP - P)">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><rect x="12" y="9" width="8" height="6" rx="1" fill="currentColor"/></svg>
+            </button>
+
+            <!-- Theater / Cinema Mode -->
+            <button class="ctrl-btn" id="ctrl-theater" title="Chế độ Rạp phim (T)">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="2" y1="9" x2="22" y2="9"/><line x1="2" y1="15" x2="22" y2="15"/></svg>
+            </button>
+
+            <!-- Download Video Button -->
+            <a class="ctrl-btn" id="ctrl-download" href="${streamUrl}" download="${media.title}.mp4" title="Tải video về máy">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </a>
+
+            <!-- Fullscreen -->
+            <button class="ctrl-btn" id="ctrl-fullscreen" title="Toàn màn hình (F)">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
             </button>
+
+            <!-- Fallback Drive Player -->
             <button class="ctrl-btn fallback-toggle-btn" id="ctrl-switch-player" title="Đổi sang Google Player">
               <span>🔄 Drive Player</span>
             </button>
@@ -302,11 +369,33 @@ function initOrangeVideoPlayer(media) {
   const volBtn       = document.getElementById('ctrl-volume');
   const volSlider    = document.getElementById('ctrl-vol-slider');
   const speedBtn     = document.getElementById('ctrl-speed');
+  const speedPopover = document.getElementById('speed-popover');
   const fsBtn        = document.getElementById('ctrl-fullscreen');
   const rewindBtn    = document.getElementById('ctrl-rewind');
   const forwardBtn   = document.getElementById('ctrl-forward');
+  const prevBtn      = document.getElementById('ctrl-prev');
+  const nextBtn      = document.getElementById('ctrl-next');
+  const loopBtn      = document.getElementById('ctrl-loop');
+  const pipBtn       = document.getElementById('ctrl-pip');
+  const theaterBtn   = document.getElementById('ctrl-theater');
   const switchBtn    = document.getElementById('ctrl-switch-player');
+  const rippleLeft   = document.getElementById('ripple-left');
+  const rippleRight  = document.getElementById('ripple-right');
+  const playerModal  = document.querySelector('.player-modal');
 
+  // Resume Playback from LocalStorage
+  const storageKey = `orangestream_pos_${media.fileId}`;
+  const savedTime = parseFloat(localStorage.getItem(storageKey) || '0');
+
+  video.addEventListener('loadedmetadata', () => {
+    timeDuration.textContent = formatTime(video.duration);
+    if (savedTime > 8 && savedTime < video.duration - 10) {
+      video.currentTime = savedTime;
+      toast(`Đã tiếp tục phát từ ${formatTime(savedTime)} 🍊`, 'info');
+    }
+  });
+
+  // Play / Pause Toggle
   function togglePlay() {
     if (video.paused || video.ended) {
       video.play().catch(() => {});
@@ -329,20 +418,21 @@ function initOrangeVideoPlayer(media) {
 
   bigPlayBtn.addEventListener('click', togglePlay);
   playPauseBtn.addEventListener('click', togglePlay);
-  video.addEventListener('click', togglePlay);
 
+  // Time & Rolling Orange Progress Update
   video.addEventListener('timeupdate', () => {
     if (!video.duration) return;
     const pct = (video.currentTime / video.duration) * 100;
     seekProgress.style.width = `${pct}%`;
     orangeThumb.style.left = `${pct}%`;
-    // 🍊 Trái cam lăn tròn theo tiến trình phát video!
+    // 🍊 Trái cam lăn tròn theo tiến trình phát video
     orangeThumb.style.transform = `translate(-50%, -50%) rotate(${pct * 7.2}deg)`;
     timeCurrent.textContent = formatTime(video.currentTime);
-  });
 
-  video.addEventListener('loadedmetadata', () => {
-    timeDuration.textContent = formatTime(video.duration);
+    // Save position periodically
+    if (Math.floor(video.currentTime) % 3 === 0) {
+      localStorage.setItem(storageKey, String(video.currentTime));
+    }
   });
 
   video.addEventListener('progress', () => {
@@ -352,31 +442,51 @@ function initOrangeVideoPlayer(media) {
     }
   });
 
+  // Double Click Video Area for Quick Seek (Left -10s, Right +10s)
+  let clickTimeout;
+  let clickCount = 0;
+  videoBox.addEventListener('click', (e) => {
+    if (e.target.closest('.citrus-controls') || e.target.closest('.big-play-btn') || e.target.closest('.speed-popover')) return;
+
+    clickCount++;
+    if (clickCount === 1) {
+      clickTimeout = setTimeout(() => {
+        clickCount = 0;
+        togglePlay();
+      }, 260);
+    } else if (clickCount === 2) {
+      clearTimeout(clickTimeout);
+      clickCount = 0;
+      const rect = videoBox.getBoundingClientRect();
+      const isRightSide = (e.clientX - rect.left) > (rect.width / 2);
+
+      if (isRightSide) {
+        video.currentTime = Math.min(video.duration || 0, video.currentTime + 10);
+        rippleRight.classList.add('active');
+        setTimeout(() => rippleRight.classList.remove('active'), 500);
+      } else {
+        video.currentTime = Math.max(0, video.currentTime - 10);
+        rippleLeft.classList.add('active');
+        setTimeout(() => rippleLeft.classList.remove('active'), 500);
+      }
+    }
+  });
+
+  // Seeking on Orange Seekbar
   let isSeeking = false;
   function seekTo(e) {
     const rect = seekbar.getBoundingClientRect();
     const pos = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-    if (video.duration) {
-      video.currentTime = pos * video.duration;
-    }
+    if (video.duration) video.currentTime = pos * video.duration;
     const pct = pos * 100;
     seekProgress.style.width = `${pct}%`;
     orangeThumb.style.left = `${pct}%`;
     orangeThumb.style.transform = `translate(-50%, -50%) rotate(${pct * 7.2}deg)`;
   }
 
-  seekbar.addEventListener('mousedown', (e) => {
-    isSeeking = true;
-    seekTo(e);
-  });
-
-  window.addEventListener('mousemove', (e) => {
-    if (isSeeking) seekTo(e);
-  });
-
-  window.addEventListener('mouseup', () => {
-    if (isSeeking) isSeeking = false;
-  });
+  seekbar.addEventListener('mousedown', (e) => { isSeeking = true; seekTo(e); });
+  window.addEventListener('mousemove', (e) => { if (isSeeking) seekTo(e); });
+  window.addEventListener('mouseup', () => { if (isSeeking) isSeeking = false; });
 
   seekbar.addEventListener('mousemove', (e) => {
     const rect = seekbar.getBoundingClientRect();
@@ -385,9 +495,47 @@ function initOrangeVideoPlayer(media) {
     seekTooltip.textContent = formatTime(pos * (video.duration || 0));
   });
 
-  rewindBtn.addEventListener('click', () => { video.currentTime = Math.max(0, video.currentTime - 10); });
-  forwardBtn.addEventListener('click', () => { video.currentTime = Math.min(video.duration || 0, video.currentTime + 10); });
+  // 10s Skip Buttons
+  rewindBtn.addEventListener('click', () => {
+    video.currentTime = Math.max(0, video.currentTime - 10);
+    toast('Tua lùi 10 giây ⏪', 'info');
+  });
+  forwardBtn.addEventListener('click', () => {
+    video.currentTime = Math.min(video.duration || 0, video.currentTime + 10);
+    toast('Tua tới 10 giây ⏩', 'info');
+  });
 
+  // Next / Prev Video Handling
+  if (prevBtn && prevMedia) {
+    prevBtn.addEventListener('click', () => {
+      openPlayer(prevMedia);
+      toast(`Đang phát: ${prevMedia.title} 🍊`, 'info');
+    });
+  }
+  if (nextBtn && nextMedia) {
+    nextBtn.addEventListener('click', () => {
+      openPlayer(nextMedia);
+      toast(`Đang phát: ${nextMedia.title} 🍊`, 'info');
+    });
+  }
+
+  // Autoplay next track on end
+  video.addEventListener('ended', () => {
+    localStorage.removeItem(storageKey);
+    if (!video.loop && nextMedia) {
+      toast(`Đang tự động chuyển tiếp: ${nextMedia.title} 🍊`, 'info');
+      setTimeout(() => openPlayer(nextMedia), 1200);
+    }
+  });
+
+  // Loop Toggle
+  loopBtn.addEventListener('click', () => {
+    video.loop = !video.loop;
+    loopBtn.classList.toggle('active', video.loop);
+    toast(video.loop ? 'Đã BẬT lặp lại video 🔁' : 'Đã TẮT lặp lại video', 'info');
+  });
+
+  // Volume
   volSlider.addEventListener('input', e => {
     video.volume = e.target.value;
     video.muted = (video.volume === 0);
@@ -395,17 +543,54 @@ function initOrangeVideoPlayer(media) {
   volBtn.addEventListener('click', () => {
     video.muted = !video.muted;
     volSlider.value = video.muted ? 0 : video.volume;
+    toast(video.muted ? 'Đã tắt tiếng 🔇' : 'Đã bật tiếng 🔊', 'info');
   });
 
-  const speeds = [1.0, 1.25, 1.5, 2.0];
-  let speedIdx = 0;
-  speedBtn.addEventListener('click', () => {
-    speedIdx = (speedIdx + 1) % speeds.length;
-    const rate = speeds[speedIdx];
-    video.playbackRate = rate;
-    speedBtn.textContent = `${rate.toFixed(1)}x`;
+  // Speed Popover Menu
+  speedBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    speedPopover.classList.toggle('open');
+  });
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.speed-popover') && !e.target.closest('#ctrl-speed')) {
+      speedPopover.classList.remove('open');
+    }
+  });
+  speedPopover.querySelectorAll('.speed-opt').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const speed = parseFloat(btn.dataset.speed);
+      video.playbackRate = speed;
+      speedBtn.textContent = `${speed}x`;
+      speedPopover.querySelectorAll('.speed-opt').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      speedPopover.classList.remove('open');
+      toast(`Tốc độ phát: ${speed}x ⚡`, 'info');
+    });
   });
 
+  // Picture in Picture (PiP)
+  pipBtn.addEventListener('click', async () => {
+    try {
+      if (document.pictureInPictureElement) {
+        await document.exitPictureInPicture();
+        pipBtn.classList.remove('active');
+      } else {
+        await video.requestPictureInPicture();
+        pipBtn.classList.add('active');
+      }
+    } catch (err) {
+      toast('Trình duyệt không hỗ trợ PiP', 'error');
+    }
+  });
+
+  // Theater / Cinema Mode
+  theaterBtn.addEventListener('click', () => {
+    const isTheater = playerModal.classList.toggle('theater');
+    theaterBtn.classList.toggle('active', isTheater);
+    toast(isTheater ? 'Bật chế độ Rạp phim 🎬' : 'Thoát chế độ Rạp phim', 'info');
+  });
+
+  // Fullscreen
   fsBtn.addEventListener('click', () => {
     if (!document.fullscreenElement) {
       videoBox.requestFullscreen().catch(() => {});
@@ -414,6 +599,7 @@ function initOrangeVideoPlayer(media) {
     }
   });
 
+  // Auto-hide controls
   let hideTimer;
   function resetControlsTimer() {
     videoBox.classList.remove('controls-hidden');
@@ -426,6 +612,7 @@ function initOrangeVideoPlayer(media) {
   }
   videoBox.addEventListener('mousemove', resetControlsTimer);
 
+  // Switch to Google Drive iframe fallback player
   switchBtn.addEventListener('click', () => {
     video.pause();
     playerBody.innerHTML = `
@@ -571,7 +758,30 @@ function closePlayer() {
   const aud = document.getElementById('orange-audio-el');
   if (aud) aud.pause();
   playerBody.innerHTML = '';
+  const modal = document.querySelector('.player-modal');
+  if (modal) modal.classList.remove('theater');
   state.currentMedia = null;
+}
+
+// ─── Shortcuts Modal Toggle ───────────────────────────
+const shortcutsModal = document.getElementById('shortcuts-modal');
+const btnShortcuts = document.getElementById('btn-show-shortcuts');
+const btnCloseShortcuts = document.getElementById('close-shortcuts');
+
+if (btnShortcuts && shortcutsModal) {
+  btnShortcuts.addEventListener('click', () => {
+    shortcutsModal.classList.add('active');
+  });
+}
+if (btnCloseShortcuts && shortcutsModal) {
+  btnCloseShortcuts.addEventListener('click', () => {
+    shortcutsModal.classList.remove('active');
+  });
+}
+if (shortcutsModal) {
+  shortcutsModal.addEventListener('click', e => {
+    if (e.target === shortcutsModal) shortcutsModal.classList.remove('active');
+  });
 }
 
 // ─── Sidebar Filter ───────────────────────────────────
@@ -591,14 +801,123 @@ searchInput.addEventListener('input', e => {
   renderGrid();
 });
 
-// Keyboard shortcut (Ctrl+K / Cmd+K or /)
+// ─── Global Keyboard Shortcuts ────────────────────────
 document.addEventListener('keydown', e => {
+  // Ignore shortcuts when typing in search input
+  if (e.target === searchInput) return;
+
+  // Search shortcut
   if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
     e.preventDefault();
     searchInput.focus();
     searchInput.select();
+    return;
   }
-  if (e.key === 'Escape') closePlayer();
+
+  // Close modals
+  if (e.key === 'Escape') {
+    if (shortcutsModal && shortcutsModal.classList.contains('active')) {
+      shortcutsModal.classList.remove('active');
+      return;
+    }
+    closePlayer();
+    return;
+  }
+
+  // Media Player Active Shortcuts
+  const video = document.getElementById('orange-video-el');
+  const audio = document.getElementById('orange-audio-el');
+  const activeMedia = video || audio;
+  if (!activeMedia || !playerOverlay.classList.contains('active')) return;
+
+  const key = e.key.toLowerCase();
+
+  // Space or K: Toggle Play/Pause
+  if (e.key === ' ' || key === 'k') {
+    e.preventDefault();
+    if (activeMedia.paused) activeMedia.play().catch(() => {});
+    else activeMedia.pause();
+  }
+
+  // ArrowLeft or J: Seek -10s
+  if (e.key === 'ArrowLeft' || key === 'j') {
+    e.preventDefault();
+    activeMedia.currentTime = Math.max(0, activeMedia.currentTime - 10);
+    toast('Tua lùi 10s ⏪', 'info');
+  }
+
+  // ArrowRight or L: Seek +10s
+  if (e.key === 'ArrowRight' || key === 'l') {
+    e.preventDefault();
+    activeMedia.currentTime = Math.min(activeMedia.duration || 0, activeMedia.currentTime + 10);
+    toast('Tua tới 10s ⏩', 'info');
+  }
+
+  // ArrowUp: Volume +5%
+  if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    activeMedia.volume = Math.min(1, activeMedia.volume + 0.05);
+    activeMedia.muted = false;
+    toast(`Âm lượng: ${Math.round(activeMedia.volume * 100)}% 🔊`, 'info');
+  }
+
+  // ArrowDown: Volume -5%
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    activeMedia.volume = Math.max(0, activeMedia.volume - 0.05);
+    toast(`Âm lượng: ${Math.round(activeMedia.volume * 100)}% 🔉`, 'info');
+  }
+
+  // M: Mute / Unmute
+  if (key === 'm') {
+    e.preventDefault();
+    activeMedia.muted = !activeMedia.muted;
+    toast(activeMedia.muted ? 'Đã tắt tiếng 🔇' : 'Đã bật tiếng 🔊', 'info');
+  }
+
+  // F: Fullscreen
+  if (key === 'f' && video) {
+    e.preventDefault();
+    const box = document.getElementById('orange-player-box');
+    if (box) {
+      if (!document.fullscreenElement) box.requestFullscreen().catch(() => {});
+      else document.exitFullscreen().catch(() => {});
+    }
+  }
+
+  // T: Theater Mode
+  if (key === 't') {
+    e.preventDefault();
+    const modal = document.querySelector('.player-modal');
+    if (modal) {
+      const isTheater = modal.classList.toggle('theater');
+      toast(isTheater ? 'Bật chế độ Rạp phim 🎬' : 'Thoát chế độ Rạp phim', 'info');
+    }
+  }
+
+  // P: Picture in Picture
+  if (key === 'p' && video) {
+    e.preventDefault();
+    if (document.pictureInPictureElement) document.exitPictureInPicture().catch(() => {});
+    else video.requestPictureInPicture().catch(() => {});
+  }
+
+  // R: Loop
+  if (key === 'r') {
+    e.preventDefault();
+    activeMedia.loop = !activeMedia.loop;
+    const loopBtn = document.getElementById('ctrl-loop');
+    if (loopBtn) loopBtn.classList.toggle('active', activeMedia.loop);
+    toast(activeMedia.loop ? 'Đã BẬT lặp lại 🔁' : 'Đã TẮT lặp lại', 'info');
+  }
+
+  // 0-9: Jump to % of duration
+  if (e.key >= '0' && e.key <= '9' && activeMedia.duration) {
+    e.preventDefault();
+    const pct = parseInt(e.key, 10) * 0.1;
+    activeMedia.currentTime = activeMedia.duration * pct;
+    toast(`Nhảy tới ${parseInt(e.key, 10) * 10}% ⏱️`, 'info');
+  }
 });
 
 // ─── Close Player ─────────────────────────────────────
@@ -621,3 +940,4 @@ document.head.appendChild(shimmerStyle);
 
 // ─── INIT ─────────────────────────────────────────────
 fetchMediaLibrary();
+
