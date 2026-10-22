@@ -662,6 +662,15 @@ function initOrangeVideoPlayer(media) {
         </div>
       </div>
 
+      <!-- Volume HUD Overlay (Bilibili / YouTube Style) -->
+      <div class="video-volume-hud" id="video-volume-hud">
+        <span class="volume-hud-icon" id="volume-hud-icon">🔊</span>
+        <span class="volume-hud-text" id="volume-hud-text">100%</span>
+        <div class="volume-hud-bar">
+          <div class="volume-hud-fill" id="volume-hud-fill" style="width: 100%;"></div>
+        </div>
+      </div>
+
       <!-- Citrus Controls Overlay -->
       <div class="citrus-controls" id="citrus-controls">
 
@@ -1043,11 +1052,58 @@ function initOrangeVideoPlayer(media) {
     });
   }
 
-  // Autoplay next track on end
+  // Volume HUD helper (YouTube / Bilibili Style)
+  let volHudTimer;
+  const volHud = document.getElementById('video-volume-hud');
+  const volHudIcon = document.getElementById('volume-hud-icon');
+  const volHudText = document.getElementById('volume-hud-text');
+  const volHudFill = document.getElementById('volume-hud-fill');
+
+  function showVolumeHud(pct, isMuted) {
+    if (!volHud) return;
+    const level = isMuted ? 0 : Math.round(pct);
+    if (volHudIcon) volHudIcon.textContent = level === 0 ? '🔇' : level < 50 ? '🔉' : '🔊';
+    if (volHudText) volHudText.textContent = isMuted ? 'Đã tắt tiếng' : `${level}%`;
+    if (volHudFill) volHudFill.style.width = `${level}%`;
+    volHud.classList.add('visible');
+    clearTimeout(volHudTimer);
+    volHudTimer = setTimeout(() => {
+      volHud.classList.remove('visible');
+    }, 900);
+  }
+
+  // Mouse Wheel on Video to Adjust Volume (Bilibili / YouTube Style)
+  videoBox.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const step = 0.05;
+    let newVol = video.muted ? 0 : video.volume;
+    if (e.deltaY < 0) {
+      newVol = Math.min(1, newVol + step);
+    } else {
+      newVol = Math.max(0, newVol - step);
+    }
+    video.volume = newVol;
+    video.muted = (newVol === 0);
+    if (volSlider) volSlider.value = newVol;
+    showVolumeHud(newVol * 100, video.muted);
+  }, { passive: false });
+
+  // Double-Click Video to Toggle Fullscreen (Bilibili / YouTube Style)
+  videoBox.addEventListener('dblclick', (e) => {
+    if (e.target.closest('.citrus-controls') || e.target.closest('.mobile-player-close-btn') || e.target.closest('.speed-popover') || e.target.closest('.quality-popover')) return;
+    if (!document.fullscreenElement) {
+      videoBox.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen().catch(() => {});
+    }
+  });
+
+  // Autoplay next track on end (YouTube / Bilibili style)
   video.addEventListener('ended', () => {
     localStorage.removeItem(storageKey);
-    if (!video.loop && nextMedia) {
-      toast(`Đang tự động chuyển tiếp: ${nextMedia.title} 🍊`, 'info');
+    const autoNextPref = localStorage.getItem('orangestream_autonext') !== 'false';
+    if (!video.loop && nextMedia && autoNextPref) {
+      toast(`Chuẩn bị phát tập tiếp theo: ${nextMedia.title} 🍊`, 'info');
       setTimeout(() => openPlayer(nextMedia), 1200);
     }
   });
@@ -1056,17 +1112,21 @@ function initOrangeVideoPlayer(media) {
   loopBtn.addEventListener('click', () => {
     video.loop = !video.loop;
     loopBtn.classList.toggle('active', video.loop);
+    const actionLoop = document.getElementById('action-btn-loop');
+    if (actionLoop) actionLoop.classList.toggle('active', video.loop);
     toast(video.loop ? 'Đã BẬT lặp lại video 🔁' : 'Đã TẮT lặp lại video', 'info');
   });
 
-  // Volume
+  // Volume Slider & Mute
   volSlider.addEventListener('input', e => {
     video.volume = e.target.value;
     video.muted = (video.volume === 0);
+    showVolumeHud(video.volume * 100, video.muted);
   });
   volBtn.addEventListener('click', () => {
     video.muted = !video.muted;
     volSlider.value = video.muted ? 0 : video.volume;
+    showVolumeHud(video.volume * 100, video.muted);
     toast(video.muted ? 'Đã tắt tiếng 🔇' : 'Đã bật tiếng 🔊', 'info');
   });
 
@@ -1204,10 +1264,10 @@ function initOrangeVideoPlayer(media) {
   if (switchBtn) {
     switchBtn.addEventListener('click', () => triggerFallbackToDrivePlayer(true));
   }
-  const mobileSwitchBtn = document.getElementById('mobile-btn-switch-player');
-  if (mobileSwitchBtn) {
-    mobileSwitchBtn.onclick = () => triggerFallbackToDrivePlayer(true);
-  }
+  ['action-btn-switch-player', 'mobile-btn-switch-player'].forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) btn.onclick = () => triggerFallbackToDrivePlayer(true);
+  });
 
   // Auto fallback if stream errors or codec unsupported
   video.addEventListener('error', (e) => {
@@ -1333,18 +1393,79 @@ function openPlayer(media) {
   openNewTab.href = `https://drive.google.com/file/d/${media.fileId}/view`;
   openNewTab.style.display = '';
 
-  // Setup mobile action buttons
-  const mBtnDownload = document.getElementById('mobile-btn-download');
-  if (mBtnDownload) {
-    mBtnDownload.href = `/stream-media/${media.fileId}`;
-    mBtnDownload.download = `${media.title}.mp4`;
-  }
-  const mBtnOpenDrive = document.getElementById('mobile-btn-open-drive');
-  if (mBtnOpenDrive) {
-    mBtnOpenDrive.href = `https://drive.google.com/file/d/${media.fileId}/view`;
+  // Setup download and Drive links (PC action pills & mobile buttons)
+  const downloadLink = `/stream-media/${media.fileId}`;
+  const driveViewUrl = `https://drive.google.com/file/d/${media.fileId}/view`;
+
+  ['action-btn-download', 'mobile-btn-download'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.href = downloadLink;
+      el.download = `${media.title}.mp4`;
+    }
+  });
+
+  ['action-btn-open-drive', 'mobile-btn-open-drive'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.href = driveViewUrl;
+  });
+
+  // Action Buttons: Theater mode, Loop, Shortcuts
+  const btnTheater = document.getElementById('action-btn-theater');
+  if (btnTheater) {
+    btnTheater.onclick = () => {
+      const modal = document.querySelector('.player-modal');
+      const isTheater = modal.classList.toggle('theater');
+      btnTheater.classList.toggle('active', isTheater);
+      const ctrlTheater = document.getElementById('ctrl-theater');
+      if (ctrlTheater) ctrlTheater.classList.toggle('active', isTheater);
+      toast(isTheater ? 'Bật chế độ Rạp phim 🍿' : 'Thoát chế độ Rạp phim', 'info');
+    };
   }
 
-  // Render Playlist carousel (Bilibili/YouTube mobile style)
+  const btnLoop = document.getElementById('action-btn-loop');
+  if (btnLoop) {
+    btnLoop.onclick = () => {
+      const vid = document.getElementById('orange-video-el') || document.getElementById('orange-audio-el');
+      if (vid) {
+        vid.loop = !vid.loop;
+        btnLoop.classList.toggle('active', vid.loop);
+        const ctrlLoop = document.getElementById('ctrl-loop');
+        if (ctrlLoop) ctrlLoop.classList.toggle('active', vid.loop);
+        toast(vid.loop ? 'Đã BẬT lặp lại 🔁' : 'Đã TẮT lặp lại', 'info');
+      }
+    };
+  }
+
+  const btnShortcuts = document.getElementById('action-btn-shortcuts');
+  if (btnShortcuts) {
+    btnShortcuts.onclick = () => {
+      if (shortcutsModal) shortcutsModal.classList.add('active');
+    };
+  }
+
+  // Auto-next toggle
+  const autoNextCheckbox = document.getElementById('auto-next-checkbox');
+  if (autoNextCheckbox) {
+    autoNextCheckbox.checked = localStorage.getItem('orangestream_autonext') !== 'false';
+    autoNextCheckbox.onchange = () => {
+      localStorage.setItem('orangestream_autonext', autoNextCheckbox.checked ? 'true' : 'false');
+      toast(autoNextCheckbox.checked ? 'Đã BẬT tự chuyển tập 📺' : 'Đã TẮT tự chuyển tập', 'info');
+    };
+  }
+
+  // Carousel navigation arrows (PC smooth scroll)
+  const navPrev = document.getElementById('playlist-nav-prev');
+  const navNext = document.getElementById('playlist-nav-next');
+  const listEl = document.getElementById('player-playlist-items');
+  if (navPrev && listEl) {
+    navPrev.onclick = () => listEl.scrollBy({ left: -360, behavior: 'smooth' });
+  }
+  if (navNext && listEl) {
+    navNext.onclick = () => listEl.scrollBy({ left: 360, behavior: 'smooth' });
+  }
+
+  // Render Playlist carousel (Bilibili/YouTube style)
   renderPlayerPlaylist(media);
 
   if (media.type === 'video') {
@@ -1369,7 +1490,14 @@ function renderPlayerPlaylist(currentMedia) {
       <div class="playlist-card ${isActive ? 'active-ep' : ''}" data-media-id="${m.id}" title="${m.title}">
         <div class="playlist-thumb">
           <img src="${thumb}" alt="${m.title}" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 100 100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%231e130b\\'/><text y=\\'.75em\\' x=\\'25\\' font-size=\\'45\\'>🍊</text></svg>'">
-          ${isActive ? '<span style="position:absolute;bottom:3px;right:3px;background:#FF7A00;color:#FFF;font-size:0.6rem;padding:1px 5px;border-radius:4px;font-weight:700;">ĐANG PHÁT</span>' : ''}
+          ${isActive ? `
+            <span class="playing-pulse-badge">
+              <span class="pulse-bar"></span>
+              <span class="pulse-bar"></span>
+              <span class="pulse-bar"></span>
+              <span>ĐANG PHÁT</span>
+            </span>
+          ` : ''}
         </div>
         <div class="playlist-card-title">${m.title}</div>
       </div>
@@ -1382,6 +1510,14 @@ function renderPlayerPlaylist(currentMedia) {
       if (found) openPlayer(found);
     });
   });
+
+  // Smooth scroll active card into view
+  const activeCard = listEl.querySelector('.playlist-card.active-ep');
+  if (activeCard) {
+    setTimeout(() => {
+      activeCard.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }, 150);
+  }
 }
 
 function closePlayer() {
@@ -1559,6 +1695,15 @@ document.addEventListener('keydown', e => {
     const loopBtn = document.getElementById('ctrl-loop');
     if (loopBtn) loopBtn.classList.toggle('active', activeMedia.loop);
     toast(activeMedia.loop ? 'Đã BẬT lặp lại 🔁' : 'Đã TẮT lặp lại', 'info');
+  }
+
+  // N: Next Video (YouTube / Bilibili standard)
+  if (key === 'n' && !e.ctrlKey && !e.altKey && !e.metaKey) {
+    e.preventDefault();
+    const ctrlNext = document.getElementById('ctrl-next');
+    if (ctrlNext && ctrlNext.style.pointerEvents !== 'none') {
+      ctrlNext.click();
+    }
   }
 
   // 0-9: Jump to % of duration

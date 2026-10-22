@@ -1085,13 +1085,29 @@ body.basket-game-active * {
 }
 .player-overlay.active { opacity: 1; visibility: visible; }
 .player-modal {
-  width: 100%; max-width: 960px;
+  width: 100%; max-width: 1060px;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
   background: #120d09;
   border: 1px solid rgba(255, 140, 40, 0.25);
   border-radius: var(--radius-lg);
-  overflow: hidden;
   box-shadow: 0 40px 90px rgba(0, 0, 0, 0.9), 0 0 50px rgba(255, 122, 0, 0.2);
   transform: scale(0.94); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 140, 40, 0.3) transparent;
+}
+.player-modal::-webkit-scrollbar {
+  width: 7px;
+}
+.player-modal::-webkit-scrollbar-thumb {
+  background: rgba(255, 140, 40, 0.3);
+  border-radius: 4px;
+}
+.player-modal::-webkit-scrollbar-thumb:hover {
+  background: var(--orange-500);
 }
 .player-overlay.active .player-modal { transform: scale(1); }
 
@@ -1389,10 +1405,71 @@ body.basket-game-active * {
 .player-modal.theater {
   max-width: 96vw;
   width: 96vw;
+  max-height: 96vh;
 }
 .player-modal.theater .custom-orange-player {
   aspect-ratio: auto;
-  height: 80vh;
+  height: 75vh;
+}
+
+/* Auto-hide controls and cursor on PC when video is playing and mouse idle */
+.custom-orange-player.controls-hidden {
+  cursor: none;
+}
+.custom-orange-player.controls-hidden .citrus-controls,
+.custom-orange-player.controls-hidden .mobile-player-close-btn {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* ─── Video Volume HUD (Bilibili / YouTube Style) ─── */
+.video-volume-hud {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.85);
+  background: rgba(16, 11, 7, 0.88);
+  border: 1px solid rgba(255, 140, 40, 0.4);
+  backdrop-filter: blur(12px);
+  padding: 12px 24px;
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: #FFF;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75), 0 0 20px rgba(255, 122, 0, 0.35);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  z-index: 50;
+}
+.video-volume-hud.visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+.volume-hud-icon {
+  font-size: 1.4rem;
+}
+.volume-hud-text {
+  font-size: 0.95rem;
+  color: #FFAE34;
+}
+.volume-hud-bar {
+  width: 90px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.volume-hud-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FF7A00, #FFAE34);
+  border-radius: 4px;
+  transition: width 0.1s ease;
 }
 
 /* Double-Click Seek Ripple */
@@ -1704,31 +1781,32 @@ body.basket-game-active * {
   color: #FFF;
 }
 
-/* ─── Below-Video Mobile Info & Playlist ─── */
+/* ─── Below-Video Info, Actions & Playlist (YouTube / Bilibili Style) ─── */
 .player-below-content {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  padding: 14px 20px;
+  padding: 16px 22px;
   background: #110c08;
   border-bottom: 1px solid rgba(255, 140, 40, 0.12);
 }
+
+/* Action Pills Toolbar (Desktop & Mobile) */
+.player-action-pills,
 .player-mobile-actions {
   display: flex;
   align-items: center;
   gap: 10px;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
+  flex-wrap: wrap;
 }
-.player-mobile-actions::-webkit-scrollbar { display: none; }
+.action-pill,
 .mobile-action-pill {
   padding: 7px 16px;
   border-radius: 20px;
   background: rgba(255, 140, 40, 0.1);
   border: 1px solid rgba(255, 140, 40, 0.25);
   color: var(--orange-300);
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
@@ -1736,21 +1814,86 @@ body.basket-game-active * {
   align-items: center;
   gap: 6px;
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  user-select: none;
   flex-shrink: 0;
 }
-.mobile-action-pill:hover,
-.mobile-action-pill:active {
+.action-pill:hover,
+.mobile-action-pill:hover {
   background: var(--orange-500);
   border-color: var(--orange-400);
   color: #FFF;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(255, 122, 0, 0.35);
+}
+.action-pill.active,
+.mobile-action-pill.active {
+  background: linear-gradient(135deg, var(--orange-500), #EA580C);
+  color: #FFF;
+  border-color: var(--orange-400);
+  box-shadow: 0 0 10px rgba(255, 122, 0, 0.4);
+}
+.action-pill-spacer {
+  flex: 1;
+}
+
+/* Auto-Next Switch (YouTube / Bilibili style) */
+.auto-next-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+  background: rgba(255, 140, 40, 0.06);
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 140, 40, 0.18);
+  transition: all 0.2s ease;
+}
+.auto-next-toggle:hover {
+  background: rgba(255, 140, 40, 0.12);
+  color: #FFF;
+}
+.auto-next-toggle input {
+  display: none;
+}
+.toggle-slider {
+  width: 32px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 140, 40, 0.3);
+  border-radius: 18px;
+  position: relative;
+  transition: all 0.2s ease;
+  display: inline-block;
+}
+.toggle-slider::after {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #FFF;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.auto-next-toggle input:checked + .toggle-slider {
+  background: var(--orange-500);
+  border-color: var(--orange-400);
+}
+.auto-next-toggle input:checked + .toggle-slider::after {
+  transform: translateX(14px);
 }
 
 /* Playlist / Related episodes */
 .player-playlist-section {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   margin-top: 4px;
 }
 .playlist-header {
@@ -1758,8 +1901,13 @@ body.basket-game-active * {
   align-items: center;
   justify-content: space-between;
 }
+.playlist-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 .playlist-title {
-  font-size: 0.88rem;
+  font-size: 0.92rem;
   font-weight: 700;
   color: var(--orange-300);
   font-family: 'Outfit', sans-serif;
@@ -1773,35 +1921,77 @@ body.basket-game-active * {
   border-radius: 12px;
   font-weight: 700;
 }
+.playlist-nav-arrows {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.carousel-nav-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 140, 40, 0.12);
+  border: 1px solid rgba(255, 140, 40, 0.25);
+  color: var(--orange-300);
+  font-size: 1.15rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1;
+  padding: 0;
+}
+.carousel-nav-btn:hover {
+  background: var(--orange-500);
+  border-color: var(--orange-400);
+  color: #FFF;
+  transform: scale(1.08);
+}
+
 .playlist-carousel {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  padding-bottom: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 140, 40, 0.25) transparent;
+  padding: 4px 2px 8px 2px;
+  scroll-behavior: smooth;
 }
-.playlist-carousel::-webkit-scrollbar { display: none; }
+.playlist-carousel::-webkit-scrollbar {
+  height: 6px;
+}
+.playlist-carousel::-webkit-scrollbar-thumb {
+  background: rgba(255, 140, 40, 0.2);
+  border-radius: 4px;
+}
+.playlist-carousel::-webkit-scrollbar-thumb:hover {
+  background: var(--orange-500);
+}
+
 .playlist-card {
-  flex: 0 0 155px;
-  background: rgba(25, 16, 10, 0.8);
+  flex: 0 0 165px;
+  background: rgba(25, 16, 10, 0.85);
   border: 1px solid rgba(255, 140, 40, 0.18);
   border-radius: 10px;
   padding: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
   user-select: none;
+  position: relative;
 }
-.playlist-card:hover,
-.playlist-card:active {
+.playlist-card:hover {
   border-color: var(--orange-400);
   background: rgba(255, 122, 0, 0.15);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.55), 0 0 12px rgba(255, 122, 0, 0.3);
 }
 .playlist-card.active-ep {
   border-color: var(--orange-500);
   background: linear-gradient(135deg, rgba(255, 122, 0, 0.25), rgba(255, 122, 0, 0.08));
-  box-shadow: 0 0 12px rgba(255, 122, 0, 0.3);
+  box-shadow: 0 0 14px rgba(255, 122, 0, 0.35);
 }
 .playlist-thumb {
   width: 100%;
@@ -1818,13 +2008,56 @@ body.basket-game-active * {
 .playlist-thumb img {
   width: 100%; height: 100%; object-fit: cover;
 }
+.playlist-card:hover .playlist-thumb::after {
+  content: '▶';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: #FFF;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+}
 .playlist-card-title {
-  font-size: 0.76rem;
+  font-size: 0.78rem;
   font-weight: 600;
   color: var(--text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* Sound bars indicator for current playing episode */
+.playing-pulse-badge {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  background: linear-gradient(135deg, #FF7A00, #EA580C);
+  color: #FFF;
+  font-size: 0.62rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  z-index: 2;
+}
+.pulse-bar {
+  width: 2px;
+  height: 8px;
+  background: #FFF;
+  border-radius: 1px;
+  animation: soundBar 0.8s ease-in-out infinite alternate;
+}
+.pulse-bar:nth-child(2) { animation-delay: 0.25s; height: 11px; }
+.pulse-bar:nth-child(3) { animation-delay: 0.5s; height: 6px; }
+@keyframes soundBar {
+  0% { transform: scaleY(0.35); }
+  100% { transform: scaleY(1.2); }
 }
 
 /* ─── Responsive Adjustments (Desktop / Tablet / Mobile) ─── */

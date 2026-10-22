@@ -7,7 +7,7 @@
   <meta name="description" content="Orangestream — Nền tảng xem phim và nghe nhạc trực tuyến mọng nước từ Google Drive. Trải nghiệm mượt mà, không quảng cáo." />
   <meta name="theme-color" content="#ff7a00" />
   <meta name="referrer" content="no-referrer" />
-  <link rel="stylesheet" href="style.css?v=3.0" />
+  <link rel="stylesheet" href="style.css?v=3.1" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍊</text></svg>" />
 </head>
 <body>
@@ -299,22 +299,44 @@
 
       <!-- ─── Bilibili/YouTube Style Below Video Info & Playlist ─── -->
       <div class="player-below-content" id="player-below-content">
-        <div class="player-mobile-actions">
-          <button class="mobile-action-pill" id="mobile-btn-switch-player">
+        <div class="player-action-pills" id="player-action-pills">
+          <button class="action-pill" id="action-btn-switch-player" title="Đổi giữa Trình phát Cam và Google Drive">
             <span>🔄 Drive Player</span>
           </button>
-          <a class="mobile-action-pill" id="mobile-btn-download" href="#" download>
+          <a class="action-pill" id="action-btn-download" href="#" download title="Tải video độ phân giải gốc">
             <span>⬇ Tải về</span>
           </a>
-          <a class="mobile-action-pill" id="mobile-btn-open-drive" href="#" target="_blank" rel="noopener">
+          <a class="action-pill" id="action-btn-open-drive" href="#" target="_blank" rel="noopener" title="Mở file trên Google Drive">
             <span>↗ Mở Drive</span>
           </a>
+          <button class="action-pill" id="action-btn-theater" title="Bật/Tắt chế độ Rạp phim (Phím T)">
+            <span>🍿 Rạp phim</span>
+          </button>
+          <button class="action-pill" id="action-btn-loop" title="Bật/Tắt phát lặp lại (Phím R)">
+            <span>🔁 Lặp lại</span>
+          </button>
+          <button class="action-pill" id="action-btn-shortcuts" title="Xem bảng phím tắt tiện lợi">
+            <span>⌨️ Phím tắt</span>
+          </button>
+          <div class="action-pill-spacer"></div>
+          <!-- YouTube/Bilibili style Auto-play next toggle -->
+          <label class="auto-next-toggle" title="Tự động phát tập tiếp theo khi hết video">
+            <input type="checkbox" id="auto-next-checkbox" checked>
+            <span class="toggle-slider"></span>
+            <span class="toggle-label">Tự chuyển tập</span>
+          </label>
         </div>
 
         <div class="player-playlist-section" id="player-playlist-section">
           <div class="playlist-header">
-            <span class="playlist-title">📺 Danh sách tập & liên quan</span>
-            <span class="playlist-count" id="player-playlist-count">0</span>
+            <div class="playlist-title-wrap">
+              <span class="playlist-title">📺 Danh sách tập & liên quan</span>
+              <span class="playlist-count" id="player-playlist-count">0 mục</span>
+            </div>
+            <div class="playlist-nav-arrows">
+              <button class="carousel-nav-btn" id="playlist-nav-prev" title="Cuộn sang trái" aria-label="Cuộn trái">‹</button>
+              <button class="carousel-nav-btn" id="playlist-nav-next" title="Cuộn sang phải" aria-label="Cuộn phải">›</button>
+            </div>
           </div>
           <div class="playlist-carousel" id="player-playlist-items"></div>
         </div>
@@ -342,19 +364,20 @@
   <div id="shortcuts-modal" class="shortcuts-overlay" role="dialog" aria-modal="true" aria-labelledby="shortcuts-title">
     <div class="shortcuts-card">
       <div class="shortcuts-title">
-        <span>⌨️ Phím Tắt Vườn Cam</span>
+        <span>⌨️ Phím Tắt Vườn Cam (YouTube / Bilibili)</span>
         <button id="close-shortcuts" class="close-btn" style="width:32px;height:32px;" aria-label="Đóng phím tắt">✕</button>
       </div>
       <div class="shortcuts-grid">
         <div class="shortcut-item"><span>Phát / Dừng</span> <kbd>Space / K</kbd></div>
-        <div class="shortcut-item"><span>Toàn màn hình</span> <kbd>F</kbd></div>
-        <div class="shortcut-item"><span>Độ phân giải</span> <kbd>Q</kbd></div>
+        <div class="shortcut-item"><span>Toàn màn hình</span> <kbd>F / Double-Click</kbd></div>
+        <div class="shortcut-item"><span>Tập tiếp theo</span> <kbd>N</kbd></div>
         <div class="shortcut-item"><span>Tua lùi 10s</span> <kbd>← / J</kbd></div>
         <div class="shortcut-item"><span>Tua tới 10s</span> <kbd>→ / L</kbd></div>
-        <div class="shortcut-item"><span>Tăng âm lượng</span> <kbd>↑</kbd></div>
-        <div class="shortcut-item"><span>Giảm âm lượng</span> <kbd>↓</kbd></div>
+        <div class="shortcut-item"><span>Nhảy 0% - 90%</span> <kbd>0 - 9</kbd></div>
+        <div class="shortcut-item"><span>Tăng / Giảm Volume</span> <kbd>↑ / ↓ / Cuộn chuột</kbd></div>
         <div class="shortcut-item"><span>Tắt / Bật tiếng</span> <kbd>M</kbd></div>
         <div class="shortcut-item"><span>Chế độ Rạp phim</span> <kbd>T</kbd></div>
+        <div class="shortcut-item"><span>Độ phân giải</span> <kbd>Q</kbd></div>
         <div class="shortcut-item"><span>Hình trong hình (PiP)</span> <kbd>P</kbd></div>
         <div class="shortcut-item"><span>Lặp lại video</span> <kbd>R</kbd></div>
       </div>
@@ -397,6 +420,6 @@
   </nav>
 
 </div><!-- /app -->
-<script type="module" src="app.js?v=3.0"></script>
+<script type="module" src="app.js?v=3.1"></script>
 </body>
 </html>
