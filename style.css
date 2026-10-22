@@ -275,6 +275,8 @@ body::after {
   overflow-y: auto;
   height: calc(100vh - 70px);
   position: sticky; top: 70px;
+  display: flex;
+  flex-direction: column;
 }
 .sidebar-section-title {
   font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
@@ -347,193 +349,193 @@ body::after {
   font-size: 0.72rem; color: var(--text-muted); font-weight: 500;
 }
 
-/* ─── Cây Cam Rung Rớt Quả (Interactive Orange Tree Widget) ─── */
-.orange-tree-widget {
-  margin-top: 1.4rem;
-  padding: 14px 12px 14px 12px;
-  background: linear-gradient(145deg, rgba(32, 20, 11, 0.85), rgba(18, 12, 7, 0.95));
-  border: 1px solid rgba(255, 140, 40, 0.22);
-  border-radius: var(--radius-md);
+/* ─── Mini Game: Cây Cam Hái Quả (Không Đóng Khung, Xếp Dưới Cùng) ─── */
+.orange-mini-game {
+  margin-top: auto;
+  padding-top: 18px;
+  padding-bottom: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   position: relative;
-  overflow: hidden;
-  cursor: pointer;
   user-select: none;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  background: transparent;
+  border: none;
 }
-.orange-tree-widget:hover {
-  border-color: rgba(255, 140, 40, 0.45);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5), 0 0 20px var(--orange-glow-sm);
-  transform: translateY(-2px);
-}
-.tree-header-tag {
-  font-size: 0.65rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  color: var(--leaf-light);
+
+/* Score HUD */
+.game-hud {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   margin-bottom: 6px;
+  z-index: 5;
 }
-.tree-pulse-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: #10B981;
-  box-shadow: 0 0 8px #10B981;
-  animation: pulseDot 2s infinite;
+.game-basket {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--orange-300);
+  background: rgba(255, 140, 40, 0.08);
+  border: 1px solid rgba(255, 140, 40, 0.2);
+  border-radius: 20px;
+  padding: 3px 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  backdrop-filter: blur(6px);
 }
-.tree-stage {
+.score-pop {
+  display: inline-block;
+  animation: scoreBounce 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes scoreBounce {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.45); color: #FFF; text-shadow: 0 0 10px #FF7A00; }
+  100% { transform: scale(1); }
+}
+
+.game-combo-tag {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #FFF;
+  background: linear-gradient(135deg, #FF7A00, #EA580C);
+  border-radius: 12px;
+  padding: 2px 8px;
+  box-shadow: 0 0 12px rgba(255, 122, 0, 0.65);
+}
+.pulse-combo {
+  animation: comboPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes comboPop {
+  0%   { transform: scale(0.6); }
+  50%  { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
+/* Tree Canvas Wrapper (Nhỏ gọn, Tự nhiên) */
+.tree-canvas-wrapper {
   position: relative;
-  width: 100%;
+  width: 125px;
+  height: 95px;
+  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  height: 140px;
-  overflow: visible;
 }
-.orange-tree-svg {
+.compact-tree-svg {
   display: block;
+  transform-origin: 80px 115px;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
+}
+.tree-canvas-wrapper:hover .compact-tree-svg {
+  transform: scale(1.08);
+}
+.tree-canvas-wrapper:hover .tree-foliage-canopy {
+  animation: canopyWind 1.6s ease-in-out infinite alternate;
+}
+@keyframes canopyWind {
+  from { transform: rotate(-2deg); }
+  to   { transform: rotate(2deg); }
+}
+
+/* Shake Action */
+.compact-tree-svg.tree-shaking {
+  animation: treeMiniShake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+@keyframes treeMiniShake {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  20%      { transform: rotate(-8deg) scale(1.08); }
+  40%      { transform: rotate(7deg) scale(1.08); }
+  60%      { transform: rotate(-5deg); }
+  80%      { transform: rotate(3deg); }
+}
+
+/* Dropzone & Falling Fruits */
+.tree-dropzone {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
   overflow: visible;
-  transform-origin: 100px 156px;
-  transition: transform 0.2s ease;
 }
-
-/* Tree Swaying & Shaking */
-.orange-tree-widget:hover .tree-foliage-group {
-  animation: canopyGentleSway 1.8s ease-in-out infinite alternate;
-}
-@keyframes canopyGentleSway {
-  0%   { transform: rotate(-1.5deg); }
-  100% { transform: rotate(1.5deg); }
-}
-
-.orange-tree-widget.shaking .orange-tree-svg {
-  animation: treeShakeAction 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-}
-@keyframes treeShakeAction {
-  0%, 100% { transform: rotate(0deg); }
-  15%      { transform: rotate(-7deg) scale(1.03); }
-  30%      { transform: rotate(6deg) scale(1.03); }
-  45%      { transform: rotate(-5deg); }
-  60%      { transform: rotate(3.5deg); }
-  75%      { transform: rotate(-2deg); }
-  90%      { transform: rotate(1deg); }
-}
-
-/* Droppable Orange */
-.branch-ripe-orange {
+.falling-fruit {
+  position: absolute;
+  font-size: 1.45rem;
   cursor: pointer;
-  transform-origin: 110px 84px;
-  transition: transform 0.2s ease;
+  pointer-events: auto;
+  user-select: none;
+  filter: drop-shadow(0 4px 8px rgba(255, 122, 0, 0.65));
+  animation: fruitFallAndBounce 1.25s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  z-index: 10;
+  transition: transform 0.15s ease;
 }
-.orange-tree-widget:hover .branch-ripe-orange {
-  animation: ripeFruitWobble 1.2s ease-in-out infinite alternate;
+.falling-fruit:hover {
+  transform: scale(1.35) !important;
 }
-@keyframes ripeFruitWobble {
-  0%   { transform: rotate(-6deg); }
-  100% { transform: rotate(6deg); }
+.golden-fruit {
+  filter: drop-shadow(0 0 12px #FFD166) drop-shadow(0 4px 12px rgba(255, 180, 0, 0.85));
 }
 
-.branch-ripe-orange.dropping {
-  animation: orangeDropPhysics 0.55s cubic-bezier(0.55, 0.055, 0.675, 0.19) forwards;
-}
-@keyframes orangeDropPhysics {
+@keyframes fruitFallAndBounce {
   0% {
-    transform: translate(0, 0) rotate(0deg);
+    transform: translate(0, 0) scale(0.6) rotate(0deg);
+    opacity: 0.85;
+  }
+  30% {
+    transform: translate(var(--drift-x, 0px), 30px) scale(1) rotate(90deg);
     opacity: 1;
   }
-  75% {
-    transform: translate(-5px, 45px) rotate(160deg);
-    opacity: 1;
+  65% {
+    transform: translate(var(--drift-x, 0px), 66px) scale(1.2, 0.8) rotate(180deg);
+  }
+  80% {
+    transform: translate(var(--drift-x, 0px), 54px) scale(0.95, 1.05) rotate(220deg);
   }
   100% {
-    transform: translate(-8px, 52px) rotate(180deg);
-    opacity: 0;
+    transform: translate(var(--drift-x, 0px), 66px) scale(1) rotate(240deg);
   }
 }
 
-.branch-ripe-orange.regrowing {
-  animation: fruitRegrowPop 0.75s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+.falling-fruit.caught {
+  animation: fruitCaughtBurst 0.3s ease-out forwards;
 }
-@keyframes fruitRegrowPop {
-  0%   { transform: scale(0); opacity: 0; }
-  60%  { transform: scale(1.35); opacity: 1; }
-  100% { transform: scale(1); opacity: 1; }
+@keyframes fruitCaughtBurst {
+  0%   { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1.9) translateY(-35px); opacity: 0; }
 }
 
-/* Ground Fallen Orange */
-.ground-fallen-orange {
-  position: absolute;
-  bottom: 2px;
-  left: 92px;
-  font-size: 1.65rem;
+.falling-fruit.fading {
+  transition: opacity 0.4s ease, transform 0.4s ease;
   opacity: 0;
-  pointer-events: none;
-  transform: scale(0);
-  cursor: pointer;
-  filter: drop-shadow(0 4px 12px rgba(255, 122, 0, 0.75));
-  z-index: 10;
-  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.ground-fallen-orange.landed {
-  opacity: 1;
-  pointer-events: auto;
-  animation: orangeLandBounce 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, fallenGlow 1.6s ease-in-out infinite alternate;
-}
-@keyframes orangeLandBounce {
-  0%   { transform: translateY(-45px) scale(0.6) rotate(-120deg); }
-  55%  { transform: translateY(0px) scale(1.25, 0.75) rotate(10deg); }
-  75%  { transform: translateY(-14px) scale(0.95, 1.05) rotate(25deg); }
-  100% { transform: translateY(0px) scale(1) rotate(35deg); }
-}
-@keyframes fallenGlow {
-  0%   { filter: drop-shadow(0 3px 8px rgba(255, 122, 0, 0.6)); transform: translateY(0) scale(1); }
-  100% { filter: drop-shadow(0 6px 18px rgba(255, 190, 0, 0.95)); transform: translateY(-3px) scale(1.12); }
-}
-.ground-fallen-orange:hover {
-  transform: scale(1.25) rotate(45deg) !important;
-}
-.ground-fallen-orange.collected {
-  animation: orangeHarvestFly 0.45s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-@keyframes orangeHarvestFly {
-  0%   { transform: scale(1.2) translateY(0); opacity: 1; }
-  100% { transform: scale(1.8) translateY(-70px); opacity: 0; }
+  transform: scale(0.4);
 }
 
-/* Tree Action Hint */
-.tree-action-hint {
-  margin-top: 8px;
-  text-align: center;
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--orange-300);
-  background: rgba(255, 140, 40, 0.1);
-  border: 1px dashed rgba(255, 140, 40, 0.25);
-  border-radius: 20px;
-  padding: 4px 10px;
-  opacity: 0.8;
-  transition: all 0.25s ease;
-  cursor: pointer;
-}
-.orange-tree-widget:hover .tree-action-hint {
-  opacity: 1;
-  background: rgba(255, 140, 40, 0.18);
-  border-color: var(--orange-400);
+/* Floating Score Popup (+1 / +3) */
+.floating-score-popup {
+  position: fixed;
+  z-index: 9999;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1.15rem;
   color: #FFF;
+  text-shadow: 0 0 10px rgba(255, 122, 0, 0.9), 0 2px 5px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+  animation: scoreFloatUp 0.85s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  transform: translate(-50%, -50%);
 }
-.tree-action-hint.show {
-  background: var(--orange-500);
-  color: #FFF;
-  border-style: solid;
-  border-color: var(--orange-400);
-  box-shadow: 0 0 14px var(--orange-glow-sm);
-  animation: promptPulse 1.2s infinite alternate;
-}
-@keyframes promptPulse {
-  from { transform: scale(0.97); }
-  to   { transform: scale(1.03); }
+@keyframes scoreFloatUp {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -10px) scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -45px) scale(1.25);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -75px) scale(1.4);
+  }
 }
 
 /* ─── Content Area ────────────────────────────────── */

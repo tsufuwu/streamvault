@@ -1488,104 +1488,160 @@ const shimmerStyle = document.createElement('style');
 shimmerStyle.textContent = `@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }`;
 document.head.appendChild(shimmerStyle);
 
-// ─── Interactive Orange Tree (Cây cam rụng quả khi chạm vào) ────
-function initInteractiveOrangeTree() {
-  const treeContainer = document.getElementById('interactive-orange-tree');
-  if (!treeContainer) return;
+// ─── Mini Game: Rung Cây Hái Cam (Interactive Mini Game) ───
+function initOrangeMiniGame() {
+  const miniGameContainer = document.getElementById('orange-mini-game');
+  if (!miniGameContainer) return;
 
-  const ripeOrange   = document.getElementById('branch-ripe-orange');
-  const fallenOrange = document.getElementById('ground-fallen-orange');
-  const harvestBtn   = document.getElementById('harvest-orange-prompt');
+  const treeSvg     = document.getElementById('compact-tree-svg');
+  const treeWrapper = document.getElementById('tree-canvas-wrapper');
+  const dropzone    = document.getElementById('tree-dropzone');
+  const scoreEl     = document.getElementById('game-score-count');
+  const comboEl     = document.getElementById('game-combo-tag');
 
+  // Load saved score
+  let score = parseInt(localStorage.getItem('orangestream_score') || '0', 10);
+  if (isNaN(score)) score = 0;
+  if (scoreEl) scoreEl.textContent = score;
+
+  let combo = 0;
+  let comboTimer = null;
   let isShaking = false;
-  let hasFallen = false;
 
-  function shakeTreeAndDropOrange(e) {
-    if (isShaking || hasFallen) return;
+  const milestones = new Set([10, 25, 50, 100, 200, 500]);
+
+  function triggerShake(e) {
+    if (isShaking) return;
     isShaking = true;
-    hasFallen = true;
 
-    // Splash small particles around mouse/touch
     if (e && e.clientX && e.clientY) {
       createJuiceSplash(e.clientX, e.clientY);
     }
 
-    // Shake tree animation
-    treeContainer.classList.add('shaking');
-
-    // Trigger orange drop
-    if (ripeOrange) {
-      ripeOrange.classList.add('dropping');
-    }
-
-    setTimeout(() => {
-      treeContainer.classList.remove('shaking');
+    // Shake tree
+    if (treeSvg) {
+      treeSvg.classList.add('tree-shaking');
+      setTimeout(() => {
+        treeSvg.classList.remove('tree-shaking');
+        isShaking = false;
+      }, 450);
+    } else {
       isShaking = false;
+    }
 
-      // Show fallen orange on the ground
-      if (fallenOrange) {
-        fallenOrange.classList.add('landed');
-      }
-      if (harvestBtn) {
-        harvestBtn.classList.add('show');
-      }
-
-      // Small bounce splash at the ground
-      const rect = treeContainer.getBoundingClientRect();
-      createJuiceSplash(rect.left + 90, rect.top + 130);
-    }, 600);
+    // Spawn 1 to 2 falling oranges
+    const count = Math.random() < 0.65 ? 1 : 2;
+    for (let i = 0; i < count; i++) {
+      setTimeout(() => spawnFallingOrange(), i * 160);
+    }
   }
 
-  function harvestOrange(e) {
-    if (e) {
-      e.stopPropagation();
-      createJuiceSplash(e.clientX, e.clientY);
+  function spawnFallingOrange() {
+    if (!dropzone) return;
+
+    const orangeEl = document.createElement('div');
+    const isGolden = Math.random() < 0.22; // 22% chance of Golden Citrus!
+    orangeEl.className = `falling-fruit ${isGolden ? 'golden-fruit' : 'normal-fruit'}`;
+    orangeEl.textContent = isGolden ? '🌟' : '🍊';
+    orangeEl.setAttribute('role', 'button');
+    orangeEl.setAttribute('tabindex', '0');
+    orangeEl.setAttribute('aria-label', isGolden ? 'Bắt cam vàng!' : 'Bắt cam!');
+
+    // Random start X around tree canopy (20px to 80px)
+    const startX = Math.floor(Math.random() * 60) + 20;
+    orangeEl.style.left = `${startX}px`;
+    orangeEl.style.top = '10px';
+
+    // Random trajectory (slight left or right drift)
+    const driftX = (Math.random() - 0.5) * 35;
+    orangeEl.style.setProperty('--drift-x', `${driftX}px`);
+
+    // Click handler to catch the fruit mid-air or on ground
+    function onCatch(ev) {
+      ev.stopPropagation();
+      catchFruit(orangeEl, isGolden, ev.clientX || (orangeEl.getBoundingClientRect().left + 10), ev.clientY || (orangeEl.getBoundingClientRect().top + 10));
     }
 
-    if (fallenOrange) {
-      fallenOrange.classList.remove('landed');
-      fallenOrange.classList.add('collected');
-    }
-    if (harvestBtn) {
-      harvestBtn.classList.remove('show');
-    }
+    orangeEl.addEventListener('click', onCatch);
+    orangeEl.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Enter' || ev.key === ' ') onCatch(ev);
+    });
 
-    toast('🎉 Bạn vừa thu hoạch 1 quả cam tươi mọng nước! 🍊🧺', 'info');
+    dropzone.appendChild(orangeEl);
 
-    // Regrow after 3 seconds
+    // Automatically remove after 3.8s if not caught
     setTimeout(() => {
-      if (fallenOrange) fallenOrange.classList.remove('collected');
-      if (ripeOrange) {
-        ripeOrange.classList.remove('dropping');
-        ripeOrange.classList.add('regrowing');
-        setTimeout(() => {
-          ripeOrange.classList.remove('regrowing');
-          hasFallen = false;
-        }, 800);
-      } else {
-        hasFallen = false;
+      if (orangeEl.parentNode) {
+        orangeEl.classList.add('fading');
+        setTimeout(() => orangeEl.remove(), 400);
       }
-    }, 3000);
+    }, 3500);
   }
 
-  // Hover or click on the tree triggers shake & drop
-  treeContainer.addEventListener('mouseenter', shakeTreeAndDropOrange);
-  treeContainer.addEventListener('click', (e) => {
-    if (!hasFallen) {
-      shakeTreeAndDropOrange(e);
+  function catchFruit(fruitEl, isGolden, x, y) {
+    if (fruitEl.dataset.caught) return;
+    fruitEl.dataset.caught = 'true';
+
+    // Combo system
+    combo++;
+    clearTimeout(comboTimer);
+    comboTimer = setTimeout(() => {
+      combo = 0;
+      if (comboEl) comboEl.style.display = 'none';
+    }, 3200);
+
+    if (combo >= 2 && comboEl) {
+      comboEl.textContent = `Combo x${combo}! 🔥`;
+      comboEl.style.display = 'inline-block';
+      comboEl.classList.remove('pulse-combo');
+      void comboEl.offsetWidth; // reflow
+      comboEl.classList.add('pulse-combo');
     }
-  });
 
-  if (fallenOrange) {
-    fallenOrange.addEventListener('click', harvestOrange);
+    // Points
+    const points = isGolden ? (3 * Math.min(combo, 3)) : (1 * Math.min(combo, 2));
+    score += points;
+    if (scoreEl) {
+      scoreEl.textContent = score;
+      scoreEl.classList.remove('score-pop');
+      void scoreEl.offsetWidth;
+      scoreEl.classList.add('score-pop');
+    }
+    localStorage.setItem('orangestream_score', String(score));
+
+    // Particle splash
+    createJuiceSplash(x, y);
+
+    // Floating text indicator (+1 / +3)
+    showFloatingPopup(x, y, `+${points} ${isGolden ? '🌟' : '🍊'}`);
+
+    // Animate fruit harvest into basket
+    fruitEl.classList.add('caught');
+    setTimeout(() => fruitEl.remove(), 300);
+
+    // Milestones
+    if (milestones.has(score)) {
+      toast(`🎉 Đỉnh cao nông dân! Bạn đã thu hoạch được ${score} quả cam! 🧺🍊`, 'info');
+    }
   }
-  if (harvestBtn) {
-    harvestBtn.addEventListener('click', harvestOrange);
+
+  function showFloatingPopup(x, y, text) {
+    const pop = document.createElement('div');
+    pop.className = 'floating-score-popup';
+    pop.textContent = text;
+    pop.style.left = `${x || 100}px`;
+    pop.style.top = `${y || 100}px`;
+    document.body.appendChild(pop);
+    setTimeout(() => pop.remove(), 850);
+  }
+
+  if (treeWrapper) {
+    treeWrapper.addEventListener('click', triggerShake);
   }
 }
 
 // ─── INIT ─────────────────────────────────────────────
 fetchMediaLibrary();
-initInteractiveOrangeTree();
+initOrangeMiniGame();
 
 
