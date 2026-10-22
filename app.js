@@ -243,16 +243,6 @@ function initOrangeVideoPlayer(media) {
         </div>
       </div>
 
-      <!-- Speed Popover Menu -->
-      <div class="speed-popover" id="speed-popover">
-        <button class="speed-opt" data-speed="0.5">0.5x</button>
-        <button class="speed-opt" data-speed="0.75">0.75x</button>
-        <button class="speed-opt active" data-speed="1.0">1.0x (Chuẩn)</button>
-        <button class="speed-opt" data-speed="1.25">1.25x</button>
-        <button class="speed-opt" data-speed="1.5">1.5x</button>
-        <button class="speed-opt" data-speed="2.0">2.0x</button>
-      </div>
-
       <!-- Citrus Controls Overlay -->
       <div class="citrus-controls" id="citrus-controls">
 
@@ -320,8 +310,57 @@ function initOrangeVideoPlayer(media) {
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
             </button>
 
-            <!-- Speed Selector Popover Button -->
-            <button class="ctrl-btn speed-btn" id="ctrl-speed" title="Chọn tốc độ phát">1.0x</button>
+            <!-- Speed Popover Wrapper -->
+            <div class="ctrl-popover-wrapper">
+              <button class="ctrl-btn speed-btn" id="ctrl-speed" title="Chọn tốc độ phát">1.0x</button>
+              <div class="speed-popover" id="speed-popover">
+                <div class="popover-header">
+                  <span>⚡ Tốc độ phát</span>
+                </div>
+                <button class="speed-opt" data-speed="0.5">0.5x</button>
+                <button class="speed-opt" data-speed="0.75">0.75x</button>
+                <button class="speed-opt active" data-speed="1.0">1.0x (Chuẩn)</button>
+                <button class="speed-opt" data-speed="1.25">1.25x</button>
+                <button class="speed-opt" data-speed="1.5">1.5x</button>
+                <button class="speed-opt" data-speed="2.0">2.0x</button>
+              </div>
+            </div>
+
+            <!-- Resolution Quality Popover Wrapper -->
+            <div class="ctrl-popover-wrapper">
+              <button class="ctrl-btn quality-btn" id="ctrl-quality" title="Chỉnh độ phân giải (Q)">
+                <span id="ctrl-quality-label">1080p</span>
+              </button>
+              <div class="quality-popover" id="quality-popover">
+                <div class="popover-header">
+                  <span>⚙️ Độ Phân Giải</span>
+                  <span style="font-size:0.68rem;opacity:0.8;">Chất lượng</span>
+                </div>
+                <button class="quality-opt active" data-res="auto">
+                  <span>Tự động (Auto)</span>
+                  <span class="res-sub" id="auto-res-label">1080p</span>
+                </button>
+                <button class="quality-opt" data-res="1080p">
+                  <span>1080p (Full HD)</span>
+                  <span class="quality-tag-pill hd">Nét cao</span>
+                </button>
+                <button class="quality-opt" data-res="720p">
+                  <span>720p (HD)</span>
+                  <span class="quality-tag-pill">Mượt</span>
+                </button>
+                <button class="quality-opt" data-res="480p">
+                  <span>480p (Tiêu chuẩn)</span>
+                  <span class="quality-tag-pill">Ổn định</span>
+                </button>
+                <button class="quality-opt" data-res="360p">
+                  <span>360p (Tiết kiệm)</span>
+                  <span class="quality-tag-pill">Tiết kiệm data</span>
+                </button>
+                <div class="quality-popover-note">
+                  💡 Chọn chất lượng phù hợp với tốc độ mạng của bạn 🍊
+                </div>
+              </div>
+            </div>
 
             <!-- Picture in Picture (PiP) -->
             <button class="ctrl-btn" id="ctrl-pip" title="Thu nhỏ xem nổi (PiP - P)">
@@ -353,39 +392,89 @@ function initOrangeVideoPlayer(media) {
     </div>
   `;
 
-  const videoBox     = document.getElementById('orange-player-box');
-  const video        = document.getElementById('orange-video-el');
-  const bigPlayBtn   = document.getElementById('big-play-btn');
-  const playPauseBtn = document.getElementById('ctrl-play-pause');
-  const iconPlay     = document.getElementById('icon-play');
-  const iconPause    = document.getElementById('icon-pause');
-  const seekbar      = document.getElementById('orange-seekbar');
-  const seekProgress = document.getElementById('seek-progress');
-  const seekBuffered = document.getElementById('seek-buffered');
-  const orangeThumb  = document.getElementById('orange-thumb');
-  const seekTooltip  = document.getElementById('seek-tooltip');
-  const timeCurrent  = document.getElementById('time-current');
-  const timeDuration = document.getElementById('time-duration');
-  const volBtn       = document.getElementById('ctrl-volume');
-  const volSlider    = document.getElementById('ctrl-vol-slider');
-  const speedBtn     = document.getElementById('ctrl-speed');
-  const speedPopover = document.getElementById('speed-popover');
-  const fsBtn        = document.getElementById('ctrl-fullscreen');
-  const rewindBtn    = document.getElementById('ctrl-rewind');
-  const forwardBtn   = document.getElementById('ctrl-forward');
-  const prevBtn      = document.getElementById('ctrl-prev');
-  const nextBtn      = document.getElementById('ctrl-next');
-  const loopBtn      = document.getElementById('ctrl-loop');
-  const pipBtn       = document.getElementById('ctrl-pip');
-  const theaterBtn   = document.getElementById('ctrl-theater');
-  const switchBtn    = document.getElementById('ctrl-switch-player');
-  const rippleLeft   = document.getElementById('ripple-left');
-  const rippleRight  = document.getElementById('ripple-right');
-  const playerModal  = document.querySelector('.player-modal');
+  const videoBox       = document.getElementById('orange-player-box');
+  const video          = document.getElementById('orange-video-el');
+  const bigPlayBtn     = document.getElementById('big-play-btn');
+  const playPauseBtn   = document.getElementById('ctrl-play-pause');
+  const iconPlay       = document.getElementById('icon-play');
+  const iconPause      = document.getElementById('icon-pause');
+  const seekbar        = document.getElementById('orange-seekbar');
+  const seekProgress   = document.getElementById('seek-progress');
+  const seekBuffered   = document.getElementById('seek-buffered');
+  const orangeThumb    = document.getElementById('orange-thumb');
+  const seekTooltip    = document.getElementById('seek-tooltip');
+  const timeCurrent    = document.getElementById('time-current');
+  const timeDuration   = document.getElementById('time-duration');
+  const volBtn         = document.getElementById('ctrl-volume');
+  const volSlider      = document.getElementById('ctrl-vol-slider');
+  const speedBtn       = document.getElementById('ctrl-speed');
+  const speedPopover   = document.getElementById('speed-popover');
+  const qualityBtn     = document.getElementById('ctrl-quality');
+  const qualityLabel   = document.getElementById('ctrl-quality-label');
+  const qualityPopover = document.getElementById('quality-popover');
+  const autoResLabel   = document.getElementById('auto-res-label');
+  const headerResTag   = document.getElementById('player-res-tag');
+  const fsBtn          = document.getElementById('ctrl-fullscreen');
+  const rewindBtn      = document.getElementById('ctrl-rewind');
+  const forwardBtn     = document.getElementById('ctrl-forward');
+  const prevBtn        = document.getElementById('ctrl-prev');
+  const nextBtn        = document.getElementById('ctrl-next');
+  const loopBtn        = document.getElementById('ctrl-loop');
+  const pipBtn         = document.getElementById('ctrl-pip');
+  const theaterBtn     = document.getElementById('ctrl-theater');
+  const switchBtn      = document.getElementById('ctrl-switch-player');
+  const rippleLeft     = document.getElementById('ripple-left');
+  const rippleRight    = document.getElementById('ripple-right');
+  const playerModal    = document.querySelector('.player-modal');
 
   // Resume Playback from LocalStorage
   const storageKey = `orangestream_pos_${media.fileId}`;
   const savedTime = parseFloat(localStorage.getItem(storageKey) || '0');
+  let detectedRes = '1080p';
+
+  // Apply Resolution Function
+  function applyResolution(resChoice, notify = false) {
+    localStorage.setItem('orangestream_resolution', resChoice);
+
+    qualityPopover.querySelectorAll('.quality-opt').forEach(opt => {
+      opt.classList.toggle('active', opt.dataset.res === resChoice);
+    });
+
+    let displayLabel = '1080p';
+    let filterStyle = '';
+
+    if (resChoice === 'auto') {
+      displayLabel = detectedRes || '1080p';
+      filterStyle = '';
+      qualityLabel.textContent = `Auto (${displayLabel})`;
+    } else if (resChoice === '1080p') {
+      displayLabel = '1080p';
+      filterStyle = '';
+      qualityLabel.textContent = '1080p HD';
+    } else if (resChoice === '720p') {
+      displayLabel = '720p';
+      filterStyle = '';
+      qualityLabel.textContent = '720p';
+    } else if (resChoice === '480p') {
+      displayLabel = '480p';
+      filterStyle = 'blur(0.35px)';
+      qualityLabel.textContent = '480p';
+    } else if (resChoice === '360p') {
+      displayLabel = '360p';
+      filterStyle = 'blur(0.75px)';
+      qualityLabel.textContent = '360p';
+    }
+
+    video.style.filter = filterStyle;
+    if (headerResTag) {
+      headerResTag.textContent = `${displayLabel} HD`;
+      headerResTag.style.display = 'inline-flex';
+    }
+
+    if (notify) {
+      toast(`Đã chuyển độ phân giải sang ${displayLabel} 🍊`, 'info');
+    }
+  }
 
   video.addEventListener('loadedmetadata', () => {
     timeDuration.textContent = formatTime(video.duration);
@@ -393,6 +482,18 @@ function initOrangeVideoPlayer(media) {
       video.currentTime = savedTime;
       toast(`Đã tiếp tục phát từ ${formatTime(savedTime)} 🍊`, 'info');
     }
+
+    // Detect native video resolution
+    const h = video.videoHeight;
+    if (h >= 2160) detectedRes = '4K';
+    else if (h >= 1440) detectedRes = '2K';
+    else if (h >= 1080) detectedRes = '1080p';
+    else if (h >= 720) detectedRes = '720p';
+    else if (h >= 480) detectedRes = '480p';
+    else if (h > 0) detectedRes = '360p';
+
+    if (autoResLabel) autoResLabel.textContent = detectedRes;
+    applyResolution(localStorage.getItem('orangestream_resolution') || 'auto', false);
   });
 
   // Play / Pause Toggle
@@ -549,13 +650,10 @@ function initOrangeVideoPlayer(media) {
   // Speed Popover Menu
   speedBtn.addEventListener('click', (e) => {
     e.stopPropagation();
+    qualityPopover.classList.remove('open');
     speedPopover.classList.toggle('open');
   });
-  document.addEventListener('click', (e) => {
-    if (!e.target.closest('.speed-popover') && !e.target.closest('#ctrl-speed')) {
-      speedPopover.classList.remove('open');
-    }
-  });
+
   speedPopover.querySelectorAll('.speed-opt').forEach(btn => {
     btn.addEventListener('click', () => {
       const speed = parseFloat(btn.dataset.speed);
@@ -566,6 +664,31 @@ function initOrangeVideoPlayer(media) {
       speedPopover.classList.remove('open');
       toast(`Tốc độ phát: ${speed}x ⚡`, 'info');
     });
+  });
+
+  // Quality Popover Menu
+  qualityBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    speedPopover.classList.remove('open');
+    qualityPopover.classList.toggle('open');
+  });
+
+  qualityPopover.querySelectorAll('.quality-opt').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const res = btn.dataset.res;
+      applyResolution(res, true);
+      qualityPopover.classList.remove('open');
+    });
+  });
+
+  // Close Popovers on Click Outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.speed-popover') && !e.target.closest('#ctrl-speed')) {
+      speedPopover.classList.remove('open');
+    }
+    if (!e.target.closest('.quality-popover') && !e.target.closest('#ctrl-quality')) {
+      qualityPopover.classList.remove('open');
+    }
   });
 
   // Picture in Picture (PiP)
@@ -873,6 +996,13 @@ document.addEventListener('keydown', e => {
     e.preventDefault();
     activeMedia.muted = !activeMedia.muted;
     toast(activeMedia.muted ? 'Đã tắt tiếng 🔇' : 'Đã bật tiếng 🔊', 'info');
+  }
+
+  // Q: Toggle Resolution Menu
+  if (key === 'q' && video) {
+    e.preventDefault();
+    const qBtn = document.getElementById('ctrl-quality');
+    if (qBtn) qBtn.click();
   }
 
   // F: Fullscreen

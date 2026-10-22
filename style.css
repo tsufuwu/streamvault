@@ -578,6 +578,20 @@ body::after {
   color: var(--orange-400); margin-bottom: 4px;
   display: flex; align-items: center; gap: 6px;
 }
+.res-tag-header {
+  margin-left: 8px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 1px 7px;
+  border-radius: 4px;
+  background: rgba(255, 122, 0, 0.2);
+  border: 1px solid rgba(255, 140, 40, 0.4);
+  color: #FFAE34;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  box-shadow: 0 0 10px rgba(255, 122, 0, 0.25);
+}
 .citrus-bullet {
   width: 6px; height: 6px; border-radius: 50%;
   background: var(--orange-500); box-shadow: 0 0 6px var(--orange-500);
@@ -784,6 +798,13 @@ body::after {
   border-radius: 5px;
 }
 
+/* Speed & Quality Button Wrappers */
+.ctrl-popover-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 /* Speed Button */
 .speed-btn {
   font-size: 0.78rem; font-weight: 700;
@@ -792,6 +813,30 @@ body::after {
   border: 1px solid rgba(255, 140, 40, 0.25);
   border-radius: 6px;
 }
+.speed-btn:hover {
+  background: rgba(255, 122, 0, 0.15);
+  border-color: var(--orange-400);
+  color: #FFF;
+}
+
+/* Quality Button */
+.quality-btn {
+  font-size: 0.78rem; font-weight: 700;
+  color: var(--orange-400);
+  padding: 4px 8px; width: auto;
+  border: 1px solid rgba(255, 140, 40, 0.25);
+  border-radius: 6px;
+  display: flex; align-items: center; gap: 4px;
+}
+.quality-btn:hover {
+  border-color: var(--orange-400);
+  background: rgba(255, 122, 0, 0.15);
+  color: #FFF;
+}
+.quality-btn .quality-badge {
+  color: var(--orange-300);
+}
+
 .fallback-toggle-btn {
   width: auto; padding: 4px 10px;
   font-size: 0.72rem; font-weight: 600;
@@ -851,41 +896,84 @@ body::after {
   transform: scale(1.15);
 }
 
-/* Speed Popover Menu */
-.speed-popover {
-  position: absolute; bottom: 58px; right: 120px;
-  background: rgba(24, 16, 10, 0.96);
+/* Speed & Quality Popover Menus */
+.speed-popover, .quality-popover {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  right: 0;
+  background: rgba(24, 16, 10, 0.98);
   border: 1px solid var(--border-active);
   border-radius: var(--radius-sm);
   padding: 6px;
   display: flex; flex-direction: column; gap: 3px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px var(--orange-glow-sm);
-  z-index: 50;
-  backdrop-filter: blur(12px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85), 0 0 20px var(--orange-glow-sm);
+  z-index: 60;
+  backdrop-filter: blur(14px);
   opacity: 0; visibility: hidden;
-  transform: translateY(10px);
-  transition: var(--transition);
+  transform: translateY(8px);
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.2s;
+  pointer-events: none;
 }
-.speed-popover.open {
+.speed-popover.open, .quality-popover.open {
   opacity: 1; visibility: visible;
   transform: translateY(0);
+  pointer-events: auto;
 }
-.speed-opt {
-  padding: 7px 16px;
+.speed-popover {
+  min-width: 140px;
+}
+.quality-popover {
+  min-width: 220px;
+}
+.popover-header {
+  font-size: 0.74rem; font-weight: 700;
+  color: var(--orange-400);
+  padding: 4px 8px 6px;
+  border-bottom: 1px solid rgba(255, 140, 40, 0.15);
+  margin-bottom: 3px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.speed-opt, .quality-opt {
+  padding: 7px 12px;
   border: none; background: none;
   color: var(--text-secondary);
   font-size: 0.82rem; font-weight: 600;
   border-radius: 6px; cursor: pointer;
   text-align: left; transition: var(--transition);
-  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
 }
-.speed-opt:hover {
+.speed-opt:hover, .quality-opt:hover {
   background: rgba(255, 122, 0, 0.15);
   color: var(--orange-300);
 }
-.speed-opt.active {
-  background: var(--orange-500);
+.speed-opt.active, .quality-opt.active {
+  background: linear-gradient(135deg, var(--orange-500), #EA580C);
   color: #FFF;
+  font-weight: 700;
+}
+.quality-opt.active .quality-tag-pill,
+.quality-opt.active .res-sub {
+  background: rgba(0, 0, 0, 0.28);
+  color: #FFF;
+}
+.quality-tag-pill {
+  font-size: 0.68rem; font-weight: 700;
+  padding: 2px 7px; border-radius: 4px;
+  background: rgba(255, 140, 40, 0.15);
+  color: var(--orange-300);
+}
+.quality-tag-pill.hd {
+  background: rgba(255, 122, 0, 0.25);
+  color: #FFAE34;
+}
+.res-sub {
+  font-size: 0.72rem; color: var(--orange-300); font-weight: 700;
+}
+.quality-popover-note {
+  font-size: 0.7rem; color: var(--text-muted);
+  padding: 6px 8px 3px;
+  border-top: 1px solid rgba(255, 140, 40, 0.12);
+  margin-top: 3px; line-height: 1.35;
 }
 
 /* Keyboard Shortcuts Modal */
@@ -995,6 +1083,13 @@ body::after {
   .navbar { padding: 0 1.2rem; }
   .navbar-search { width: 220px; }
   .media-grid { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 1rem; }
+}
+
+@media (max-width: 640px) {
+  .controls-bar { flex-wrap: wrap; gap: 8px; }
+  .controls-left, .controls-right { gap: 6px; flex-wrap: wrap; }
+  .volume-slider { width: 45px; }
+  #ctrl-loop, #ctrl-pip, #ctrl-theater { display: none; }
 }
 
 /* ─── Juice Splash Particle Effect ────────────────── */
