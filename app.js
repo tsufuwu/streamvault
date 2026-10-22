@@ -205,7 +205,349 @@ function updateSidebarCounts() {
   });
 }
 
-// ─── Player ───────────────────────────────────────────
+// ─── Time Formatter ───────────────────────────────────
+function formatTime(sec) {
+  if (isNaN(sec) || sec < 0) return '0:00';
+  const m = Math.floor(sec / 60);
+  const s = Math.floor(sec % 60);
+  return `${m}:${s < 10 ? '0' : ''}${s}`;
+}
+
+// ─── Custom Orange Video Player ───────────────────────
+function initOrangeVideoPlayer(media) {
+  const streamUrl = `https://drive.usercontent.google.com/download?id=${media.fileId}&export=download`;
+  const previewUrl = `https://drive.google.com/file/d/${media.fileId}/preview`;
+
+  playerBody.innerHTML = `
+    <div class="custom-orange-player" id="orange-player-box">
+      <video id="orange-video-el" preload="auto" playsinline src="${streamUrl}">
+        Trình duyệt không hỗ trợ thẻ video HTML5.
+      </video>
+
+      <!-- Center Big Play Button (Orange Slice) -->
+      <button class="big-play-btn" id="big-play-btn" title="Phát video">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+
+      <!-- Citrus Controls Overlay -->
+      <div class="citrus-controls" id="citrus-controls">
+
+        <!-- ─── Orange Seekbar / Thanh Chạy Trái Cam ─── -->
+        <div class="orange-seekbar-container" id="orange-seekbar" role="slider" aria-label="Thanh chạy trái cam">
+          <div class="orange-seek-track">
+            <div class="orange-seek-buffered" id="seek-buffered"></div>
+            <div class="orange-seek-progress" id="seek-progress"></div>
+          </div>
+          <!-- Rolling Orange Handle (Trái cam đang lăn trên thanh chạy) -->
+          <div class="rolling-orange-thumb" id="orange-thumb" title="Trái cam đang chạy">
+            🍊
+          </div>
+          <div class="seek-tooltip" id="seek-tooltip">0:00</div>
+        </div>
+
+        <!-- ─── Controls Bar ─── -->
+        <div class="controls-bar">
+          <div class="controls-left">
+            <button class="ctrl-btn" id="ctrl-play-pause" title="Phát / Dừng">
+              <svg id="icon-play" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              <svg id="icon-pause" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            <button class="ctrl-btn" id="ctrl-rewind" title="Tua lại 10s">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+            </button>
+            <button class="ctrl-btn" id="ctrl-forward" title="Tua tới 10s">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            </button>
+            <div class="time-display">
+              <span id="time-current">0:00</span>
+              <span class="time-sep">/</span>
+              <span id="time-duration">0:00</span>
+            </div>
+          </div>
+
+          <div class="controls-right">
+            <div class="volume-container">
+              <button class="ctrl-btn" id="ctrl-volume" title="Âm lượng">
+                <svg id="icon-vol" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+              </button>
+              <input type="range" class="volume-slider" id="ctrl-vol-slider" min="0" max="1" step="0.05" value="1">
+            </div>
+
+            <button class="ctrl-btn speed-btn" id="ctrl-speed" title="Tốc độ">1.0x</button>
+            <button class="ctrl-btn" id="ctrl-fullscreen" title="Toàn màn hình">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+            </button>
+            <button class="ctrl-btn fallback-toggle-btn" id="ctrl-switch-player" title="Đổi sang Google Player">
+              <span>🔄 Drive Player</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const videoBox     = document.getElementById('orange-player-box');
+  const video        = document.getElementById('orange-video-el');
+  const bigPlayBtn   = document.getElementById('big-play-btn');
+  const playPauseBtn = document.getElementById('ctrl-play-pause');
+  const iconPlay     = document.getElementById('icon-play');
+  const iconPause    = document.getElementById('icon-pause');
+  const seekbar      = document.getElementById('orange-seekbar');
+  const seekProgress = document.getElementById('seek-progress');
+  const seekBuffered = document.getElementById('seek-buffered');
+  const orangeThumb  = document.getElementById('orange-thumb');
+  const seekTooltip  = document.getElementById('seek-tooltip');
+  const timeCurrent  = document.getElementById('time-current');
+  const timeDuration = document.getElementById('time-duration');
+  const volBtn       = document.getElementById('ctrl-volume');
+  const volSlider    = document.getElementById('ctrl-vol-slider');
+  const speedBtn     = document.getElementById('ctrl-speed');
+  const fsBtn        = document.getElementById('ctrl-fullscreen');
+  const rewindBtn    = document.getElementById('ctrl-rewind');
+  const forwardBtn   = document.getElementById('ctrl-forward');
+  const switchBtn    = document.getElementById('ctrl-switch-player');
+
+  function togglePlay() {
+    if (video.paused || video.ended) {
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+    }
+  }
+
+  video.addEventListener('play', () => {
+    bigPlayBtn.classList.add('hidden');
+    iconPlay.style.display = 'none';
+    iconPause.style.display = '';
+  });
+
+  video.addEventListener('pause', () => {
+    bigPlayBtn.classList.remove('hidden');
+    iconPlay.style.display = '';
+    iconPause.style.display = 'none';
+  });
+
+  bigPlayBtn.addEventListener('click', togglePlay);
+  playPauseBtn.addEventListener('click', togglePlay);
+  video.addEventListener('click', togglePlay);
+
+  video.addEventListener('timeupdate', () => {
+    if (!video.duration) return;
+    const pct = (video.currentTime / video.duration) * 100;
+    seekProgress.style.width = `${pct}%`;
+    orangeThumb.style.left = `${pct}%`;
+    // 🍊 Trái cam lăn tròn theo tiến trình phát video!
+    orangeThumb.style.transform = `translate(-50%, -50%) rotate(${pct * 7.2}deg)`;
+    timeCurrent.textContent = formatTime(video.currentTime);
+  });
+
+  video.addEventListener('loadedmetadata', () => {
+    timeDuration.textContent = formatTime(video.duration);
+  });
+
+  video.addEventListener('progress', () => {
+    if (video.buffered.length > 0 && video.duration) {
+      const bufferedEnd = video.buffered.end(video.buffered.length - 1);
+      seekBuffered.style.width = `${(bufferedEnd / video.duration) * 100}%`;
+    }
+  });
+
+  let isSeeking = false;
+  function seekTo(e) {
+    const rect = seekbar.getBoundingClientRect();
+    const pos = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    if (video.duration) {
+      video.currentTime = pos * video.duration;
+    }
+    const pct = pos * 100;
+    seekProgress.style.width = `${pct}%`;
+    orangeThumb.style.left = `${pct}%`;
+    orangeThumb.style.transform = `translate(-50%, -50%) rotate(${pct * 7.2}deg)`;
+  }
+
+  seekbar.addEventListener('mousedown', (e) => {
+    isSeeking = true;
+    seekTo(e);
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (isSeeking) seekTo(e);
+  });
+
+  window.addEventListener('mouseup', () => {
+    if (isSeeking) isSeeking = false;
+  });
+
+  seekbar.addEventListener('mousemove', (e) => {
+    const rect = seekbar.getBoundingClientRect();
+    const pos = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    seekTooltip.style.left = `${pos * 100}%`;
+    seekTooltip.textContent = formatTime(pos * (video.duration || 0));
+  });
+
+  rewindBtn.addEventListener('click', () => { video.currentTime = Math.max(0, video.currentTime - 10); });
+  forwardBtn.addEventListener('click', () => { video.currentTime = Math.min(video.duration || 0, video.currentTime + 10); });
+
+  volSlider.addEventListener('input', e => {
+    video.volume = e.target.value;
+    video.muted = (video.volume === 0);
+  });
+  volBtn.addEventListener('click', () => {
+    video.muted = !video.muted;
+    volSlider.value = video.muted ? 0 : video.volume;
+  });
+
+  const speeds = [1.0, 1.25, 1.5, 2.0];
+  let speedIdx = 0;
+  speedBtn.addEventListener('click', () => {
+    speedIdx = (speedIdx + 1) % speeds.length;
+    const rate = speeds[speedIdx];
+    video.playbackRate = rate;
+    speedBtn.textContent = `${rate.toFixed(1)}x`;
+  });
+
+  fsBtn.addEventListener('click', () => {
+    if (!document.fullscreenElement) {
+      videoBox.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen().catch(() => {});
+    }
+  });
+
+  let hideTimer;
+  function resetControlsTimer() {
+    videoBox.classList.remove('controls-hidden');
+    clearTimeout(hideTimer);
+    if (!video.paused) {
+      hideTimer = setTimeout(() => {
+        videoBox.classList.add('controls-hidden');
+      }, 3500);
+    }
+  }
+  videoBox.addEventListener('mousemove', resetControlsTimer);
+
+  switchBtn.addEventListener('click', () => {
+    video.pause();
+    playerBody.innerHTML = `
+      <div class="player-video-wrapper">
+        <iframe class="player-iframe" src="${previewUrl}" allow="autoplay; fullscreen" allowfullscreen></iframe>
+      </div>
+    `;
+    toast('Đã chuyển sang trình phát Google Drive 🔄', 'info');
+  });
+
+  video.addEventListener('error', () => {
+    playerBody.innerHTML = `
+      <div class="player-video-wrapper">
+        <iframe class="player-iframe" src="${previewUrl}" allow="autoplay; fullscreen" allowfullscreen></iframe>
+      </div>
+    `;
+    toast('Đang dùng trình phát Google Drive để tối ưu định dạng 🍊', 'info');
+  });
+
+  video.play().catch(() => {});
+}
+
+// ─── Custom Orange Audio Player ───────────────────────
+function initOrangeAudioPlayer(media) {
+  const audioUrl = `https://drive.usercontent.google.com/download?id=${media.fileId}&export=download`;
+
+  playerBody.innerHTML = `
+    <div style="padding:28px 24px;background:#140e08;border-radius:0 0 16px 16px;">
+      <div style="display:flex;align-items:center;gap:20px;margin-bottom:20px;">
+        <div style="width:70px;height:70px;border-radius:14px;background:linear-gradient(135deg,#ea580c,#9a3412);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 20px rgba(255,122,0,0.3);">
+          <span style="font-size:2.2rem;">🍊</span>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-weight:700;font-size:1.15rem;margin-bottom:6px;color:#FFF7ED;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${media.title}</div>
+          <div style="font-size:0.84rem;color:#D4A373;">🍃 ${media.genre || 'Audio Cam'}</div>
+        </div>
+      </div>
+
+      <audio id="orange-audio-el" src="${audioUrl}" preload="auto"></audio>
+
+      <!-- Orange Seekbar for Audio -->
+      <div class="orange-seekbar-container" id="audio-seekbar" role="slider" aria-label="Thanh chạy trái cam audio">
+        <div class="orange-seek-track">
+          <div class="orange-seek-progress" id="audio-progress"></div>
+        </div>
+        <div class="rolling-orange-thumb" id="audio-thumb" title="Trái cam đang chạy">
+          🍊
+        </div>
+        <div class="seek-tooltip" id="audio-tooltip">0:00</div>
+      </div>
+
+      <div class="controls-bar" style="margin-top:10px;">
+        <div class="controls-left">
+          <button class="ctrl-btn" id="audio-play-pause" title="Phát / Dừng">
+            <svg id="audio-icon-play" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <svg id="audio-icon-pause" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          </button>
+          <div class="time-display">
+            <span id="audio-current">0:00</span>
+            <span class="time-sep">/</span>
+            <span id="audio-duration">0:00</span>
+          </div>
+        </div>
+        <div class="controls-right">
+          <div class="volume-container">
+            <input type="range" class="volume-slider" id="audio-vol-slider" min="0" max="1" step="0.05" value="1">
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const audio        = document.getElementById('orange-audio-el');
+  const playPauseBtn = document.getElementById('audio-play-pause');
+  const iconPlay     = document.getElementById('audio-icon-play');
+  const iconPause    = document.getElementById('audio-icon-pause');
+  const seekbar      = document.getElementById('audio-seekbar');
+  const seekProgress = document.getElementById('audio-progress');
+  const orangeThumb  = document.getElementById('audio-thumb');
+  const timeCurrent  = document.getElementById('audio-current');
+  const timeDuration = document.getElementById('audio-duration');
+  const volSlider    = document.getElementById('audio-vol-slider');
+
+  function togglePlay() {
+    if (audio.paused || audio.ended) audio.play().catch(() => {});
+    else audio.pause();
+  }
+
+  audio.addEventListener('play', () => {
+    iconPlay.style.display = 'none';
+    iconPause.style.display = '';
+  });
+  audio.addEventListener('pause', () => {
+    iconPlay.style.display = '';
+    iconPause.style.display = 'none';
+  });
+  playPauseBtn.addEventListener('click', togglePlay);
+
+  audio.addEventListener('timeupdate', () => {
+    if (!audio.duration) return;
+    const pct = (audio.currentTime / audio.duration) * 100;
+    seekProgress.style.width = `${pct}%`;
+    orangeThumb.style.left = `${pct}%`;
+    orangeThumb.style.transform = `translate(-50%, -50%) rotate(${pct * 7.2}deg)`;
+    timeCurrent.textContent = formatTime(audio.currentTime);
+  });
+
+  audio.addEventListener('loadedmetadata', () => {
+    timeDuration.textContent = formatTime(audio.duration);
+  });
+
+  seekbar.addEventListener('click', (e) => {
+    const rect = seekbar.getBoundingClientRect();
+    const pos = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    if (audio.duration) audio.currentTime = pos * audio.duration;
+  });
+
+  volSlider.addEventListener('input', e => { audio.volume = e.target.value; });
+  audio.play().catch(() => {});
+}
+
+// ─── Player Entry Point ───────────────────────────────
 function openPlayer(media) {
   state.currentMedia = media;
   playerTitle.textContent    = media.title;
@@ -213,43 +555,23 @@ function openPlayer(media) {
   playerOverlay.classList.add('active');
   document.body.style.overflow = 'hidden';
 
+  openNewTab.href = `https://drive.google.com/file/d/${media.fileId}/view`;
+  openNewTab.style.display = '';
+
   if (media.type === 'video') {
-    // Google Drive Preview Iframe: Fast, supports 1080p/720p/360p, subtitles, zero CORS issues
-    playerBody.innerHTML = `
-      <div class="player-video-wrapper">
-        <iframe class="player-iframe"
-                src="https://drive.google.com/file/d/${media.fileId}/preview"
-                allow="autoplay; fullscreen"
-                allowfullscreen>
-        </iframe>
-      </div>`;
-    openNewTab.href = `https://drive.google.com/file/d/${media.fileId}/view`;
-    openNewTab.style.display = '';
+    initOrangeVideoPlayer(media);
   } else {
-    // Audio Player
-    const audioUrl = `https://drive.usercontent.google.com/download?id=${media.fileId}&export=download`;
-    playerBody.innerHTML = `
-      <div style="padding:32px 24px;background:#140e08;display:flex;align-items:center;gap:20px;">
-        <div style="width:72px;height:72px;border-radius:14px;background:linear-gradient(135deg,#ea580c,#9a3412);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 20px rgba(255,122,0,0.3);">
-          <span style="font-size:2rem;">🍊</span>
-        </div>
-        <div style="flex:1;min-width:0;">
-          <div style="font-weight:700;font-size:1.1rem;margin-bottom:6px;color:#FFF7ED;">${media.title}</div>
-          <div style="font-size:0.84rem;color:#D4A373;margin-bottom:14px;">🍃 ${media.genre || 'Audio Cam'}</div>
-          <audio id="audio-player" src="${audioUrl}" controls autoplay preload="metadata"
-                 style="width:100%;height:44px;" aria-label="${media.title}">
-            Trình duyệt không hỗ trợ thẻ audio.
-          </audio>
-        </div>
-      </div>`;
-    openNewTab.href = audioUrl;
-    openNewTab.style.display = '';
+    initOrangeAudioPlayer(media);
   }
 }
 
 function closePlayer() {
   playerOverlay.classList.remove('active');
   document.body.style.overflow = '';
+  const vid = document.getElementById('orange-video-el');
+  if (vid) vid.pause();
+  const aud = document.getElementById('orange-audio-el');
+  if (aud) aud.pause();
   playerBody.innerHTML = '';
   state.currentMedia = null;
 }

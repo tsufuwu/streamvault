@@ -607,15 +607,202 @@ body::after {
 .player-video-wrapper {
   position: relative;
   width: 100%;
-  padding-top: 56.25%; /* 16:9 Aspect Ratio */
   background: #000;
 }
 .player-iframe {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  width: 100%; height: 500px;
+  max-height: 70vh;
   border: 0;
   display: block;
+}
+
+/* ─── Custom Orange Video Player ─────────────────── */
+.custom-orange-player {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #000;
+  overflow: hidden;
+  user-select: none;
+}
+.custom-orange-player video {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  display: block;
+  cursor: pointer;
+}
+
+/* Big Center Play Button */
+.big-play-btn {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  width: 76px; height: 76px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--orange-400), var(--orange-600));
+  border: 3px solid #FFF;
+  box-shadow: 0 0 35px var(--orange-glow);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s;
+}
+.big-play-btn:hover {
+  transform: translate(-50%, -50%) scale(1.12);
+  box-shadow: 0 0 45px var(--orange-glow);
+}
+.big-play-btn.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.7);
+}
+
+/* Citrus Controls Bar */
+.citrus-controls {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: linear-gradient(0deg, rgba(12, 8, 5, 0.96) 0%, rgba(20, 14, 8, 0.75) 70%, transparent 100%);
+  padding: 12px 20px 14px 20px;
+  z-index: 20;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.custom-orange-player.controls-hidden .citrus-controls {
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+}
+
+/* Seekbar & Rolling Orange Scrubber */
+.orange-seekbar-container {
+  position: relative;
+  width: 100%;
+  height: 28px;
+  display: flex; align-items: center;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+.orange-seek-track {
+  position: relative;
+  width: 100%;
+  height: 8px;
+  border-radius: 6px;
+  background: rgba(255, 140, 40, 0.22);
+  backdrop-filter: blur(4px);
+  overflow: visible;
+}
+.orange-seek-buffered {
+  position: absolute;
+  left: 0; top: 0; height: 100%;
+  border-radius: 6px;
+  background: rgba(255, 183, 3, 0.2);
+  width: 0%;
+  transition: width 0.2s;
+}
+.orange-seek-progress {
+  position: absolute;
+  left: 0; top: 0; height: 100%;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #EA580C, #FF7A00 70%, #FFB703 100%);
+  box-shadow: 0 0 10px rgba(255, 122, 0, 0.5);
+  width: 0%;
+}
+.rolling-orange-thumb {
+  position: absolute;
+  top: 50%;
+  left: 0%;
+  transform: translate(-50%, -50%) rotate(0deg);
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  filter: drop-shadow(0 2px 8px rgba(255, 122, 0, 0.8));
+  user-select: none;
+  pointer-events: none;
+  transition: transform 0.05s linear;
+}
+.orange-seekbar-container:hover .rolling-orange-thumb {
+  font-size: 28px;
+  filter: drop-shadow(0 0 14px rgba(255, 140, 40, 0.95));
+}
+.seek-tooltip {
+  position: absolute;
+  top: -30px;
+  transform: translateX(-50%);
+  background: rgba(28, 18, 11, 0.95);
+  border: 1px solid var(--border-active);
+  color: var(--orange-300);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.orange-seekbar-container:hover .seek-tooltip {
+  opacity: 1;
+}
+
+/* Control Buttons */
+.controls-bar {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.controls-left, .controls-right {
+  display: flex; align-items: center; gap: 10px;
+}
+.ctrl-btn {
+  background: none; border: none;
+  color: var(--text-primary);
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.ctrl-btn:hover {
+  background: rgba(255, 140, 40, 0.15);
+  color: var(--orange-300);
+  transform: scale(1.08);
+}
+.time-display {
+  font-size: 0.82rem; font-weight: 600;
+  color: var(--orange-300);
+  margin-left: 6px;
+  display: flex; align-items: center; gap: 4px;
+  font-variant-numeric: tabular-nums;
+}
+.time-sep { color: var(--text-muted); }
+
+/* Volume Slider */
+.volume-container {
+  display: flex; align-items: center; gap: 6px;
+}
+.volume-slider {
+  width: 65px; height: 5px;
+  accent-color: var(--orange-500);
+  cursor: pointer;
+  background: rgba(255, 140, 40, 0.2);
+  border-radius: 5px;
+}
+
+/* Speed Button */
+.speed-btn {
+  font-size: 0.78rem; font-weight: 700;
+  color: var(--orange-400);
+  padding: 4px 8px; width: auto;
+  border: 1px solid rgba(255, 140, 40, 0.25);
+  border-radius: 6px;
+}
+.fallback-toggle-btn {
+  width: auto; padding: 4px 10px;
+  font-size: 0.72rem; font-weight: 600;
+  border: 1px solid rgba(255, 140, 40, 0.3);
+  border-radius: 6px;
+  color: var(--text-secondary);
+}
+.fallback-toggle-btn:hover {
+  background: var(--orange-500);
+  color: #FFF;
+  border-color: var(--orange-500);
 }
 
 /* Player Footer */
