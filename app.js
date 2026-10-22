@@ -57,6 +57,66 @@ function createJuiceSplash(x, y) {
   }
 }
 
+// ─── Orange Split / Slice in Half Animation ─────────
+function playOrangeSliceAnimation(x, y) {
+  if (!x || !y) {
+    x = window.innerWidth / 2;
+    y = window.innerHeight / 2;
+  }
+
+  const wrap = document.createElement('div');
+  wrap.className = 'orange-slice-animation';
+  wrap.style.left = `${x}px`;
+  wrap.style.top = `${y}px`;
+
+  wrap.innerHTML = `
+    <!-- Left Half of Orange (Slices away to left) -->
+    <svg class="orange-half orange-half-left" viewBox="0 0 40 70">
+      <defs>
+        <radialGradient id="pulp-left" cx="85%" cy="50%" r="75%">
+          <stop offset="0%" stop-color="#FFB703"/>
+          <stop offset="50%" stop-color="#FF7A00"/>
+          <stop offset="100%" stop-color="#E65100"/>
+        </radialGradient>
+      </defs>
+      <path d="M35 5 A30 30 0 0 0 35 65 Z" fill="url(#pulp-left)" stroke="#FFAE34" stroke-width="2.5"/>
+      <line x1="33" y1="5" x2="33" y2="65" stroke="#FFF" stroke-width="2.5" stroke-linecap="round" opacity="0.95"/>
+      <circle cx="26" cy="35" r="3.5" fill="#FFF" opacity="0.95"/>
+      <circle cx="16" cy="24" r="2.2" fill="#FFF" opacity="0.8"/>
+      <circle cx="16" cy="46" r="2.2" fill="#FFF" opacity="0.8"/>
+      <path d="M35 5 C30 0, 20 2, 22 8 Z" fill="#34D399"/>
+    </svg>
+
+    <!-- Slash Light Cut Effect -->
+    <div class="orange-slash-flash"></div>
+
+    <!-- Right Half of Orange (Slices away to right) -->
+    <svg class="orange-half orange-half-right" viewBox="0 0 40 70">
+      <defs>
+        <radialGradient id="pulp-right" cx="15%" cy="50%" r="75%">
+          <stop offset="0%" stop-color="#FFB703"/>
+          <stop offset="50%" stop-color="#FF7A00"/>
+          <stop offset="100%" stop-color="#E65100"/>
+        </radialGradient>
+      </defs>
+      <path d="M5 5 A30 30 0 0 1 5 65 Z" fill="url(#pulp-right)" stroke="#FFAE34" stroke-width="2.5"/>
+      <line x1="7" y1="5" x2="7" y2="65" stroke="#FFF" stroke-width="2.5" stroke-linecap="round" opacity="0.95"/>
+      <circle cx="14" cy="35" r="3.5" fill="#FFF" opacity="0.95"/>
+      <circle cx="24" cy="24" r="2.2" fill="#FFF" opacity="0.8"/>
+      <circle cx="24" cy="46" r="2.2" fill="#FFF" opacity="0.8"/>
+    </svg>
+  `;
+
+  document.body.appendChild(wrap);
+
+  // Trigger burst droplets around the cut
+  createJuiceSplash(x, y);
+
+  setTimeout(() => {
+    if (wrap.parentNode) wrap.remove();
+  }, 560);
+}
+
 // ─── Toast ───────────────────────────────────────────
 function toast(msg, type = 'info') {
   const el = document.createElement('div');
@@ -241,13 +301,13 @@ function createMediaCard(media, i) {
     </div>`;
 
   card.addEventListener('click', (e) => {
-    createJuiceSplash(e.clientX, e.clientY);
+    playOrangeSliceAnimation(e.clientX, e.clientY);
     openPlayer(media);
   });
   card.addEventListener('keydown', e => {
     if (e.key === 'Enter' || e.key === ' ') {
       const rect = card.getBoundingClientRect();
-      createJuiceSplash(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      playOrangeSliceAnimation(rect.left + rect.width / 2, rect.top + rect.height / 2);
       openPlayer(media);
     }
   });
@@ -1514,7 +1574,11 @@ function renderPlayerPlaylist(currentMedia) {
   }).join('');
 
   listEl.querySelectorAll('.playlist-card').forEach(card => {
-    card.addEventListener('click', () => {
+    card.addEventListener('click', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX || (rect.left + rect.width / 2);
+      const y = e.clientY || (rect.top + rect.height / 2);
+      playOrangeSliceAnimation(x, y);
       const found = state.allMedia.find(x => x.id === card.dataset.mediaId);
       if (found) openPlayer(found);
     });
