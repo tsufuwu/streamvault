@@ -7,7 +7,7 @@
   <meta name="description" content="Orangestream — Nền tảng xem phim và nghe nhạc trực tuyến mọng nước từ Google Drive. Trải nghiệm mượt mà, không quảng cáo." />
   <meta name="theme-color" content="#ff7a00" />
   <meta name="referrer" content="no-referrer" />
-  <link rel="stylesheet" href="style.css?v=3.1" />
+  <link rel="stylesheet" href="style.css?v=3.2" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍊</text></svg>" />
 </head>
 <body>
@@ -384,6 +384,152 @@
     </div>
   </div>
 
+  <!-- ─── Download Hub Modal (Phân loại định dạng & Trích xuất MP3 / AAC / Video) ─── -->
+  <div id="download-modal" class="download-overlay" role="dialog" aria-modal="true" aria-labelledby="download-modal-title">
+    <div class="download-card">
+      <div class="download-modal-header">
+        <div class="download-modal-title-wrap">
+          <span class="download-modal-icon">⬇️</span>
+          <div>
+            <h3 id="download-modal-title" class="download-modal-title">Tùy Chọn Tải Về Mọng Nước</h3>
+            <p id="download-media-name" class="download-media-name">Tên file đang phát</p>
+          </div>
+        </div>
+        <button id="close-download-modal" class="close-btn" style="width:34px;height:34px;" aria-label="Đóng">✕</button>
+      </div>
+
+      <!-- Format Category Tabs -->
+      <div class="download-format-tabs" id="download-format-tabs">
+        <button type="button" class="download-tab-btn active" data-tab="audio" id="dtab-audio">
+          <span>🎵 Âm thanh & MP3</span>
+        </button>
+        <button type="button" class="download-tab-btn" data-tab="video" id="dtab-video">
+          <span>🎬 Video MP4</span>
+        </button>
+      </div>
+
+      <!-- Format Options Body -->
+      <div class="download-options-container" id="download-options-container">
+        <!-- Audio Options Group -->
+        <div class="format-group-pane active" id="pane-audio">
+          <div class="format-list">
+            <label class="format-option-card active">
+              <input type="radio" name="download-format" value="mp3-320" checked>
+              <div class="format-opt-radio-circle"></div>
+              <div class="format-opt-info">
+                <div class="format-opt-header">
+                  <span class="format-opt-name">MP3 — 320 kbps</span>
+                  <span class="format-opt-badge gold">Studio Quality</span>
+                </div>
+                <div class="format-opt-desc">Chất lượng âm thanh cao nhất, âm bass sâu, chi tiết rõ nét (Khuyên dùng)</div>
+              </div>
+            </label>
+
+            <label class="format-option-card">
+              <input type="radio" name="download-format" value="mp3-128">
+              <div class="format-opt-radio-circle"></div>
+              <div class="format-opt-info">
+                <div class="format-opt-header">
+                  <span class="format-opt-name">MP3 — 128 kbps</span>
+                  <span class="format-opt-badge">Tiêu chuẩn</span>
+                </div>
+                <div class="format-opt-desc">Dung lượng nhẹ, tải nhanh, phù hợp lưu trữ số lượng lớn</div>
+              </div>
+            </label>
+
+            <label class="format-option-card">
+              <input type="radio" name="download-format" value="aac">
+              <div class="format-opt-radio-circle"></div>
+              <div class="format-opt-info">
+                <div class="format-opt-header">
+                  <span class="format-opt-name">AAC — 192 kbps</span>
+                  <span class="format-opt-badge green">Apple & Android</span>
+                </div>
+                <div class="format-opt-desc">Chuẩn âm thanh nén hiện đại, tương thích hoàn hảo mọi thiết bị</div>
+              </div>
+            </label>
+
+            <label class="format-option-card">
+              <input type="radio" name="download-format" value="audio-original">
+              <div class="format-opt-radio-circle"></div>
+              <div class="format-opt-info">
+                <div class="format-opt-header">
+                  <span class="format-opt-name">Bản Gốc (Original Audio)</span>
+                  <span class="format-opt-badge raw">Nguyên bản</span>
+                </div>
+                <div class="format-opt-desc">Tải nguyên vẹn file âm thanh gốc (FLAC/WAV/MP3/M4A) không qua nén</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Video Options Group -->
+        <div class="format-group-pane" id="pane-video">
+          <div class="format-list">
+            <label class="format-option-card">
+              <input type="radio" name="download-format" value="video-original">
+              <div class="format-opt-radio-circle"></div>
+              <div class="format-opt-info">
+                <div class="format-opt-header">
+                  <span class="format-opt-name">Bản Gốc Siêu Nét (Full HD / 4K)</span>
+                  <span class="format-opt-badge gold">Tối ưu nhất</span>
+                </div>
+                <div class="format-opt-desc">File video gốc từ Google Drive, độ sắc nét và âm thanh nguyên bản 100%</div>
+              </div>
+            </label>
+
+            <label class="format-option-card">
+              <input type="radio" name="download-format" value="video-720p">
+              <div class="format-opt-radio-circle"></div>
+              <div class="format-opt-info">
+                <div class="format-opt-header">
+                  <span class="format-opt-name">MP4 — 720p HD</span>
+                  <span class="format-opt-badge">Mượt mà</span>
+                </div>
+                <div class="format-opt-desc">Cân bằng hoàn hảo giữa độ nét và dung lượng cho điện thoại / laptop</div>
+              </div>
+            </label>
+
+            <label class="format-option-card">
+              <input type="radio" name="download-format" value="video-480p">
+              <div class="format-opt-radio-circle"></div>
+              <div class="format-opt-info">
+                <div class="format-opt-header">
+                  <span class="format-opt-name">MP4 — 480p Tiêu chuẩn</span>
+                  <span class="format-opt-badge">Tiết kiệm</span>
+                </div>
+                <div class="format-opt-desc">Dung lượng cực nhẹ, phù hợp tải nhanh khi dùng 4G/5G</div>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Converting & Processing Status Bar -->
+      <div class="download-progress-box" id="download-progress-box" style="display:none;">
+        <div class="progress-info-row">
+          <span class="progress-status-text" id="download-status-text">Đang chuẩn bị...</span>
+          <span class="progress-percent-text" id="download-percent-text">0%</span>
+        </div>
+        <div class="download-progress-track">
+          <div class="download-progress-fill" id="download-progress-fill"></div>
+        </div>
+        <div class="progress-note" id="download-progress-note">
+          💡 Đang trích xuất và xử lý âm thanh trực tiếp trên trình duyệt của bạn 🍊
+        </div>
+      </div>
+
+      <!-- Action Footer -->
+      <div class="download-modal-footer">
+        <button type="button" class="download-cancel-btn" id="btn-cancel-download">Hủy</button>
+        <button type="button" class="download-submit-btn" id="btn-start-download">
+          <span id="download-submit-label">Tải Về Ngay</span>
+          <span class="btn-arrow">⬇</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ─── Toast Container ─── -->
   <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
@@ -420,6 +566,6 @@
   </nav>
 
 </div><!-- /app -->
-<script type="module" src="app.js?v=3.1"></script>
+<script type="module" src="app.js?v=3.2"></script>
 </body>
 </html>

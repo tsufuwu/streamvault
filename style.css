@@ -1617,6 +1617,291 @@ body.basket-game-active * {
   padding: 2px 7px; border-radius: 4px; color: var(--orange-300); font-weight: 700;
 }
 
+/* ─── Download Hub Modal (Format Selection & Converter) ─── */
+.download-overlay {
+  position: fixed; inset: 0; z-index: 2600;
+  background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden; transition: var(--transition);
+  padding: 1rem;
+}
+.download-overlay.active { opacity: 1; visibility: visible; }
+.download-card {
+  width: 100%; max-width: 540px;
+  background: #140e09;
+  border: 1px solid rgba(255, 140, 40, 0.35);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.85), 0 0 40px var(--orange-glow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.download-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.download-modal-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.download-modal-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+.download-modal-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #FFF;
+  margin: 0 0 2px 0;
+}
+.download-media-name {
+  font-size: 0.8rem;
+  color: var(--orange-300);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 380px;
+}
+.download-format-tabs {
+  display: flex;
+  background: rgba(255, 140, 40, 0.08);
+  border: 1px solid rgba(255, 140, 40, 0.2);
+  border-radius: 12px;
+  padding: 4px;
+  gap: 4px;
+}
+.download-tab-btn {
+  flex: 1;
+  padding: 8px 14px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.download-tab-btn:hover {
+  color: #FFF;
+}
+.download-tab-btn.active {
+  background: linear-gradient(135deg, var(--orange-500), #EA580C);
+  color: #FFF;
+  box-shadow: 0 2px 10px rgba(255, 122, 0, 0.4);
+}
+.format-group-pane {
+  display: none;
+}
+.format-group-pane.active {
+  display: block;
+}
+.format-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.format-option-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  background: rgba(255, 140, 40, 0.05);
+  border: 1px solid rgba(255, 140, 40, 0.18);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  position: relative;
+}
+.format-option-card:hover {
+  background: rgba(255, 140, 40, 0.12);
+  border-color: var(--orange-400);
+  transform: translateY(-1px);
+}
+.format-option-card input[type="radio"] {
+  display: none;
+}
+.format-opt-radio-circle {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 140, 40, 0.4);
+  margin-top: 2px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+.format-option-card input[type="radio"]:checked + .format-opt-radio-circle {
+  border-color: var(--orange-500);
+  background: var(--orange-500);
+  box-shadow: 0 0 8px rgba(255, 122, 0, 0.6);
+}
+.format-option-card input[type="radio"]:checked + .format-opt-radio-circle::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #FFF;
+}
+.format-option-card.active {
+  background: rgba(255, 122, 0, 0.12);
+  border-color: var(--orange-500);
+  box-shadow: 0 0 14px rgba(255, 122, 0, 0.2);
+}
+.format-opt-info {
+  flex: 1;
+  min-width: 0;
+}
+.format-opt-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+.format-opt-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #FFF;
+}
+.format-opt-desc {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+.format-opt-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: rgba(255, 140, 40, 0.15);
+  color: var(--orange-300);
+  white-space: nowrap;
+}
+.format-opt-badge.gold {
+  background: linear-gradient(135deg, rgba(255, 174, 52, 0.3), rgba(255, 122, 0, 0.2));
+  color: #FFAE34;
+  border: 1px solid rgba(255, 174, 52, 0.4);
+}
+.format-opt-badge.green {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34D399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+.format-opt-badge.raw {
+  background: rgba(168, 85, 247, 0.15);
+  color: #C084FC;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+/* Progress Box */
+.download-progress-box {
+  background: rgba(20, 14, 9, 0.9);
+  border: 1px solid rgba(255, 140, 40, 0.3);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.progress-info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+.progress-status-text {
+  color: var(--orange-300);
+}
+.progress-percent-text {
+  color: #FFF;
+  font-weight: 800;
+}
+.download-progress-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.download-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #EA580C, #FF7A00 70%, #FFB703 100%);
+  border-radius: 6px;
+  transition: width 0.2s ease;
+  box-shadow: 0 0 10px rgba(255, 122, 0, 0.6);
+}
+.progress-note {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+/* Footer Buttons */
+.download-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 4px;
+}
+.download-cancel-btn {
+  padding: 9px 18px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.download-cancel-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #FFF;
+}
+.download-submit-btn {
+  padding: 9px 24px;
+  background: linear-gradient(135deg, var(--orange-500), #EA580C);
+  border: 1px solid var(--orange-400);
+  border-radius: 10px;
+  color: #FFF;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 4px 16px rgba(255, 122, 0, 0.4);
+}
+.download-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(255, 122, 0, 0.55);
+}
+.download-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
 /* Player Footer */
 .player-footer {
   padding: 14px 24px;

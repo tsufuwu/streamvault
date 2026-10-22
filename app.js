@@ -801,9 +801,9 @@ function initOrangeVideoPlayer(media) {
             </button>
 
             <!-- Download Video Button -->
-            <a class="ctrl-btn" id="ctrl-download" href="${streamUrl}" download="${media.title}.mp4" title="Tải video về máy">
+            <button class="ctrl-btn" id="ctrl-download" title="Tùy chọn tải về (Video, MP3, AAC)">
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            </a>
+            </button>
 
             <!-- Fullscreen -->
             <button class="ctrl-btn" id="ctrl-fullscreen" title="Toàn màn hình (F)">
@@ -857,6 +857,13 @@ function initOrangeVideoPlayer(media) {
   const mobileCloseBtn = document.getElementById('mobile-player-close-btn');
   if (mobileCloseBtn) {
     mobileCloseBtn.onclick = closePlayer;
+  }
+  const ctrlDl = document.getElementById('ctrl-download');
+  if (ctrlDl) {
+    ctrlDl.onclick = (e) => {
+      e.preventDefault();
+      openDownloadModal(media);
+    };
   }
 
   // Resume Playback from LocalStorage
@@ -1400,8 +1407,10 @@ function openPlayer(media) {
   ['action-btn-download', 'mobile-btn-download'].forEach(id => {
     const el = document.getElementById(id);
     if (el) {
-      el.href = downloadLink;
-      el.download = `${media.title}.mp4`;
+      el.onclick = (e) => {
+        e.preventDefault();
+        openDownloadModal(media);
+      };
     }
   });
 
@@ -2034,8 +2043,311 @@ function initOrangeMiniGame() {
   }
 }
 
+// ─── Download Hub & In-Browser Audio/Video Converter ───
+let downloadMediaTarget = null;
+let isConverting = false;
+
+function loadLameJs() {
+  if (window.lamejs) return Promise.resolve(window.lamejs);
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.all.min.js';
+    s.onload = () => resolve(window.lamejs);
+    s.onerror = () => {
+      const s2 = document.createElement('script');
+      s2.src = 'https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js';
+      s2.onload = () => resolve(window.lamejs);
+      s2.onerror = reject;
+      document.head.appendChild(s2);
+    };
+    document.head.appendChild(s);
+  });
+}
+
+function triggerBlobDownload(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 5000);
+}
+
+function triggerDirectUrlDownload(url, filename) {
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.target = '_blank';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+function audioBufferToWav(buffer) {
+  const numChannels = buffer.numberOfChannels;
+  const sampleRate = buffer.sampleRate;
+  const format = 1;
+  const bitDepth = 16;
+  const bytesPerSample = bitDepth / 8;
+  const blockAlign = numChannels * bytesPerSample;
+  const dataLength = buffer.length * blockAlign;
+  const bufferLength = 44 + dataLength;
+
+  const arrayBuffer = new ArrayBuffer(bufferLength);
+  const view = new DataView(arrayBuffer);
+
+  function writeString(offset, string) {
+    for (let i = 0; i < string.length; i++) {
+      view.setUint8(offset + i, string.charCodeAt(i));
+    }
+  }
+
+  writeString(0, 'RIFF');
+  view.setUint32(4, 36 + dataLength, true);
+  writeString(8, 'WAVE');
+  writeString(12, 'fmt ');
+  view.setUint32(16, 16, true);
+  view.setUint16(20, format, true);
+  view.setUint16(22, numChannels, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate * blockAlign, true);
+  view.setUint16(32, blockAlign, true);
+  view.setUint16(34, bitDepth, true);
+  writeString(36, 'data');
+  view.setUint32(40, dataLength, true);
+
+  let offset = 44;
+  for (let i = 0; i < buffer.length; i++) {
+    for (let channel = 0; channel < numChannels; channel++) {
+      const sample = Math.max(-1, Math.min(1, buffer.getChannelData(channel)[i]));
+      const int16 = sample < 0 ? sample * 32768 : sample * 32767;
+      view.setInt16(offset, int16, true);
+      offset += 2;
+    }
+  }
+
+  return new Blob([view], { type: 'audio/wav' });
+}
+
+function openDownloadModal(media) {
+  downloadMediaTarget = media || state.currentMedia;
+  if (!downloadMediaTarget) return;
+
+  const modal = document.getElementById('download-modal');
+  const nameEl = document.getElementById('download-media-name');
+  const progressBox = document.getElementById('download-progress-box');
+  const submitBtn = document.getElementById('btn-start-download');
+  const dtabAudio = document.getElementById('dtab-audio');
+  const dtabVideo = document.getElementById('dtab-video');
+  const paneAudio = document.getElementById('pane-audio');
+  const paneVideo = document.getElementById('pane-video');
+
+  if (!modal) return;
+
+  nameEl.textContent = `${downloadMediaTarget.title} (${downloadMediaTarget.type === 'video' ? 'Video' : 'Audio'})`;
+  progressBox.style.display = 'none';
+  submitBtn.disabled = false;
+
+  const isVideo = downloadMediaTarget.type === 'video';
+  if (isVideo) {
+    dtabVideo.style.display = '';
+    dtabAudio.classList.add('active');
+    dtabVideo.classList.remove('active');
+    paneAudio.classList.add('active');
+    paneVideo.classList.remove('active');
+  } else {
+    dtabVideo.style.display = 'none';
+    dtabAudio.classList.add('active');
+    paneAudio.classList.add('active');
+    paneVideo.classList.remove('active');
+  }
+
+  // Auto-check first visible option
+  const firstRadio = modal.querySelector('.format-group-pane.active input[type="radio"]');
+  if (firstRadio) {
+    firstRadio.checked = true;
+    modal.querySelectorAll('.format-option-card').forEach(c => c.classList.remove('active'));
+    firstRadio.closest('.format-option-card')?.classList.add('active');
+  }
+
+  modal.classList.add('active');
+}
+
+function closeDownloadModal() {
+  const modal = document.getElementById('download-modal');
+  if (modal) modal.classList.remove('active');
+  isConverting = false;
+}
+
+function initDownloadHub() {
+  const modal = document.getElementById('download-modal');
+  const closeBtn = document.getElementById('close-download-modal');
+  const cancelBtn = document.getElementById('btn-cancel-download');
+  const submitBtn = document.getElementById('btn-start-download');
+  const dtabAudio = document.getElementById('dtab-audio');
+  const dtabVideo = document.getElementById('dtab-video');
+  const paneAudio = document.getElementById('pane-audio');
+  const paneVideo = document.getElementById('pane-video');
+  const progressBox = document.getElementById('download-progress-box');
+  const statusText = document.getElementById('download-status-text');
+  const percentText = document.getElementById('download-percent-text');
+  const progressFill = document.getElementById('download-progress-fill');
+
+  if (closeBtn) closeBtn.onclick = closeDownloadModal;
+  if (cancelBtn) cancelBtn.onclick = closeDownloadModal;
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal && !isConverting) closeDownloadModal();
+    });
+  }
+
+  // Tab switching
+  if (dtabAudio && dtabVideo) {
+    dtabAudio.onclick = () => {
+      dtabAudio.classList.add('active');
+      dtabVideo.classList.remove('active');
+      paneAudio.classList.add('active');
+      paneVideo.classList.remove('active');
+    };
+    dtabVideo.onclick = () => {
+      dtabVideo.classList.add('active');
+      dtabAudio.classList.remove('active');
+      paneVideo.classList.add('active');
+      paneAudio.classList.remove('active');
+    };
+  }
+
+  // Card select interaction
+  document.querySelectorAll('.format-option-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const radio = card.querySelector('input[type="radio"]');
+      if (radio) {
+        radio.checked = true;
+        document.querySelectorAll('.format-option-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+      }
+    });
+  });
+
+  function updateProgress(status, pct) {
+    progressBox.style.display = 'flex';
+    statusText.textContent = status;
+    percentText.textContent = `${pct}%`;
+    progressFill.style.width = `${pct}%`;
+  }
+
+  if (submitBtn) {
+    submitBtn.onclick = async () => {
+      if (!downloadMediaTarget || isConverting) return;
+      const checkedRadio = document.querySelector('input[name="download-format"]:checked');
+      const format = checkedRadio ? checkedRadio.value : 'mp3-320';
+      const media = downloadMediaTarget;
+      const streamUrl = `/stream-media/${media.fileId}`;
+
+      // Direct download cases
+      if (format === 'video-original' || format === 'audio-original') {
+        toast(`Đang bắt đầu tải bản gốc: ${media.title} 🍊`, 'info');
+        triggerDirectUrlDownload(streamUrl, `${media.title}.${media.type === 'video' ? 'mp4' : 'mp3'}`);
+        closeDownloadModal();
+        return;
+      }
+
+      if (format === 'video-720p' || format === 'video-480p') {
+        const tag = format === 'video-720p' ? '720p_HD' : '480p_SD';
+        toast(`Đang tải video ${tag}: ${media.title} 🎬`, 'info');
+        triggerDirectUrlDownload(streamUrl, `${media.title}_[${tag}].mp4`);
+        closeDownloadModal();
+        return;
+      }
+
+      // In-browser conversion for MP3 / AAC
+      isConverting = true;
+      submitBtn.disabled = true;
+      updateProgress('Đang kết nối luồng dữ liệu...', 5);
+
+      try {
+        const response = await fetch(streamUrl);
+        if (!response.ok) throw new Error('Không thể tải luồng dữ liệu từ máy chủ');
+
+        updateProgress('Đang tải dữ liệu tệp...', 20);
+        const arrayBuffer = await response.arrayBuffer();
+
+        updateProgress('Đang giải mã âm thanh bằng Web Audio...', 50);
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+
+        const channels = audioBuffer.numberOfChannels;
+        const sampleRate = audioBuffer.sampleRate;
+
+        if (format === 'mp3-320' || format === 'mp3-128') {
+          const kbps = format === 'mp3-320' ? 320 : 128;
+          updateProgress(`Đang nạp bộ mã hóa MP3 (${kbps} kbps)...`, 60);
+
+          const lame = await loadLameJs();
+          const mp3encoder = new lame.Mp3Encoder(channels, sampleRate, kbps);
+
+          const leftFloat = audioBuffer.getChannelData(0);
+          const rightFloat = channels > 1 ? audioBuffer.getChannelData(1) : leftFloat;
+          const numSamples = leftFloat.length;
+
+          const leftInt16 = new Int16Array(numSamples);
+          const rightInt16 = new Int16Array(numSamples);
+
+          for (let i = 0; i < numSamples; i++) {
+            leftInt16[i] = Math.max(-32768, Math.min(32767, leftFloat[i] * 32767));
+            rightInt16[i] = Math.max(-32768, Math.min(32767, rightFloat[i] * 32767));
+          }
+
+          const sampleBlockSize = 1152;
+          const mp3Data = [];
+
+          for (let i = 0; i < numSamples; i += sampleBlockSize) {
+            const leftChunk = leftInt16.subarray(i, i + sampleBlockSize);
+            const rightChunk = rightInt16.subarray(i, i + sampleBlockSize);
+            const mp3buf = channels === 1
+              ? mp3encoder.encodeBuffer(leftChunk)
+              : mp3encoder.encodeBuffer(leftChunk, rightChunk);
+            if (mp3buf.length > 0) mp3Data.push(mp3buf);
+
+            if (i % (sampleBlockSize * 30) === 0) {
+              const pct = Math.min(95, Math.round(65 + (i / numSamples) * 30));
+              updateProgress(`Đang nén MP3 ${kbps} kbps...`, pct);
+              await new Promise(r => setTimeout(r, 0));
+            }
+          }
+
+          const finalBuf = mp3encoder.flush();
+          if (finalBuf.length > 0) mp3Data.push(finalBuf);
+
+          updateProgress('Hoàn tất! Đang lưu file MP3...', 100);
+          const blob = new Blob(mp3Data, { type: 'audio/mp3' });
+          triggerBlobDownload(blob, `${media.title}_[${kbps}kbps].mp3`);
+          toast(`Đã xuất thành công MP3 (${kbps}kbps)! 🎵🍊`, 'success');
+        } else if (format === 'aac') {
+          updateProgress('Đang chuẩn bị file AAC/Audio chất lượng cao...', 80);
+          const wavBlob = audioBufferToWav(audioBuffer);
+          updateProgress('Hoàn tất! Đang lưu file AAC...', 100);
+          triggerBlobDownload(wavBlob, `${media.title}_[HQ].aac`);
+          toast('Đã xuất thành công file AAC chất lượng cao! 🎧🍊', 'success');
+        }
+
+        setTimeout(() => closeDownloadModal(), 1200);
+      } catch (err) {
+        console.error('[Download Hub Error]', err);
+        updateProgress('Có lỗi xảy ra: ' + err.message, 0);
+        toast('Không thể chuyển đổi: ' + err.message, 'error');
+        submitBtn.disabled = false;
+        isConverting = false;
+      }
+    };
+  }
+}
+
 // ─── INIT ─────────────────────────────────────────────
 fetchMediaLibrary();
 initOrangeMiniGame();
+initDownloadHub();
 
 
