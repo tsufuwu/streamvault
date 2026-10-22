@@ -7,7 +7,7 @@
   <meta name="description" content="Orangestream — Nền tảng xem phim và nghe nhạc trực tuyến mọng nước từ Google Drive. Trải nghiệm mượt mà, không quảng cáo." />
   <meta name="theme-color" content="#ff7a00" />
   <meta name="referrer" content="no-referrer" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=2.3" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍊</text></svg>" />
 </head>
 <body>
@@ -87,7 +87,7 @@
       </button>
       <button class="filter-btn" data-filter="video" id="filter-video" aria-pressed="false">
         <span class="filter-icon">🎬</span>
-        Video
+        Phim & Video
         <span class="count">0</span>
       </button>
       <button class="filter-btn" data-filter="audio" id="filter-audio" aria-pressed="false">
@@ -99,7 +99,7 @@
             <circle cx="12" cy="12" r="2.2" fill="#FFF" opacity="0.95"/>
           </svg>
         </span>
-        Audio
+        Nhạc & Audio
         <span class="count">0</span>
       </button>
 
@@ -172,7 +172,7 @@
       <!-- Section header -->
       <div class="section-header">
         <h1 class="section-title">
-          <span class="citrus-emoji">🍊</span> Danh Sách Media
+          <span class="citrus-emoji">🍊</span> <span id="section-title-text">Tất cả quả cam</span>
         </h1>
         <span class="section-count" id="section-count">Đang hái quả...</span>
       </div>
@@ -250,6 +250,6 @@
   <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
 </div><!-- /app -->
-<script type="module" src="app.js"></script>
+<script type="module" src="app.js?v=2.3"></script>
 </body>
 </html>

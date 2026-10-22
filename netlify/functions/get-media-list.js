@@ -81,14 +81,15 @@ function parseFolderContents(html, currentFolderId) {
           if (Array.isArray(entry)) {
             if (typeof entry[0] === 'string' && entry[0].length >= 25 && typeof entry[2] === 'string') {
               const id = entry[0];
-              const name = entry[2];
+              const rawName = (entry[2] || '').trim();
               const mime = entry[3] || '';
               if (id !== currentFolderId && !seen.has(id)) {
                 seen.add(id);
-                if (mime === 'application/vnd.google-apps.folder') {
-                  subfolders.push({ id, name });
+                if (mime === 'application/vnd.google-apps.folder' || mime.includes('folder') || /\b(?:Thư mục|Folder|Shared folder)\b/i.test(rawName)) {
+                  const cleanFolderName = rawName.replace(/\s+(?:Thư mục|Folder|Shared folder)$/i, '').trim();
+                  subfolders.push({ id, name: cleanFolderName });
                 } else {
-                  files.push({ id, name, type: getType(name) });
+                  files.push({ id, name: rawName, type: getType(rawName) });
                 }
               }
             } else {
@@ -108,13 +109,14 @@ function parseFolderContents(html, currentFolderId) {
   let m;
   while ((m = reTooltip.exec(html)) !== null) {
     const [, id, rawName] = m;
+    const cleanRaw = (rawName || '').trim();
     if (id !== currentFolderId && !seen.has(id)) {
       seen.add(id);
-      if (/\b(?:Thư mục|Folder)\b/i.test(rawName)) {
-        const cleanName = rawName.replace(/\s+(?:Thư mục|Folder|Shared folder)$/i, '').trim();
+      if (/\b(?:Thư mục|Folder|Shared folder)\b/i.test(cleanRaw)) {
+        const cleanName = cleanRaw.replace(/\s+(?:Thư mục|Folder|Shared folder)$/i, '').trim();
         subfolders.push({ id, name: cleanName });
       } else {
-        files.push({ id, name: rawName, type: getType(rawName) });
+        files.push({ id, name: cleanRaw, type: getType(cleanRaw) });
       }
     }
   }
@@ -166,7 +168,7 @@ async function crawlDrive(rootFolderId) {
         year       : '',
         description: '',
         folderId   : current.id,
-        folderName : current.name,
+        folderName : current.name.trim(),
         folderPath : current.path, // Array of ancestor names: e.g. ["Anime", "Mùa 1"]
       });
     }
@@ -175,11 +177,12 @@ async function crawlDrive(rootFolderId) {
     for (const sub of subfolders) {
       if (!visited.has(sub.id)) {
         visited.add(sub.id);
-        const subPath = [...current.path, sub.name];
-        queue.push({ id: sub.id, path: subPath, name: sub.name });
+        const cleanSubName = (sub.name || '').trim();
+        const subPath = [...current.path, cleanSubName];
+        queue.push({ id: sub.id, path: subPath, name: cleanSubName });
         allFolders.push({
           id      : sub.id,
-          name    : sub.name,
+          name    : cleanSubName,
           path    : subPath,
           parentId: current.id,
         });

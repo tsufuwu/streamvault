@@ -66,6 +66,16 @@ function toast(msg, type = 'info') {
 }
 
 // ─── Fetch Media From Netlify API ────────────────────
+function isRealMedia(item) {
+  if (!item || !item.title) return false;
+  const t = item.title.trim().toLowerCase();
+  // Ensure folders are never mistaken for media cards
+  if (t.includes('shared folder') || t.endsWith(' folder') || t.startsWith('thư mục ') || t === 'thư mục' || t === 'folder') {
+    return false;
+  }
+  return true;
+}
+
 async function fetchMediaLibrary() {
   // Show warm orange skeleton loading
   mediaGrid.innerHTML = Array(8).fill(0).map(() => `
@@ -78,17 +88,18 @@ async function fetchMediaLibrary() {
     </div>`).join('');
 
   try {
-    const res  = await fetch(MEDIA_LIST_API);
+    // Add cache buster query parameter
+    const res  = await fetch(`${MEDIA_LIST_API}?t=${Date.now()}`);
     const json = await res.json();
 
     if (!json.ok) throw new Error(json.error || 'Lỗi đọc dữ liệu từ vườn cam');
 
-    state.allMedia   = json.data || [];
+    state.allMedia   = (json.data || []).filter(isRealMedia);
     state.allFolders = json.folders || [];
     renderFolderNavigation();
     updateSidebarCounts();
     renderGrid();
-    toast(`Đã thu hoạch ${json.count} quả cam media tươi ngon!`, 'info');
+    toast(`Đã thu hoạch ${state.allMedia.length} quả cam media tươi ngon!`, 'info');
 
   } catch (err) {
     mediaGrid.innerHTML = `
@@ -139,80 +150,200 @@ function getFilteredMedia() {
   });
 }
 
-// ─── Render Grid ──────────────────────────────────────
+// ─── Update Section Header ────────────────────────────
+function updateSectionHeader(items) {
+  const countUnit = state.filter === 'video' ? 'video' : state.filter === 'audio' ? 'audio' : 'quả cam';
+  if (sectionCount) {
+    sectionCount.textContent = `${items.length} ${countUnit}`;
+  }
+
+  const titleEl = document.getElementById('section-title-text');
+  if (titleEl) {
+    if (state.currentPath.length > 0) {
+      if (state.currentPath[0] === '__root__') {
+        titleEl.textContent = 'Chưa phân loại (Thư mục mẹ)';
+      } else {
+        titleEl.textContent = `Thư mục: ${state.currentPath.join(' / ')}`;
+      }
+    } else if (state.filter === 'video') {
+      titleEl.textContent = 'Phim & Video (Tất cả thư mục)';
+    } else if (state.filter === 'audio') {
+      titleEl.textContent = 'Nhạc & Audio (Tất cả thư mục)';
+    } else {
+      titleEl.textContent = 'Tất cả quả cam (Theo thư mục)';
+    }
+  }
+}
+
+// ─── Create Single Media Card ─────────────────────────
+function createMediaCard(media, i) {
+  const card = document.createElement('div');
+  card.className = 'media-card';
+  card.setAttribute('role', 'button');
+  card.setAttribute('tabindex', '0');
+  card.setAttribute('aria-label', `Phát ${media.title}`);
+  card.id = `card-${media.id}`;
+  card.style.animationDelay = `${(i % 12) * 40}ms`;
+
+  const isVideo = media.type === 'video';
+  const thumbContent = media.thumbnail
+    ? `<img src="${media.thumbnail}" alt="${media.title}" loading="lazy">`
+    : isVideo
+      ? `<svg class="card-default-icon" width="56" height="56" viewBox="0 0 24 24" fill="currentColor"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>`
+      : `<svg class="card-default-icon" width="56" height="56" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" fill="#FF7A00"/><circle cx="12" cy="12" r="7.5" fill="#FF9000"/><circle cx="12" cy="12" r="2.2" fill="#FFF"/></svg>`;
+
+  const folderBadge = media.folderName && media.folderName !== 'Thư mục gốc'
+    ? `<span class="card-meta-item" style="color:var(--text-muted);" title="Đường dẫn: ${(media.folderPath || [media.folderName]).join(' / ')}"><span style="opacity:0.75;">📁</span> ${media.folderName}</span>`
+    : '';
+
+  const typeMeta = isVideo
+    ? `<span class="card-meta-item meta-video">🎬 Video</span>`
+    : `<span class="card-meta-item meta-audio">
+         <svg class="orange-no-leaf-icon" width="14" height="14" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#FF7A00" stroke="#FFAE34" stroke-width="1.5"/><circle cx="12" cy="12" r="7.5" fill="#FF9000"/><circle cx="12" cy="12" r="2.2" fill="#FFF" opacity="0.95"/></svg>
+         Audio
+       </span>`;
+
+  card.innerHTML = `
+    <div class="card-thumbnail">
+      ${thumbContent}
+      <span class="card-type-badge badge-${media.type}">${isVideo ? 'Video' : 'Audio'}</span>
+      <div class="card-play-overlay">
+        <div class="play-circle" title="Xem ngay">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+      </div>
+    </div>
+    <div class="card-info">
+      <div class="card-title" title="${media.title}">${media.title}</div>
+      <div class="card-meta">
+        ${media.quality ? `<span class="quality-badge">${media.quality}</span>` : ''}
+        ${typeMeta}
+        ${folderBadge}
+      </div>
+    </div>`;
+
+  card.addEventListener('click', (e) => {
+    createJuiceSplash(e.clientX, e.clientY);
+    openPlayer(media);
+  });
+  card.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      const rect = card.getBoundingClientRect();
+      createJuiceSplash(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      openPlayer(media);
+    }
+  });
+
+  return card;
+}
+
+// ─── Render Grid (Hỗ trợ gom nhóm theo thư mục con) ─────
 function renderGrid() {
   const items = getFilteredMedia();
-  sectionCount.textContent = `${items.length} quả cam`;
+  updateSectionHeader(items);
   mediaGrid.innerHTML = '';
 
   if (items.length === 0) {
+    const isAudioFilter = state.filter === 'audio';
     mediaGrid.innerHTML = `
       <div class="empty-state" style="grid-column:1/-1">
         <span style="font-size:3rem;display:block;margin-bottom:1rem;">🍊</span>
-        <h3>Không tìm thấy file nào trong thư mục này</h3>
-        <p>Thử chọn tab thư mục khác hoặc xóa từ khoá tìm kiếm</p>
+        <h3>${isAudioFilter ? 'Chưa có file audio nào trong thư mục này' : 'Không tìm thấy file nào trong thư mục này'}</h3>
+        <p>Thử chọn tab thư mục khác hoặc chuyển sang mục Phim & Video</p>
       </div>`;
     return;
   }
 
-  items.forEach((media, i) => {
-    const card = document.createElement('div');
-    card.className = 'media-card';
-    card.setAttribute('role', 'button');
-    card.setAttribute('tabindex', '0');
-    card.setAttribute('aria-label', `Phát ${media.title}`);
-    card.id = `card-${media.id}`;
-    card.style.animationDelay = `${i * 40}ms`;
+  const currentDepth = state.currentPath.length;
 
-    const isVideo = media.type === 'video';
-    const thumbContent = media.thumbnail
-      ? `<img src="${media.thumbnail}" alt="${media.title}" loading="lazy">`
-      : isVideo
-        ? `<svg class="card-default-icon" width="56" height="56" viewBox="0 0 24 24" fill="currentColor"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>`
-        : `<svg class="card-default-icon" width="56" height="56" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" fill="#FF7A00"/><circle cx="12" cy="12" r="7.5" fill="#FF9500"/><circle cx="12" cy="12" r="2.2" fill="#FFF"/></svg>`;
+  // Gom nhóm media theo thư mục con tại độ sâu hiện tại
+  const groupMap = new Map();
+  items.forEach(m => {
+    const p = m.folderPath || [];
+    let groupKey;
+    if (p.length > currentDepth) {
+      groupKey = p[currentDepth];
+    } else {
+      groupKey = currentDepth === 0 ? '__root__' : '__direct__';
+    }
+    if (!groupMap.has(groupKey)) {
+      groupMap.set(groupKey, []);
+    }
+    groupMap.get(groupKey).push(m);
+  });
 
-    const folderBadge = media.folderName && media.folderName !== 'Thư mục gốc'
-      ? `<span class="card-meta-item" style="color:var(--text-muted);" title="Đường dẫn: ${(media.folderPath || [media.folderName]).join(' / ')}"><span style="opacity:0.75;">📁</span> ${media.folderName}</span>`
-      : '';
+  // Xác định có nên chia nhóm hay không:
+  // - Nếu đang ở root ([]): luôn chia nhóm theo từng thư mục con (Phim, Nhạc, Video nhảm nhí,...)
+  // - Nếu đang ở thư mục con mà bên trong có các thư mục con khác: chia nhóm
+  // - Nếu là thư mục lá (chỉ có file trực tiếp): hiện thẳng dạng lưới
+  const shouldGroup = currentDepth === 0
+    ? (groupMap.size > 1 || (!groupMap.has('__root__') && groupMap.size > 0))
+    : (groupMap.size > 1 || (groupMap.size === 1 && !groupMap.has('__direct__')));
 
-    const typeMeta = isVideo
-      ? `<span class="card-meta-item meta-video">🎬 Video</span>`
-      : `<span class="card-meta-item meta-audio">
-           <svg class="orange-no-leaf-icon" width="14" height="14" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#FF7A00" stroke="#FFAE34" stroke-width="1.5"/><circle cx="12" cy="12" r="7.5" fill="#FF9000"/><circle cx="12" cy="12" r="2.2" fill="#FFF" opacity="0.95"/></svg>
-           Audio
-         </span>`;
+  if (!shouldGroup) {
+    items.forEach((media, i) => {
+      mediaGrid.appendChild(createMediaCard(media, i));
+    });
+    return;
+  }
 
-    card.innerHTML = `
-      <div class="card-thumbnail">
-        ${thumbContent}
-        <span class="card-type-badge badge-${media.type}">${isVideo ? 'Video' : 'Audio'}</span>
-        <div class="card-play-overlay">
-          <div class="play-circle" title="Xem ngay">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-          </div>
+  // Render các section gom nhóm
+  const sortedKeys = Array.from(groupMap.keys()).sort((a, b) => {
+    if (a.startsWith('__')) return 1;
+    if (b.startsWith('__')) return -1;
+    return a.localeCompare(b, 'vi');
+  });
+
+  sortedKeys.forEach(key => {
+    const groupItems = groupMap.get(key);
+    const isSpecial = key.startsWith('__');
+    const folderDisplayName = isSpecial
+      ? (currentDepth === 0 ? 'Thư mục mẹ (Chưa phân loại)' : 'File trong thư mục này')
+      : key;
+
+    const sectionEl = document.createElement('div');
+    sectionEl.className = 'folder-group-section';
+
+    const countUnit = state.filter === 'video' ? 'video' : state.filter === 'audio' ? 'audio' : 'quả cam';
+
+    const targetPath = isSpecial
+      ? (currentDepth === 0 ? ['__root__'] : [...state.currentPath])
+      : [...state.currentPath, key];
+
+    sectionEl.innerHTML = `
+      <div class="folder-group-header">
+        <div class="folder-group-title">
+          <span class="folder-group-icon">📁</span>
+          <span class="folder-group-name">${folderDisplayName}</span>
+          <span class="folder-group-count">${groupItems.length} ${countUnit}</span>
         </div>
+        ${!isSpecial ? `
+          <button class="folder-group-action" data-folder-path="${encodeURIComponent(JSON.stringify(targetPath))}">
+            <span>Mở tab thư mục</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        ` : ''}
       </div>
-      <div class="card-info">
-        <div class="card-title" title="${media.title}">${media.title}</div>
-        <div class="card-meta">
-          ${media.quality ? `<span class="quality-badge">${media.quality}</span>` : ''}
-          ${typeMeta}
-          ${folderBadge}
-        </div>
-      </div>`;
+      <div class="folder-group-grid"></div>
+    `;
 
-    card.addEventListener('click', (e) => {
-      createJuiceSplash(e.clientX, e.clientY);
-      openPlayer(media);
+    const subGrid = sectionEl.querySelector('.folder-group-grid');
+    groupItems.forEach((m, idx) => {
+      subGrid.appendChild(createMediaCard(m, idx));
     });
-    card.addEventListener('keydown', e => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        const rect = card.getBoundingClientRect();
-        createJuiceSplash(rect.left + rect.width / 2, rect.top + rect.height / 2);
-        openPlayer(media);
-      }
-    });
-    mediaGrid.appendChild(card);
+
+    const openBtn = sectionEl.querySelector('button[data-folder-path]');
+    if (openBtn) {
+      openBtn.addEventListener('click', (e) => {
+        createJuiceSplash(e.clientX, e.clientY);
+        try {
+          const path = JSON.parse(decodeURIComponent(openBtn.dataset.folderPath));
+          setFolderPath(path);
+        } catch (err) {}
+      });
+    }
+
+    mediaGrid.appendChild(sectionEl);
   });
 }
 
@@ -270,11 +401,15 @@ function renderBreadcrumbs() {
   folderBreadcrumbs.innerHTML = crumbs.join('');
 
   folderBreadcrumbs.querySelectorAll('button[data-crumb-idx="-1"]').forEach(btn => {
-    btn.addEventListener('click', () => setFolderPath([]));
+    btn.addEventListener('click', (e) => {
+      createJuiceSplash(e.clientX, e.clientY);
+      setFolderPath([]);
+    });
   });
 
   folderBreadcrumbs.querySelectorAll('button[data-crumb-path]').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+      createJuiceSplash(e.clientX, e.clientY);
       try {
         const targetPath = JSON.parse(decodeURIComponent(btn.dataset.crumbPath));
         setFolderPath(targetPath);
@@ -288,8 +423,13 @@ function renderPrimaryFolderTabs() {
 
   const topFoldersMap = new Map();
   let rootFilesCount = 0;
+  let totalActiveMediaCount = 0;
 
   state.allMedia.forEach(m => {
+    // Chỉ đếm số file khớp với filter loại media hiện tại
+    if (state.filter !== 'all' && m.type !== state.filter) return;
+    totalActiveMediaCount++;
+
     const p = m.folderPath || [];
     if (p.length === 0) {
       rootFilesCount++;
@@ -299,7 +439,7 @@ function renderPrimaryFolderTabs() {
     }
   });
 
-  // Include any discovered empty top folders from Google Drive
+  // Bao gồm các thư mục rỗng đã tìm thấy từ Drive
   state.allFolders.forEach(f => {
     const p = f.path || [];
     if (p.length === 1 && !topFoldersMap.has(p[0])) {
@@ -309,16 +449,16 @@ function renderPrimaryFolderTabs() {
 
   const tabs = [];
 
-  // "Tất cả" tab
+  // Tab "Tất cả"
   const isAllActive = state.currentPath.length === 0;
   tabs.push(`
     <button class="folder-tab ${isAllActive ? 'active' : ''}" data-folder-action="all">
       <span>🍊 Tất cả</span>
-      <span class="folder-tab-badge">${state.allMedia.length}</span>
+      <span class="folder-tab-badge">${totalActiveMediaCount}</span>
     </button>
   `);
 
-  // Uncategorized tab (files sitting directly at root folder when subfolders exist)
+  // Tab "Chưa phân loại" nếu có file ở thư mục mẹ
   if (rootFilesCount > 0 && topFoldersMap.size > 0) {
     const isRootActive = state.currentPath.length === 1 && state.currentPath[0] === '__root__';
     tabs.push(`
@@ -329,7 +469,7 @@ function renderPrimaryFolderTabs() {
     `);
   }
 
-  // Top level folder tabs
+  // Các tab thư mục cấp 1
   Array.from(topFoldersMap.keys()).sort().forEach(folderName => {
     const count = topFoldersMap.get(folderName) || 0;
     const isActive = state.currentPath.length >= 1 && state.currentPath[0] === folderName;
@@ -344,15 +484,22 @@ function renderPrimaryFolderTabs() {
   folderTabs.innerHTML = tabs.join('');
 
   folderTabs.querySelectorAll('button[data-folder-action="all"]').forEach(btn => {
-    btn.addEventListener('click', () => setFolderPath([]));
+    btn.addEventListener('click', (e) => {
+      createJuiceSplash(e.clientX, e.clientY);
+      setFolderPath([]);
+    });
   });
 
   folderTabs.querySelectorAll('button[data-folder-action="root"]').forEach(btn => {
-    btn.addEventListener('click', () => setFolderPath(['__root__']));
+    btn.addEventListener('click', (e) => {
+      createJuiceSplash(e.clientX, e.clientY);
+      setFolderPath(['__root__']);
+    });
   });
 
   folderTabs.querySelectorAll('button[data-top-folder]').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+      createJuiceSplash(e.clientX, e.clientY);
       const folderName = decodeURIComponent(btn.dataset.topFolder);
       setFolderPath([folderName]);
     });
@@ -1166,6 +1313,8 @@ document.querySelectorAll('.filter-btn[data-filter]').forEach(btn => {
     document.querySelectorAll('.filter-btn[data-filter]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     state.filter = btn.dataset.filter;
+    state.currentPath = []; // Quay về thư mục mẹ để xem toàn bộ file theo nhóm thư mục con
+    renderFolderNavigation();
     renderGrid();
   });
 });
