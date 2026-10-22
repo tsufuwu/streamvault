@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Netlify Serverless Function: get-stream-url
  *
  * Resolves a Google Drive fileId to a direct, streamable media URL
@@ -30,7 +30,7 @@ exports.handler = async (event) => {
     };
   }
 
-  const initialUrl = https://drive.google.com/uc?id=&export=download&confirm=t;
+  const initialUrl = `https://drive.google.com/uc?id=${fileId}&export=download&confirm=t`;
 
   try {
     let currentUrl = initialUrl;
@@ -53,7 +53,7 @@ exports.handler = async (event) => {
       if (status >= 300 && status < 400 && location) {
         currentUrl = location.startsWith("http")
           ? location
-          : https://drive.google.com;
+          : `https://drive.google.com${location}`;
 
         const isCdnUrl =
           !currentUrl.includes("drive.google.com") &&
@@ -98,7 +98,7 @@ exports.handler = async (event) => {
     return {
       statusCode: 500,
       headers: CORS_HEADERS,
-      body: JSON.stringify({ error: Internal server error:  }),
+      body: JSON.stringify({ error: `Internal server error: ${err.message}` }),
     };
   }
 };
