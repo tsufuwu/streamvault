@@ -185,11 +185,11 @@ function updateSectionHeader(items) {
         titleEl.textContent = `Thư mục: ${state.currentPath.join(' / ')}`;
       }
     } else if (state.filter === 'video') {
-      titleEl.textContent = 'Phim & Video (Tất cả thư mục)';
+      titleEl.textContent = 'Phim & Video';
     } else if (state.filter === 'audio') {
-      titleEl.textContent = 'Nhạc & Audio (Tất cả thư mục)';
+      titleEl.textContent = 'Nhạc & Audio';
     } else {
-      titleEl.textContent = 'Tất cả quả cam (Theo thư mục)';
+      titleEl.textContent = 'Tất cả quả cam';
     }
   }
 }
@@ -386,8 +386,8 @@ function renderBreadcrumbs() {
   const crumbs = [];
   const isRootActive = path.length === 0;
   crumbs.push(`
-    <button class="breadcrumb-crumb ${isRootActive ? 'active' : ''}" data-crumb-idx="-1" title="Xem tất cả thư mục">
-      <span>🏠 Vườn Cam (Tất cả)</span>
+    <button class="breadcrumb-crumb ${isRootActive ? 'active' : ''}" data-crumb-idx="-1" title="Vườn Cam">
+      <span>🏠 Vườn Cam</span>
     </button>
   `);
 
@@ -1488,6 +1488,104 @@ const shimmerStyle = document.createElement('style');
 shimmerStyle.textContent = `@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }`;
 document.head.appendChild(shimmerStyle);
 
+// ─── Interactive Orange Tree (Cây cam rụng quả khi chạm vào) ────
+function initInteractiveOrangeTree() {
+  const treeContainer = document.getElementById('interactive-orange-tree');
+  if (!treeContainer) return;
+
+  const ripeOrange   = document.getElementById('branch-ripe-orange');
+  const fallenOrange = document.getElementById('ground-fallen-orange');
+  const harvestBtn   = document.getElementById('harvest-orange-prompt');
+
+  let isShaking = false;
+  let hasFallen = false;
+
+  function shakeTreeAndDropOrange(e) {
+    if (isShaking || hasFallen) return;
+    isShaking = true;
+    hasFallen = true;
+
+    // Splash small particles around mouse/touch
+    if (e && e.clientX && e.clientY) {
+      createJuiceSplash(e.clientX, e.clientY);
+    }
+
+    // Shake tree animation
+    treeContainer.classList.add('shaking');
+
+    // Trigger orange drop
+    if (ripeOrange) {
+      ripeOrange.classList.add('dropping');
+    }
+
+    setTimeout(() => {
+      treeContainer.classList.remove('shaking');
+      isShaking = false;
+
+      // Show fallen orange on the ground
+      if (fallenOrange) {
+        fallenOrange.classList.add('landed');
+      }
+      if (harvestBtn) {
+        harvestBtn.classList.add('show');
+      }
+
+      // Small bounce splash at the ground
+      const rect = treeContainer.getBoundingClientRect();
+      createJuiceSplash(rect.left + 90, rect.top + 130);
+    }, 600);
+  }
+
+  function harvestOrange(e) {
+    if (e) {
+      e.stopPropagation();
+      createJuiceSplash(e.clientX, e.clientY);
+    }
+
+    if (fallenOrange) {
+      fallenOrange.classList.remove('landed');
+      fallenOrange.classList.add('collected');
+    }
+    if (harvestBtn) {
+      harvestBtn.classList.remove('show');
+    }
+
+    toast('🎉 Bạn vừa thu hoạch 1 quả cam tươi mọng nước! 🍊🧺', 'info');
+
+    // Regrow after 3 seconds
+    setTimeout(() => {
+      if (fallenOrange) fallenOrange.classList.remove('collected');
+      if (ripeOrange) {
+        ripeOrange.classList.remove('dropping');
+        ripeOrange.classList.add('regrowing');
+        setTimeout(() => {
+          ripeOrange.classList.remove('regrowing');
+          hasFallen = false;
+        }, 800);
+      } else {
+        hasFallen = false;
+      }
+    }, 3000);
+  }
+
+  // Hover or click on the tree triggers shake & drop
+  treeContainer.addEventListener('mouseenter', shakeTreeAndDropOrange);
+  treeContainer.addEventListener('click', (e) => {
+    if (!hasFallen) {
+      shakeTreeAndDropOrange(e);
+    }
+  });
+
+  if (fallenOrange) {
+    fallenOrange.addEventListener('click', harvestOrange);
+  }
+  if (harvestBtn) {
+    harvestBtn.addEventListener('click', harvestOrange);
+  }
+}
+
 // ─── INIT ─────────────────────────────────────────────
 fetchMediaLibrary();
+initInteractiveOrangeTree();
+
 

@@ -7,20 +7,31 @@
   <meta name="description" content="Orangestream — Nền tảng xem phim và nghe nhạc trực tuyến mọng nước từ Google Drive. Trải nghiệm mượt mà, không quảng cáo." />
   <meta name="theme-color" content="#ff7a00" />
   <meta name="referrer" content="no-referrer" />
-  <link rel="stylesheet" href="style.css?v=2.3" />
+  <link rel="stylesheet" href="style.css?v=2.5" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍊</text></svg>" />
 </head>
 <body>
 
-<!-- ─── Floating Citrus Particles Background ─── -->
+<!-- ─── Floating Citrus Particles Background (Sống động & Rực rỡ) ─── -->
 <div class="citrus-ambient" aria-hidden="true">
-  <div class="citrus-leaf leaf-1">🍃</div>
-  <div class="citrus-slice slice-1">🍊</div>
-  <div class="citrus-leaf leaf-2">🌿</div>
-  <div class="citrus-slice slice-2">🍊</div>
-  <div class="citrus-leaf leaf-3">🍃</div>
-  <div class="citrus-slice slice-3">✨</div>
-  <div class="citrus-slice slice-4">🍊</div>
+  <!-- Soft glowing citrus aura orbs -->
+  <div class="citrus-glow-orb orb-1"></div>
+  <div class="citrus-glow-orb orb-2"></div>
+  <div class="citrus-glow-orb orb-3"></div>
+
+  <!-- Vivid floating oranges & citrus slices -->
+  <div class="citrus-item item-orange-1">🍊</div>
+  <div class="citrus-item item-leaf-1">🍃</div>
+  <div class="citrus-item item-slice-1">🍊</div>
+  <div class="citrus-item item-leaf-2">🌿</div>
+  <div class="citrus-item item-sparkle-1">✨</div>
+  <div class="citrus-item item-orange-2">🍊</div>
+  <div class="citrus-item item-slice-2">🍊</div>
+  <div class="citrus-item item-leaf-3">🍃</div>
+  <div class="citrus-item item-sparkle-2">✨</div>
+  <div class="citrus-item item-orange-3">🍊</div>
+  <div class="citrus-item item-slice-3">🍊</div>
+  <div class="citrus-item item-leaf-4">🌿</div>
 </div>
 
 <div id="app">
@@ -113,6 +124,104 @@
         <p class="guide-desc" style="margin-bottom:0;">
           đây là demo thử nên ở đây sẽ ghi cái gì đó tùy thích
         </p>
+      </div>
+
+      <!-- ─── Cây Cam Rung Rớt Quả (Interactive Orange Tree) ─── -->
+      <div class="orange-tree-widget" id="interactive-orange-tree" title="Chạm hoặc bấm vào cây để rung rớt cam!">
+        <div class="tree-header-tag">
+          <span class="tree-pulse-dot"></span> VƯỜN CAM CỦA BẠN
+        </div>
+
+        <div class="tree-stage">
+          <!-- Orange Tree SVG -->
+          <svg class="orange-tree-svg" id="tree-svg-canopy" viewBox="0 0 200 170" width="100%" height="150">
+            <defs>
+              <linearGradient id="trunkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#8B4513"/>
+                <stop offset="50%" stop-color="#5D2E0C"/>
+                <stop offset="100%" stop-color="#3E1F08"/>
+              </linearGradient>
+              <linearGradient id="canopyGrad1" x1="20%" y1="0%" x2="80%" y2="100%">
+                <stop offset="0%" stop-color="#34D399"/>
+                <stop offset="40%" stop-color="#059669"/>
+                <stop offset="100%" stop-color="#064E3B"/>
+              </linearGradient>
+              <linearGradient id="canopyGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#10B981"/>
+                <stop offset="60%" stop-color="#047857"/>
+                <stop offset="100%" stop-color="#022C22"/>
+              </linearGradient>
+              <radialGradient id="orangeGrad" cx="35%" cy="35%" r="65%">
+                <stop offset="0%" stop-color="#FFAE34"/>
+                <stop offset="45%" stop-color="#FF7A00"/>
+                <stop offset="100%" stop-color="#D9480F"/>
+              </radialGradient>
+              <filter id="fruitGlow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#FF7A00" flood-opacity="0.6"/>
+              </filter>
+            </defs>
+
+            <!-- Soil Mound & Grass -->
+            <ellipse cx="100" cy="158" rx="80" ry="12" fill="#2E1C0C" opacity="0.8"/>
+            <path d="M40 156 Q100 148 160 156 Q100 162 40 156 Z" fill="#059669" opacity="0.9"/>
+            <path d="M50 154 L52 148 L56 154 M90 153 L93 146 L97 154 M140 154 L143 147 L147 154" stroke="#34D399" stroke-width="2" stroke-linecap="round"/>
+
+            <!-- Tree Trunk & Main Branches -->
+            <path class="tree-trunk-path" d="M96 156 C94 135 90 115 82 95 C75 78 62 70 54 66 C66 70 76 80 84 92 C88 80 94 68 100 58 C104 68 108 80 114 90 C122 78 134 68 146 64 C136 70 125 78 118 95 C112 115 106 135 104 156 Z" fill="url(#trunkGrad)"/>
+
+            <!-- Foliage / Canopy Layers -->
+            <g class="tree-foliage-group">
+              <!-- Back Canopy Layer -->
+              <circle cx="62" cy="72" r="32" fill="url(#canopyGrad2)" opacity="0.95"/>
+              <circle cx="138" cy="72" r="32" fill="url(#canopyGrad2)" opacity="0.95"/>
+              <circle cx="100" cy="48" r="38" fill="url(#canopyGrad1)"/>
+              <!-- Front Canopy Layer -->
+              <circle cx="76" cy="62" r="28" fill="url(#canopyGrad1)"/>
+              <circle cx="124" cy="62" r="28" fill="url(#canopyGrad1)"/>
+              <circle cx="100" cy="70" r="32" fill="url(#canopyGrad2)"/>
+              <!-- Fresh leaves accents -->
+              <path d="M78 40 C85 30 96 35 94 44 C88 48 80 46 78 40 Z" fill="#6EE7B7"/>
+              <path d="M122 40 C115 30 104 35 106 44 C112 48 120 46 122 40 Z" fill="#6EE7B7"/>
+            </g>
+
+            <!-- Static Oranges on Branches -->
+            <g class="hanging-fruits">
+              <!-- Top Left Orange -->
+              <circle cx="58" cy="68" r="8.5" fill="url(#orangeGrad)" filter="url(#fruitGlow)"/>
+              <path d="M58 60 Q57 56 61 54" stroke="#059669" stroke-width="2" fill="none"/>
+              <circle cx="56" cy="65" r="2" fill="#FFF" opacity="0.5"/>
+
+              <!-- Top Right Orange -->
+              <circle cx="140" cy="68" r="8.5" fill="url(#orangeGrad)" filter="url(#fruitGlow)"/>
+              <path d="M140 60 Q141 56 137 54" stroke="#059669" stroke-width="2" fill="none"/>
+              <circle cx="138" cy="65" r="2" fill="#FFF" opacity="0.5"/>
+
+              <!-- Middle Center Orange -->
+              <circle cx="100" cy="48" r="9" fill="url(#orangeGrad)" filter="url(#fruitGlow)"/>
+              <path d="M100 39 Q102 35 98 33" stroke="#059669" stroke-width="2" fill="none"/>
+              <circle cx="98" cy="45" r="2" fill="#FFF" opacity="0.5"/>
+            </g>
+
+            <!-- ─── THE DROPPABLE RIPE ORANGE (Rụng khi động vào) ─── -->
+            <g class="branch-ripe-orange" id="branch-ripe-orange">
+              <path class="orange-stem-branch" d="M112 84 Q114 90 110 93" stroke="#059669" stroke-width="2.5" fill="none"/>
+              <circle cx="110" cy="102" r="10.5" fill="url(#orangeGrad)" filter="url(#fruitGlow)"/>
+              <circle cx="107" cy="98" r="2.5" fill="#FFF" opacity="0.7"/>
+              <!-- Little green leaf on fruit -->
+              <path d="M110 93 C116 88 122 92 118 96 Z" fill="#34D399"/>
+            </g>
+          </svg>
+
+          <!-- The Fallen Orange on the ground (Interactive) -->
+          <div class="ground-fallen-orange" id="ground-fallen-orange" title="Bấm vào để thu hoạch quả cam này!">
+            🍊
+          </div>
+        </div>
+
+        <!-- Harvest Prompt / Tooltip -->
+        <div class="tree-action-hint" id="harvest-orange-prompt">
+          <span class="tree-hint-text">✨ Bấm quả cam để hái! 🧺</span>
+        </div>
       </div>
     </aside>
 
@@ -250,6 +359,6 @@
   <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
 </div><!-- /app -->
-<script type="module" src="app.js?v=2.3"></script>
+<script type="module" src="app.js?v=2.5"></script>
 </body>
 </html>
