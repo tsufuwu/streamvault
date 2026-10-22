@@ -1602,24 +1602,387 @@ body.basket-game-active * {
   to   { transform: translateX(0); opacity: 1; }
 }
 
-/* ─── Responsive Adjustments ──────────────────────── */
-@media (max-width: 900px) {
-  .main-layout { grid-template-columns: 1fr; }
-  .sidebar { display: none; }
-  .content-area { padding: 1.5rem; }
-  .orange-hero { flex-direction: column; text-align: center; gap: 1.5rem; padding: 1.8rem; }
-  .hero-content { max-width: 100%; }
-  .hero-art { padding-left: 0; }
-  .navbar { padding: 0 1.2rem; }
-  .navbar-search { width: 220px; }
-  .media-grid { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 1rem; }
+/* ─── Mobile Category Chips Bar (YouTube/Bilibili Style) ─── */
+.mobile-category-bar {
+  display: none;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  gap: 8px;
+  padding: 6px 0 12px 0;
+  margin-bottom: 6px;
+}
+.mobile-category-bar::-webkit-scrollbar { display: none; }
+
+.mobile-cat-chip {
+  flex-shrink: 0;
+  padding: 7px 15px;
+  background: rgba(32, 20, 12, 0.75);
+  border: 1px solid rgba(255, 140, 40, 0.22);
+  border-radius: 50px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+  backdrop-filter: blur(8px);
+}
+.mobile-cat-chip.active {
+  background: linear-gradient(135deg, var(--orange-500), #EA580C);
+  border-color: var(--orange-400);
+  color: #FFF;
+  font-weight: 700;
+  box-shadow: 0 4px 15px var(--orange-glow);
+}
+.mobile-cat-chip .count {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.15);
+}
+.mobile-cat-chip.active .count {
+  background: rgba(0, 0, 0, 0.3);
+  color: #FFF;
 }
 
-@media (max-width: 640px) {
-  .controls-bar { flex-wrap: wrap; gap: 8px; }
-  .controls-left, .controls-right { gap: 6px; flex-wrap: wrap; }
-  .volume-slider { width: 45px; }
-  #ctrl-loop, #ctrl-pip, #ctrl-theater { display: none; }
+/* ─── Mobile Bottom Navigation (YouTube / Bilibili Style) ─── */
+.mobile-bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 60px;
+  background: rgba(16, 11, 7, 0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 140, 40, 0.22);
+  display: none;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 1500;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.65);
+}
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  user-select: none;
+  flex: 1;
+}
+.bnav-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.bottom-nav-item:hover,
+.bottom-nav-item.active {
+  color: var(--orange-400);
+}
+.bottom-nav-item.active .bnav-icon {
+  transform: scale(1.18);
+  filter: drop-shadow(0 0 8px rgba(255, 122, 0, 0.75));
+}
+.bottom-nav-item.active .bnav-label {
+  font-weight: 700;
+  color: #FFF;
+}
+
+/* ─── Below-Video Mobile Info & Playlist ─── */
+.player-below-content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 14px 20px;
+  background: #110c08;
+  border-bottom: 1px solid rgba(255, 140, 40, 0.12);
+}
+.player-mobile-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.player-mobile-actions::-webkit-scrollbar { display: none; }
+.mobile-action-pill {
+  padding: 7px 16px;
+  border-radius: 20px;
+  background: rgba(255, 140, 40, 0.1);
+  border: 1px solid rgba(255, 140, 40, 0.25);
+  color: var(--orange-300);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.mobile-action-pill:hover,
+.mobile-action-pill:active {
+  background: var(--orange-500);
+  border-color: var(--orange-400);
+  color: #FFF;
+}
+
+/* Playlist / Related episodes */
+.player-playlist-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+.playlist-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.playlist-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--orange-300);
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: 0.02em;
+}
+.playlist-count {
+  font-size: 0.72rem;
+  background: rgba(255, 140, 40, 0.15);
+  color: var(--orange-400);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+.playlist-carousel {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+}
+.playlist-carousel::-webkit-scrollbar { display: none; }
+.playlist-card {
+  flex: 0 0 155px;
+  background: rgba(25, 16, 10, 0.8);
+  border: 1px solid rgba(255, 140, 40, 0.18);
+  border-radius: 10px;
+  padding: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+.playlist-card:hover,
+.playlist-card:active {
+  border-color: var(--orange-400);
+  background: rgba(255, 122, 0, 0.15);
+  transform: translateY(-2px);
+}
+.playlist-card.active-ep {
+  border-color: var(--orange-500);
+  background: linear-gradient(135deg, rgba(255, 122, 0, 0.25), rgba(255, 122, 0, 0.08));
+  box-shadow: 0 0 12px rgba(255, 122, 0, 0.3);
+}
+.playlist-thumb {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 6px;
+  background: #1e130b;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.playlist-thumb img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.playlist-card-title {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ─── Responsive Adjustments (Desktop / Tablet / Mobile) ─── */
+@media (max-width: 900px) {
+  .main-layout { grid-template-columns: 1fr; }
+  .sidebar { display: none !important; }
+  .mobile-category-bar { display: flex; }
+  .mobile-bottom-nav { display: flex; }
+  .content-area {
+    padding: 1rem 1rem 85px 1rem;
+  }
+  .orange-hero { flex-direction: column; text-align: center; gap: 1.2rem; padding: 1.5rem; }
+  .hero-content { max-width: 100%; }
+  .hero-art { padding-left: 0; }
+  .navbar { padding: 0 1rem; }
+  .navbar-search { width: 170px; }
+  .media-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.85rem; }
+}
+
+@media (max-width: 768px) {
+  /* Fullscreen Bilibili / YouTube Mobile Player Experience */
+  .player-overlay {
+    padding: 0 !important;
+    background: #000 !important;
+    backdrop-filter: none !important;
+    align-items: flex-start !important;
+  }
+  .player-modal {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow-y: auto !important;
+    background: #0a0704 !important;
+  }
+
+  /* Pinned 16:9 Video Player at Very Top */
+  .player-body {
+    order: 1 !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 200 !important;
+    width: 100% !important;
+    background: #000 !important;
+  }
+  .custom-orange-player {
+    width: 100vw !important;
+    aspect-ratio: 16/9 !important;
+    background: #000 !important;
+  }
+
+  /* Auto-Hide Video Controls */
+  .custom-orange-player.controls-hidden .citrus-controls {
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+  .citrus-controls {
+    padding: 6px 10px 4px 10px !important;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.25) 50%, transparent 100%) !important;
+  }
+
+  /* Compact 1-Row Mobile Controls Bar (No wrapping, no covering video) */
+  .controls-bar {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: nowrap !important;
+    gap: 4px !important;
+  }
+  .controls-left {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+  }
+  .controls-right {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+  }
+
+  /* Hide Desktop-only Controls on Mobile to Keep Video Clean */
+  .volume-container,
+  #ctrl-loop,
+  #ctrl-pip,
+  #ctrl-theater,
+  #ctrl-download,
+  #ctrl-switch-player {
+    display: none !important;
+  }
+
+  /* Mobile Touch Controls */
+  .ctrl-btn {
+    width: 32px !important;
+    height: 32px !important;
+    padding: 0 !important;
+  }
+  .time-display {
+    font-size: 0.72rem !important;
+    margin-left: 2px !important;
+    white-space: nowrap !important;
+  }
+  .orange-seekbar-container {
+    height: 18px !important;
+    margin-bottom: 2px !important;
+  }
+  .orange-seek-track {
+    height: 4px !important;
+  }
+  .rolling-orange-thumb {
+    font-size: 15px !important;
+    width: 18px !important;
+    height: 18px !important;
+  }
+  .speed-btn, .quality-btn {
+    font-size: 0.7rem !important;
+    padding: 2px 6px !important;
+    width: auto !important;
+    min-width: 44px !important;
+  }
+
+  /* Video Details Below Video */
+  .player-header {
+    order: 2 !important;
+    padding: 12px 16px !important;
+    background: #110c08 !important;
+    border-bottom: 1px solid rgba(255, 140, 40, 0.12) !important;
+  }
+  .player-title {
+    font-size: 1.05rem !important;
+    white-space: normal !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    line-height: 1.35 !important;
+  }
+  .close-btn {
+    width: 34px !important;
+    height: 34px !important;
+    margin-left: 10px !important;
+  }
+
+  .player-below-content {
+    order: 3 !important;
+    padding: 14px 16px !important;
+  }
+  .player-footer {
+    order: 4 !important;
+    padding: 12px 16px 40px 16px !important;
+  }
 }
 
 /* ─── Juice Splash Particle Effect ────────────────── */

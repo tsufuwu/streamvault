@@ -7,7 +7,7 @@
   <meta name="description" content="Orangestream — Nền tảng xem phim và nghe nhạc trực tuyến mọng nước từ Google Drive. Trải nghiệm mượt mà, không quảng cáo." />
   <meta name="theme-color" content="#ff7a00" />
   <meta name="referrer" content="no-referrer" />
-  <link rel="stylesheet" href="style.css?v=2.8" />
+  <link rel="stylesheet" href="style.css?v=3.0" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍊</text></svg>" />
 </head>
 <body>
@@ -220,6 +220,28 @@
         </div>
       </section>
 
+      <!-- ─── Mobile Horizontal Category Bar (YouTube / Bilibili Style) ─── -->
+      <nav class="mobile-category-bar" id="mobile-category-bar" aria-label="Bộ lọc chuyên mục mobile">
+        <button class="mobile-cat-chip active" data-filter="all">
+          <span class="chip-icon">🍊</span> Tất cả quả cam
+          <span class="count">0</span>
+        </button>
+        <button class="mobile-cat-chip" data-filter="video">
+          <span class="chip-icon">🎬</span> Phim & Video
+          <span class="count">0</span>
+        </button>
+        <button class="mobile-cat-chip" data-filter="audio">
+          <span class="chip-icon">
+            <svg class="orange-no-leaf-icon" width="14" height="14" viewBox="0 0 24 24" style="vertical-align:middle;display:inline-block;">
+              <circle cx="12" cy="12" r="10" fill="#FF7A00" stroke="#FFAE34" stroke-width="1.6"/>
+              <circle cx="12" cy="12" r="7.5" fill="#FF9000"/>
+              <circle cx="12" cy="12" r="2.2" fill="#FFF" opacity="0.95"/>
+            </svg>
+          </span> Nhạc & Audio
+          <span class="count">0</span>
+        </button>
+      </nav>
+
       <!-- ─── Folder Navigation & Tabs (Hỗ trợ đa tầng thư mục) ─── -->
       <section class="folder-browser-section" id="folder-browser-section">
         <!-- Breadcrumbs bar (đường dẫn khi vào sâu thư mục con) -->
@@ -275,6 +297,29 @@
 
       <div id="player-body" class="player-body"></div>
 
+      <!-- ─── Bilibili/YouTube Style Below Video Info & Playlist ─── -->
+      <div class="player-below-content" id="player-below-content">
+        <div class="player-mobile-actions">
+          <button class="mobile-action-pill" id="mobile-btn-switch-player">
+            <span>🔄 Drive Player</span>
+          </button>
+          <a class="mobile-action-pill" id="mobile-btn-download" href="#" download>
+            <span>⬇ Tải về</span>
+          </a>
+          <a class="mobile-action-pill" id="mobile-btn-open-drive" href="#" target="_blank" rel="noopener">
+            <span>↗ Mở Drive</span>
+          </a>
+        </div>
+
+        <div class="player-playlist-section" id="player-playlist-section">
+          <div class="playlist-header">
+            <span class="playlist-title">📺 Danh sách tập & liên quan</span>
+            <span class="playlist-count" id="player-playlist-count">0</span>
+          </div>
+          <div class="playlist-carousel" id="player-playlist-items"></div>
+        </div>
+      </div>
+
       <div class="player-footer">
         <div style="display:flex;align-items:center;gap:10px;">
           <a id="open-new-tab" href="#" target="_blank" rel="noopener" class="open-new-tab-btn" style="display:none;" aria-label="Mở trong tab mới">
@@ -325,7 +370,33 @@
     <span class="basket-cursor-icon">🧺</span>
   </div>
 
+  <!-- ─── Mobile Bottom Navigation (YouTube / Bilibili Style) ─── -->
+  <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Điều hướng chính mobile">
+    <button class="bottom-nav-item active" data-filter="all" id="bnav-all">
+      <span class="bnav-icon">🍊</span>
+      <span class="bnav-label">Tất cả</span>
+    </button>
+    <button class="bottom-nav-item" data-filter="video" id="bnav-video">
+      <span class="bnav-icon">🎬</span>
+      <span class="bnav-label">Video</span>
+    </button>
+    <button class="bottom-nav-item" data-filter="audio" id="bnav-audio">
+      <span class="bnav-icon">
+        <svg class="orange-no-leaf-icon" width="18" height="18" viewBox="0 0 24 24" style="vertical-align:middle;display:inline-block;">
+          <circle cx="12" cy="12" r="10" fill="#FF7A00" stroke="#FFAE34" stroke-width="1.6"/>
+          <circle cx="12" cy="12" r="7.5" fill="#FF9000"/>
+          <circle cx="12" cy="12" r="2.2" fill="#FFF" opacity="0.95"/>
+        </svg>
+      </span>
+      <span class="bnav-label">Audio</span>
+    </button>
+    <button class="bottom-nav-item" id="bnav-tree-game">
+      <span class="bnav-icon">🌳</span>
+      <span class="bnav-label">Vườn Cam</span>
+    </button>
+  </nav>
+
 </div><!-- /app -->
-<script type="module" src="app.js?v=2.8"></script>
+<script type="module" src="app.js?v=3.0"></script>
 </body>
 </html>

@@ -609,9 +609,9 @@ function renderSubfolderTabs() {
   });
 }
 
-// ─── Sidebar Counts ───────────────────────────────────
+// ─── Filter Counts (Sidebar, Mobile Chips & Bottom Nav) ───
 function updateSidebarCounts() {
-  document.querySelectorAll('.filter-btn[data-filter]').forEach(btn => {
+  document.querySelectorAll('[data-filter]').forEach(btn => {
     const f = btn.dataset.filter;
     const count = f === 'all' ? state.allMedia.length : state.allMedia.filter(m => m.type === f).length;
     const countEl = btn.querySelector('.count');
@@ -641,6 +641,11 @@ function initOrangeVideoPlayer(media) {
       <video id="orange-video-el" preload="auto" playsinline src="${streamUrl}">
         Trình duyệt không hỗ trợ thẻ video HTML5.
       </video>
+
+      <!-- Mobile Quick Close / Collapse Button (YouTube / Bilibili Style) -->
+      <button class="mobile-player-close-btn" id="mobile-player-close-btn" title="Thu nhỏ / Đóng" aria-label="Đóng video">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </button>
 
       <!-- Center Big Play Button (Orange Slice) -->
       <button class="big-play-btn" id="big-play-btn" title="Phát video (Space)">
@@ -840,6 +845,10 @@ function initOrangeVideoPlayer(media) {
   const rippleLeft     = document.getElementById('ripple-left');
   const rippleRight    = document.getElementById('ripple-right');
   const playerModal    = document.querySelector('.player-modal');
+  const mobileCloseBtn = document.getElementById('mobile-player-close-btn');
+  if (mobileCloseBtn) {
+    mobileCloseBtn.onclick = closePlayer;
+  }
 
   // Resume Playback from LocalStorage
   const storageKey = `orangestream_pos_${media.fileId}`;
@@ -1144,10 +1153,20 @@ function initOrangeVideoPlayer(media) {
     if (!video.paused) {
       hideTimer = setTimeout(() => {
         videoBox.classList.add('controls-hidden');
-      }, 3500);
+      }, 3000);
     }
   }
   videoBox.addEventListener('mousemove', resetControlsTimer);
+  videoBox.addEventListener('touchstart', (e) => {
+    if (e.target.closest('.ctrl-btn') || e.target.closest('.orange-seekbar-container') || e.target.closest('.speed-popover') || e.target.closest('.quality-popover')) {
+      return;
+    }
+    if (videoBox.classList.contains('controls-hidden')) {
+      resetControlsTimer();
+    } else {
+      videoBox.classList.add('controls-hidden');
+    }
+  }, { passive: true });
 
   // Seamless fallback to Google Drive iframe player
   let fallbackTriggered = false;
@@ -1181,8 +1200,14 @@ function initOrangeVideoPlayer(media) {
     }
   }
 
-  // Switch button click
-  switchBtn.addEventListener('click', () => triggerFallbackToDrivePlayer(true));
+  // Switch button click (Desktop & Mobile)
+  if (switchBtn) {
+    switchBtn.addEventListener('click', () => triggerFallbackToDrivePlayer(true));
+  }
+  const mobileSwitchBtn = document.getElementById('mobile-btn-switch-player');
+  if (mobileSwitchBtn) {
+    mobileSwitchBtn.onclick = () => triggerFallbackToDrivePlayer(true);
+  }
 
   // Auto fallback if stream errors or codec unsupported
   video.addEventListener('error', (e) => {
@@ -1308,11 +1333,55 @@ function openPlayer(media) {
   openNewTab.href = `https://drive.google.com/file/d/${media.fileId}/view`;
   openNewTab.style.display = '';
 
+  // Setup mobile action buttons
+  const mBtnDownload = document.getElementById('mobile-btn-download');
+  if (mBtnDownload) {
+    mBtnDownload.href = `/stream-media/${media.fileId}`;
+    mBtnDownload.download = `${media.title}.mp4`;
+  }
+  const mBtnOpenDrive = document.getElementById('mobile-btn-open-drive');
+  if (mBtnOpenDrive) {
+    mBtnOpenDrive.href = `https://drive.google.com/file/d/${media.fileId}/view`;
+  }
+
+  // Render Playlist carousel (Bilibili/YouTube mobile style)
+  renderPlayerPlaylist(media);
+
   if (media.type === 'video') {
     initOrangeVideoPlayer(media);
   } else {
     initOrangeAudioPlayer(media);
   }
+}
+
+function renderPlayerPlaylist(currentMedia) {
+  const listEl = document.getElementById('player-playlist-items');
+  const countEl = document.getElementById('player-playlist-count');
+  if (!listEl) return;
+
+  const items = getFilteredMedia();
+  if (countEl) countEl.textContent = `${items.length} mục`;
+
+  listEl.innerHTML = items.map(m => {
+    const isActive = m.id === currentMedia.id;
+    const thumb = m.thumbnail || `https://lh3.googleusercontent.com/u/0/d/${m.fileId}=w400`;
+    return `
+      <div class="playlist-card ${isActive ? 'active-ep' : ''}" data-media-id="${m.id}" title="${m.title}">
+        <div class="playlist-thumb">
+          <img src="${thumb}" alt="${m.title}" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 100 100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%231e130b\\'/><text y=\\'.75em\\' x=\\'25\\' font-size=\\'45\\'>🍊</text></svg>'">
+          ${isActive ? '<span style="position:absolute;bottom:3px;right:3px;background:#FF7A00;color:#FFF;font-size:0.6rem;padding:1px 5px;border-radius:4px;font-weight:700;">ĐANG PHÁT</span>' : ''}
+        </div>
+        <div class="playlist-card-title">${m.title}</div>
+      </div>
+    `;
+  }).join('');
+
+  listEl.querySelectorAll('.playlist-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const found = state.allMedia.find(x => x.id === card.dataset.mediaId);
+      if (found) openPlayer(found);
+    });
+  });
 }
 
 function closePlayer() {
@@ -1349,14 +1418,21 @@ if (shortcutsModal) {
   });
 }
 
-// ─── Sidebar Filter ───────────────────────────────────
-document.querySelectorAll('.filter-btn[data-filter]').forEach(btn => {
+// ─── Unified Filter (Sidebar, Mobile Top Chips & Mobile Bottom Nav) ───
+document.querySelectorAll('[data-filter]').forEach(btn => {
   btn.addEventListener('click', (e) => {
     createJuiceSplash(e.clientX, e.clientY);
-    document.querySelectorAll('.filter-btn[data-filter]').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    state.filter = btn.dataset.filter;
+    const selectedFilter = btn.dataset.filter;
+    state.filter = selectedFilter;
     state.currentPath = []; // Quay về thư mục mẹ để xem toàn bộ file theo nhóm thư mục con
+
+    // Đồng bộ trạng thái active trên toàn bộ giao diện
+    document.querySelectorAll('[data-filter]').forEach(b => {
+      const isActive = b.dataset.filter === selectedFilter;
+      b.classList.toggle('active', isActive);
+      b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+
     renderFolderNavigation();
     renderGrid();
   });
@@ -1544,10 +1620,9 @@ function initOrangeMiniGame() {
   let mouseY = window.innerHeight / 2;
   let lastMouseX = mouseX;
 
-  // Track mouse coordinates & update basket cursor
-  window.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
+  function updateBasketPos(clientX, clientY) {
+    mouseX = clientX;
+    mouseY = clientY;
 
     if (!isPlaying || !basketCursor) return;
 
@@ -1564,7 +1639,19 @@ function initOrangeMiniGame() {
       basketCursor.className = 'game-basket-cursor';
     }
     lastMouseX = mouseX;
-  });
+  }
+
+  // Track mouse coordinates & touch on mobile
+  window.addEventListener('mousemove', (e) => updateBasketPos(e.clientX, e.clientY));
+
+  function handleTouch(e) {
+    if (!isPlaying) return;
+    if (e.touches && e.touches[0]) {
+      updateBasketPos(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  }
+  window.addEventListener('touchstart', handleTouch, { passive: true });
+  window.addEventListener('touchmove', handleTouch, { passive: true });
 
   // Toggle Game Start / Stop on tree click
   function toggleGame() {
@@ -1790,6 +1877,15 @@ function initOrangeMiniGame() {
 
   if (treeWrapper) {
     treeWrapper.addEventListener('click', toggleGame);
+  }
+  const bnavTree = document.getElementById('bnav-tree-game');
+  if (bnavTree) {
+    bnavTree.addEventListener('click', () => {
+      toggleGame();
+      if (isPlaying) {
+        toast('Đã bật giỏ hứng cam! Di chuyển ngón tay trên màn hình để hứng cam nhé! 🧺🍊', 'info');
+      }
+    });
   }
 }
 
