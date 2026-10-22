@@ -26,74 +26,61 @@ function getType(name) {
   const ext = getExt(name);
   if (VIDEO_EXTS.has(ext)) return 'video';
   if (AUDIO_EXTS.has(ext)) return 'audio';
-  return null;
+  return 'video'; // default to video for media files
 }
 
 function cleanTitle(name) {
   return name
     .replace(/\.[^/.]+$/, '')   // remove extension
-    .replace(/[._-]+/g, ' ')    // underscores/dots/dashes → spaces
-    .replace(/\s+/g, ' ')
     .trim();
 }
 
 /**
  * Parse file entries from Google Drive folder HTML.
- * Google embeds folder data in multiple script tag formats.
- * We try several patterns for resilience.
  */
 function parseFiles(html) {
   const seen  = new Set();
   const files = [];
 
-  /**
-   * Strategy 1 — AF_initDataCallback nested arrays
-   * Matches entries like: ["FILE_ID",null,"filename.mp4", ...
-   * The file ID is a 25-44 char alphanumeric string distinct from the folder ID.
-   */
-  const re1 = /\["([\w-]{25,44})",\s*(?:null|""),\s*"([^"\\]+\.[a-z0-9]{2,5})"/gi;
+  // Strategy 1 — data-id attribute with matching data-tooltip (most accurate on Drive table/grid)
+  const reTooltip = /data-id="([\w-]{25,44})"[^>]*data-tooltip="([^"]+?)(?:\s+(?:Video|Audio|Tệp|Shared))*"/g;
   let m;
-  while ((m = re1.exec(html)) !== null) {
+  while ((m = reTooltip.exec(html)) !== null) {
     const [, id, rawName] = m;
     if (id === FOLDER_ID || seen.has(id)) continue;
-    const type = getType(rawName);
-    if (!type) continue;
     seen.add(id);
+    const type = getType(rawName);
     files.push({ id, name: rawName, type });
   }
 
-  /**
-   * Strategy 2 — href="/file/d/FILE_ID" links in rendered HTML
-   * Catches cases where files are rendered as <a> tags.
-   */
-  const re2 = /href="\/file\/d\/([\w-]{25,44})(?:\/|\?)([^"]*)"[^>]*>([^<]*)</gi;
-  while ((m = re2.exec(html)) !== null) {
+  // Strategy 2 — data-id with enclosed strong title tag
+  const reStrong = /data-id="([\w-]{25,44})"[\s\S]*?<strong class="DNoYtb">([^<]+)<\/strong>/g;
+  while ((m = reStrong.exec(html)) !== null) {
+    const [, id, rawName] = m;
+    if (id === FOLDER_ID || seen.has(id)) continue;
+    seen.add(id);
+    const type = getType(rawName);
+    files.push({ id, name: rawName, type });
+  }
+
+  // Strategy 3 — AF_initDataCallback nested data arrays
+  const reAF = /\["([\w-]{25,44})",\s*(?:null|""),\s*"([^"\\]+\.[a-z0-9]{2,5})"/gi;
+  while ((m = reAF.exec(html)) !== null) {
+    const [, id, rawName] = m;
+    if (id === FOLDER_ID || seen.has(id)) continue;
+    seen.add(id);
+    const type = getType(rawName);
+    files.push({ id, name: rawName, type });
+  }
+
+  // Strategy 4 — Fallback to any href="/file/d/FILE_ID"
+  const reLink = /href="\/file\/d\/([\w-]{25,44})(?:\/|\?)([^"]*)"[^>]*>([^<]*)</gi;
+  while ((m = reLink.exec(html)) !== null) {
     const [, id, , label] = m;
     if (id === FOLDER_ID || seen.has(id)) continue;
-    // label might not have extension; we'll still record it
-    const guessedName = label.trim() || id;
-    const type = getType(guessedName) || 'video'; // default to video if unknown
+    const rawName = label.trim() || id;
     seen.add(id);
-    files.push({ id, name: guessedName, type });
-  }
-
-  /**
-   * Strategy 3 — data-id attributes on file cards
-   */
-  const re3 = /data-id="([\w-]{25,44})"/gi;
-  const re3name = /data-tooltip="([^"]+\.[a-z0-9]{2,5})"/gi;
-  // collect data-tooltip names
-  const tooltips = {};
-  let t;
-  while ((t = re3name.exec(html)) !== null) tooltips[t[1]] = t[1];
-
-  while ((m = re3.exec(html)) !== null) {
-    const id = m[1];
-    if (id === FOLDER_ID || seen.has(id)) continue;
-    const rawName = Object.keys(tooltips)[0] || id;
-    const type = getType(rawName) || 'video';
-    seen.add(id);
-    files.push({ id, name: rawName, type });
+    files.push({ id, name: rawName, type: getType(rawName) });
   }
 
   return files;
@@ -128,15 +115,14 @@ exports.handler = async (event) => {
       title      : cleanTitle(f.name),
       fileId     : f.id,
       type       : f.type,
-      thumbnail  : null,
+      thumbnail  : `https://lh3.googleusercontent.com/u/0/d/${f.id}=w600`,
       duration   : '',
-      quality    : '',
-      genre      : f.type === 'video' ? 'Phim' : 'Nhac',
+      quality    : 'HD',
+      genre      : f.type === 'video' ? 'Phim' : 'Nhạc',
       year       : '',
       description: '',
     }));
 
-    // Sort: newest-added-first approximation (order from Drive page)
     return {
       statusCode: 200,
       headers   : CORS,

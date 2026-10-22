@@ -178,75 +178,53 @@ function updateSidebarCounts() {
 }
 
 // ─── Player ───────────────────────────────────────────
-async function openPlayer(media) {
+function openPlayer(media) {
   state.currentMedia = media;
   playerTitle.textContent    = media.title;
   playerSubtitle.textContent = [media.genre, media.year, media.duration].filter(Boolean).join(' · ');
-  playerBody.innerHTML = `
-    <div class="player-loading">
-      <div class="spinner"></div>
-      <span>Đang lấy đường dẫn stream...</span>
-    </div>`;
-  openNewTab.style.display = 'none';
   playerOverlay.classList.add('active');
   document.body.style.overflow = 'hidden';
 
-  try {
-    const url = await resolveStreamUrl(media.fileId);
-
-    if (media.type === 'video') {
-      playerBody.innerHTML = `
-        <video id="video-player" controls autoplay preload="metadata"
-               crossorigin="anonymous" playsinline aria-label="${media.title}">
-          <source src="${url}">
-          Trình duyệt không hỗ trợ HTML5 video.
-        </video>`;
-    } else {
-      playerBody.innerHTML = `
-        <div style="padding:24px;background:#0a0b0f;display:flex;align-items:center;gap:20px;">
-          <div style="width:80px;height:80px;border-radius:12px;background:linear-gradient(135deg,#1e1b4b,#312e81);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="#a78bfa"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
-          </div>
-          <div style="flex:1;min-width:0;">
-            <div style="font-weight:600;font-size:1rem;margin-bottom:4px;">${media.title}</div>
-            <div style="font-size:0.8rem;color:#94a3b8;margin-bottom:12px;">${media.genre || 'Audio'}</div>
-            <audio id="audio-player" controls autoplay preload="metadata"
-                   style="width:100%;height:40px;" aria-label="${media.title}">
-              <source src="${url}">
-            </audio>
-          </div>
-        </div>`;
-    }
-
-    openNewTab.href = url;
-    openNewTab.style.display = '';
-  } catch (err) {
+  if (media.type === 'video') {
+    // Google Drive Preview Iframe: Fast, supports 1080p/720p/360p, subtitles, zero CORS issues
     playerBody.innerHTML = `
-      <div class="player-error">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:8px;"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-        <p style="font-weight:600;margin-bottom:4px;">Không thể phát</p>
-        <p style="font-size:0.82rem;color:#94a3b8;">${err.message}</p>
+      <div class="player-video-wrapper">
+        <iframe class="player-iframe"
+                src="https://drive.google.com/file/d/${media.fileId}/preview"
+                allow="autoplay; fullscreen"
+                allowfullscreen>
+        </iframe>
       </div>`;
-    toast(err.message, 'error');
+    openNewTab.href = `https://drive.google.com/file/d/${media.fileId}/view`;
+    openNewTab.style.display = '';
+  } else {
+    // Audio Player
+    const audioUrl = `https://drive.usercontent.google.com/download?id=${media.fileId}&export=download`;
+    playerBody.innerHTML = `
+      <div style="padding:28px 24px;background:#0a0b0f;display:flex;align-items:center;gap:20px;">
+        <div style="width:70px;height:70px;border-radius:12px;background:linear-gradient(135deg,#1e1b4b,#312e81);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="#a78bfa"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-weight:600;font-size:1.05rem;margin-bottom:6px;color:#f1f5f9;">${media.title}</div>
+          <div style="font-size:0.82rem;color:#94a3b8;margin-bottom:14px;">${media.genre || 'Audio'}</div>
+          <audio id="audio-player" src="${audioUrl}" controls autoplay preload="metadata"
+                 style="width:100%;height:44px;" aria-label="${media.title}">
+            Trình duyệt không hỗ trợ thẻ audio.
+          </audio>
+        </div>
+      </div>`;
+    openNewTab.href = audioUrl;
+    openNewTab.style.display = '';
   }
-}
-
-async function resolveStreamUrl(fileId) {
-  const res  = await fetch(`/.netlify/functions/get-stream-url?fileId=${encodeURIComponent(fileId)}`);
-  const data = await res.json();
-  if (!res.ok || !data.url) throw new Error(data.error || 'Không lấy được URL stream');
-  return data.url;
 }
 
 function closePlayer() {
   playerOverlay.classList.remove('active');
   document.body.style.overflow = '';
-  ['video-player', 'audio-player'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) { el.pause(); el.src = ''; }
-  });
+  // Stop playback immediately by removing player elements
+  playerBody.innerHTML = '';
   state.currentMedia = null;
-  setTimeout(() => { playerBody.innerHTML = ''; }, 300);
 }
 
 // ─── Sidebar Filter ───────────────────────────────────
