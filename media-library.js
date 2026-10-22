@@ -1,4 +1,4 @@
-﻿/**
+/**
  * media-library.js
  * Edit this file to add/remove your Google Drive media files.
  * 

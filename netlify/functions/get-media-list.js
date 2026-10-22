@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Netlify Function: get-media-list
  *
  * Scrapes a PUBLIC Google Drive folder page to extract file metadata.

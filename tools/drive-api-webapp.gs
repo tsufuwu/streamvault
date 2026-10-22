@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Google Apps Script — Dynamic Media API
  * Deploy as Web App: Execute as "Me", Access "Anyone"
  *
