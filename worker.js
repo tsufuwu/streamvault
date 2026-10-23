@@ -125,7 +125,7 @@ async function crawlDrive(rootFolderId) {
         type: f.type,
         thumbnail: `https://lh3.googleusercontent.com/u/0/d/${f.id}=w600`,
         duration: '',
-        quality: 'HD',
+        quality: '',
         genre: f.type === 'video' ? 'Video' : 'Audio',
         year: '',
         description: '',

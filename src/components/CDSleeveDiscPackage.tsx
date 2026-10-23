@@ -101,14 +101,7 @@ export const CDSleeveDiscPackage: React.FC<CDSleeveDiscPackageProps> = ({
           {/* Right Thumb Notch Opening (Khuyết ngón tay rút đĩa bên mép phải) */}
           <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2.5 h-12 rounded-l-full bg-black/80 border-l border-y border-white/20 pointer-events-none shadow-inner" />
 
-          {/* Technical Quality Foil Seal Badge */}
-          <div className="absolute top-2 left-3.5 px-1.5 py-0.5 rounded bg-black/75 border border-white/20 backdrop-blur-md font-courier text-[8px] font-bold text-white uppercase tracking-wider shadow">
-            {quality}
-          </div>
 
-          <div className="absolute bottom-2 left-3.5 px-1.5 py-0.5 rounded bg-black/80 border border-white/20 font-courier text-[7px] font-bold text-white/90 uppercase tracking-widest pointer-events-none">
-            CD VINYL // MASTER
-          </div>
 
           {/* Center Play Button on Hover */}
           {showPlayButton && (

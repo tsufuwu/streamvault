@@ -8,11 +8,10 @@ import { CategoryFolderBar } from './components/CategoryFolderBar';
 import { MediaCard } from './components/MediaCard';
 import { PlayerModal } from './components/PlayerModal';
 import { MobileMiniPlayer } from './components/MobileMiniPlayer';
-import { MiniGameLounge } from './components/MiniGameLounge';
 import { CustomMediaModal } from './components/CustomMediaModal';
 import { ShortcutsModal } from './components/ShortcutsModal';
 import { sounds } from './utils/soundEffects';
-import { Disc3, History, Sparkles, Film, Music, Heart, Plus } from 'lucide-react';
+import { Disc3, History, Sparkles, Film, Music, Heart, Plus, ChevronRight } from 'lucide-react';
 
 export default function App() {
   const [mediaList, setMediaList] = useState<MediaItem[]>([]);
@@ -181,6 +180,27 @@ export default function App() {
     });
   }, [mediaList, searchQuery, mediaTypeFilter, selectedFolder, currentPath, favorites]);
 
+  // Group media by top-level Google Drive folders when on root overview (Vườn Cam structure)
+  const isRootOverview = currentPath.length === 0 && selectedFolder === null && !searchQuery.trim() && mediaTypeFilter === 'all';
+
+  const groupedByTopFolder = useMemo(() => {
+    if (!isRootOverview) return null;
+    const map = new Map<string, MediaItem[]>();
+    folderNames.forEach((name) => {
+      map.set(name, []);
+    });
+    filteredMedia.forEach((item) => {
+      const topName = (item.folderPath && item.folderPath.length > 0)
+        ? item.folderPath[0]
+        : (item.folderName || 'Chưa phân loại');
+      if (!map.has(topName)) {
+        map.set(topName, []);
+      }
+      map.get(topName)!.push(item);
+    });
+    return Array.from(map.entries()).filter(([_, items]) => items.length > 0);
+  }, [isRootOverview, folderNames, filteredMedia]);
+
   const counts = useMemo(() => {
     return {
       all: mediaList.length,
@@ -288,7 +308,7 @@ export default function App() {
                         {item.title}
                       </span>
                       <span className="font-courier text-[9px] text-neutral-400 uppercase truncate w-full -mt-0.5">
-                        {item.folderName || 'CRATE'}
+                        {item.folderName || 'Thư mục'}
                       </span>
                     </div>
                   ))}
@@ -301,54 +321,107 @@ export default function App() {
               <div className="py-24 flex flex-col items-center justify-center space-y-4">
                 <div className="w-12 h-12 rounded-full border-4 border-[var(--theme-primary)] border-t-transparent animate-spin" />
                 <span className="font-courier text-xs tracking-wider uppercase text-neutral-400">
-                  [INITIALIZING VINYL PLATTER &bull; SYNCING CRATE DATABASE...]
+                  [ĐANG ĐỌC DỮ LIỆU TỪ GOOGLE DRIVE...]
                 </span>
               </div>
             )}
 
             {/* Media Items Grid - 2 columns on mobile (Spotify / Apple Music style) */}
+            {/* Media Items Grid - Grouped by folder like original Vườn Cam */}
             {!loading && (
               <>
                 {filteredMedia.length > 0 ? (
-                  <div
-                    className={`grid gap-3 sm:gap-5 ${
-                      isCompactView
-                        ? 'grid-cols-2 sm:grid-cols-2 md:grid-cols-3'
-                        : 'grid-cols-2 sm:grid-cols-2'
-                    }`}
-                  >
-                    {filteredMedia.map((media) => (
-                      <MediaCard
-                        key={media.id}
-                        media={media}
-                        isFavorite={favorites.includes(media.id)}
-                        isPlaying={activeMedia?.id === media.id && isPlayerOpen}
-                        onPlay={handlePlayMedia}
-                        onToggleFavorite={handleToggleFavorite}
-                        onDeleteCustom={handleDeleteCustom}
-                      />
-                    ))}
-                  </div>
+                  isRootOverview && groupedByTopFolder && groupedByTopFolder.length > 0 ? (
+                    <div className="space-y-8">
+                      {groupedByTopFolder.map(([folderName, items]) => (
+                        <div key={folderName} className="space-y-3">
+                          <div className="flex items-center justify-between pb-2 border-b border-white/10 font-courier">
+                            <div className="flex items-center gap-2">
+                              <span className="text-base sm:text-lg">📁</span>
+                              <h2 className="font-alegreya text-lg sm:text-xl font-bold text-white tracking-wide">
+                                {folderName}
+                              </h2>
+                              <span className="px-2 py-0.5 rounded-full bg-white/10 text-neutral-300 text-[10px] sm:text-xs font-bold">
+                                {items.length} file
+                              </span>
+                            </div>
+                            <button
+                              onClick={() => {
+                                sounds.playClick();
+                                setSelectedFolder(folderName);
+                                setCurrentPath([folderName]);
+                              }}
+                              className="text-xs text-[var(--theme-primary-light)] hover:text-white flex items-center gap-1 font-bold group/btn transition-colors"
+                            >
+                              <span>Mở thư mục</span>
+                              <ChevronRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
+                            </button>
+                          </div>
+
+                          <div
+                            className={`grid gap-3 sm:gap-5 ${
+                              isCompactView
+                                ? 'grid-cols-2 sm:grid-cols-2 md:grid-cols-3'
+                                : 'grid-cols-2 sm:grid-cols-2'
+                            }`}
+                          >
+                            {items.map((media) => (
+                              <MediaCard
+                                key={media.id}
+                                media={media}
+                                isFavorite={favorites.includes(media.id)}
+                                isPlaying={activeMedia?.id === media.id && isPlayerOpen}
+                                onPlay={handlePlayMedia}
+                                onToggleFavorite={handleToggleFavorite}
+                                onDeleteCustom={handleDeleteCustom}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div
+                      className={`grid gap-3 sm:gap-5 ${
+                        isCompactView
+                          ? 'grid-cols-2 sm:grid-cols-2 md:grid-cols-3'
+                          : 'grid-cols-2 sm:grid-cols-2'
+                      }`}
+                    >
+                      {filteredMedia.map((media) => (
+                        <MediaCard
+                          key={media.id}
+                          media={media}
+                          isFavorite={favorites.includes(media.id)}
+                          isPlaying={activeMedia?.id === media.id && isPlayerOpen}
+                          onPlay={handlePlayMedia}
+                          onToggleFavorite={handleToggleFavorite}
+                          onDeleteCustom={handleDeleteCustom}
+                        />
+                      ))}
+                    </div>
+                  )
                 ) : (
                   <div className="py-16 px-6 text-center rounded-3xl bg-[var(--theme-bg-surface)]/60 border border-[var(--theme-border)]/40 backdrop-blur-md">
                     <Disc3 className="w-12 h-12 text-neutral-500 mx-auto mb-3 animate-spin" style={{ animationDuration: '8s' }} />
                     <h3 className="font-alegreya text-lg font-bold text-white mb-1">
-                      No matching vinyl records or reels found
+                      Không tìm thấy file nào phù hợp
                     </h3>
                     <p className="font-courier text-xs text-neutral-400 max-w-sm mx-auto mb-4 font-normal">
                       {searchQuery
-                        ? `[QUERY NOT FOUND]: "${searchQuery}"`
-                        : 'This crate or genre does not contain any records yet.'}
+                        ? `[KHÔNG CÓ KẾT QUẢ]: "${searchQuery}"`
+                        : 'Thư mục này hiện chưa có file media nào.'}
                     </p>
                     <button
                       onClick={() => {
                         setSearchQuery('');
                         setMediaTypeFilter('all');
                         setSelectedFolder(null);
+                        setCurrentPath([]);
                       }}
                       className="font-courier px-4 py-2 rounded-xl text-xs font-bold bg-[var(--theme-primary)] text-white hover:opacity-90 transition-opacity uppercase tracking-wider"
                     >
-                      [VIEW ALL CRATES]
+                      [XEM TẤT CẢ THƯ MỤC]
                     </button>
                   </div>
                 )}
@@ -358,9 +431,6 @@ export default function App() {
 
           {/* Right Interactive Sidebar */}
           <div className="lg:col-span-4 space-y-6">
-            {/* Mini Game Lounge: DJ Turntable Scratch & Citrus Harvest */}
-            <MiniGameLounge currentTheme={currentTheme} />
-
             {/* Recently Played Tracks */}
             {recentItems.length > 0 && (
               <div className="rounded-2xl border border-[var(--theme-border)]/60 bg-[var(--theme-bg-surface)]/80 backdrop-blur-xl p-4 shadow-xl">
@@ -392,7 +462,7 @@ export default function App() {
                           {item.title}
                         </p>
                         <span className="font-courier text-[10px] text-neutral-400 uppercase font-bold">
-                          {item.folderName || 'DEFAULT CRATE'}
+                          {item.folderName || 'Thư mục'}
                         </span>
                       </div>
                     </div>
@@ -483,7 +553,7 @@ export default function App() {
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               className="hover:text-white transition-colors uppercase tracking-wider"
             >
-              [&uarr; TOP OF CRATE]
+              [&uarr; ĐẦU TRANG]
             </button>
           </div>
         </div>

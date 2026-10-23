@@ -414,11 +414,15 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
               </h2>
               {/* Typewriter tag in Courier */}
               <div className="font-courier flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] text-neutral-400 font-bold uppercase">
-                <span className="truncate max-w-[120px] sm:max-w-none">{media.folderName || 'MAIN CRATE'}</span>
-                <span>•</span>
-                <span className="text-[var(--theme-primary-light)]">
-                  {media.quality || (isAudio ? '24-BIT HI-FI' : '1080P')}
-                </span>
+                <span className="truncate max-w-[120px] sm:max-w-none">📁 {media.folderName || 'Thư mục'}</span>
+                {media.duration && (
+                  <>
+                    <span>•</span>
+                    <span className="text-[var(--theme-primary-light)]">
+                      {media.duration}
+                    </span>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -911,10 +915,10 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <span className="font-alegreya text-base font-bold text-white tracking-wide">
-                Crate Playlist &amp; Related Reels
+                Danh Sách Phát Trong Thư Mục
               </span>
               <span className="font-courier text-xs text-neutral-400 font-bold">
-                [{playlist.length} TRACKS]
+                [{playlist.length} FILE]
               </span>
             </div>
 

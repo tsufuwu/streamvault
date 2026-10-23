@@ -69,7 +69,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
           <CDSleeveDiscPackage
             thumbnail={media.thumbnail}
             title={media.title}
-            quality={media.quality || (media.type === 'audio' ? 'HI-FI' : '1080P')}
+            quality={media.quality || ''}
             isHovered={isHovered}
             isPlaying={isPlaying}
             labelColor={media.type === 'audio' ? 'var(--theme-primary)' : '#10B981'}
@@ -82,7 +82,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
           <CDSleeveDiscPackage
             thumbnail={media.thumbnail}
             title={media.title}
-            quality={media.quality || (media.type === 'audio' ? 'HI-FI FLAC' : '1080P MASTER')}
+            quality={media.quality || ''}
             isHovered={isHovered}
             isPlaying={isPlaying}
             labelColor={media.type === 'audio' ? 'var(--theme-primary)' : '#10B981'}
@@ -113,9 +113,10 @@ export const MediaCard: React.FC<MediaCardProps> = ({
 
         {/* Bottom Technical Stamps & Actions */}
         <div className="mt-2 sm:mt-3 pt-2 sm:pt-2.5 border-t border-white/5 flex items-center justify-between font-courier">
-          <div className="flex items-center gap-1 sm:gap-2 text-[9px] sm:text-[11px] font-bold truncate max-w-[95px] sm:max-w-none">
-            <span className="px-1.5 py-0.5 rounded bg-black/60 border border-white/10 text-neutral-300 uppercase truncate">
-              {media.folderName || 'CRATE'}
+          <div className="flex items-center gap-1 sm:gap-2 text-[9px] sm:text-[11px] font-bold truncate max-w-[110px] sm:max-w-none">
+            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-black/60 border border-white/10 text-neutral-300 truncate" title={media.folderName || 'Chưa phân loại'}>
+              <span className="text-[10px]">📁</span>
+              <span className="truncate">{media.folderName || 'Chưa phân loại'}</span>
             </span>
             {media.duration && (
               <span className="text-[var(--theme-primary-light)] hidden sm:inline">

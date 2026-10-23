@@ -59,15 +59,15 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           <div className="pt-1 sm:pt-2 flex flex-wrap items-center gap-2 sm:gap-3 font-courier text-[11px] sm:text-xs text-neutral-300">
             <div className="flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl bg-black/50 border border-white/10 font-bold">
               <Disc className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[var(--theme-primary)]" />
-              <span>{totalTracks} DISCS &amp; REELS</span>
+              <span>{totalTracks} FILE MEDIA</span>
             </div>
             <div className="flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl bg-black/50 border border-white/10 font-bold">
               <Film className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-emerald-400" />
-              <span>1080P MASTER</span>
+              <span>GOOGLE DRIVE</span>
             </div>
             <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-black/50 border border-white/10 font-bold">
               <Music className="w-3.5 h-3.5 text-amber-400" />
-              <span>24-BIT/96KHZ FLAC HI-FI</span>
+              <span>LOSSLESS AUDIO &amp; VIDEO</span>
             </div>
           </div>
 
@@ -82,14 +82,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 className="w-full sm:w-auto px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-[var(--theme-primary)] hover:bg-[var(--theme-primary-hover)] text-white text-xs sm:text-sm font-bold shadow-xl shadow-[var(--theme-primary-glow)] flex items-center justify-center gap-2 transform active:scale-[0.98] transition-all"
               >
                 <Play className="w-4 h-4 fill-current shrink-0" />
-                <span className="font-alegreya text-sm sm:text-base font-bold">Spin Featured:</span>
+                <span className="font-alegreya text-sm sm:text-base font-bold">Phát nổi bật:</span>
                 <span className="font-courier text-xs opacity-90 truncate max-w-[180px] sm:max-w-[200px]">
                   {featuredMedia.title}
                 </span>
               </button>
 
               <div className="font-courier text-[10px] sm:text-xs text-neutral-400 text-center sm:text-left">
-                CRATE: <span className="text-white font-bold">{featuredMedia.folderName || 'Master Reel'}</span>
+                THƯ MỤC: <span className="text-white font-bold">{featuredMedia.folderName || 'Thư mục gốc'}</span>
               </div>
             </div>
           )}
@@ -114,7 +114,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <CDSleeveDiscPackage
                 thumbnail={featuredMedia?.thumbnail}
                 title={featuredMedia?.title || 'Featured Vinyl Album'}
-                quality={featuredMedia?.quality || '1080P MASTER'}
+                quality={featuredMedia?.quality || ''}
                 isHovered={true}
                 isPlaying={true}
                 labelColor="var(--theme-primary)"
@@ -128,7 +128,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <CDSleeveDiscPackage
                 thumbnail={featuredMedia?.thumbnail}
                 title={featuredMedia?.title || 'Featured Vinyl Album'}
-                quality={featuredMedia?.quality || '1080P MASTER'}
+                quality={featuredMedia?.quality || ''}
                 isHovered={true}
                 isPlaying={true}
                 labelColor="var(--theme-primary)"

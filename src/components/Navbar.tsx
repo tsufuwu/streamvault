@@ -47,30 +47,22 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <header className="sticky top-0 z-40 w-full backdrop-blur-2xl bg-[var(--theme-bg-base)]/85 border-b border-[var(--theme-border)]/60 px-4 sm:px-8 py-3.5 transition-all">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-        {/* Brand Logo with Interleaved Alegreya & Courier */}
+        {/* Minimalist Clean Brand Logo */}
         <div
           onClick={() => {
-            sounds.playVinylScratch();
+            sounds.playClick();
             onSearchChange('');
           }}
-          className="flex items-center gap-3 cursor-pointer select-none group"
-          title="VinylStream Noir — Hi-Fi Vinyl CD & Cinema Lounge"
+          className="flex items-center gap-2.5 cursor-pointer select-none group"
+          title="VinylStream"
         >
-          {/* Animated Mascot Vinyl Record */}
-          <div className="relative w-10 h-10 rounded-full flex items-center justify-center p-1 bg-gradient-to-tr from-[var(--theme-primary)] to-[var(--theme-primary-light)] shadow-lg shadow-[var(--theme-primary-glow)] transform group-hover:scale-105 transition-transform">
-            <div className="w-full h-full rounded-full bg-[#0a0409] flex items-center justify-center animate-vinyl-spin">
-              <div className="w-5 h-5 rounded-full border border-white/20 flex items-center justify-center">
-                <div className="w-2.5 h-2.5 rounded-full bg-[var(--theme-primary)]" />
-              </div>
-            </div>
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white/5 border border-white/10 group-hover:border-[var(--theme-primary)]/50 flex items-center justify-center transition-all group-hover:scale-105 shadow-sm">
+            <Disc3 className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--theme-primary)] group-hover:rotate-45 transition-transform duration-300" />
           </div>
 
-          <div className="flex flex-col">
-            <span className="font-alegreya text-2xl font-bold tracking-tight text-white flex items-center">
-              Vinyl<span className="text-[var(--theme-primary)] font-black italic ml-0.5">Stream</span>
-            </span>
-            <span className="font-courier text-[9px] tracking-widest text-[var(--theme-primary-light)] uppercase opacity-90 -mt-1 font-bold">
-              [CD VINYL &bull; CINEMA NOIR]
+          <div className="flex items-baseline">
+            <span className="text-lg sm:text-xl font-bold tracking-tight text-white font-sans">
+              Vinyl<span className="text-[var(--theme-primary)] font-black">Stream</span>
             </span>
           </div>
         </div>

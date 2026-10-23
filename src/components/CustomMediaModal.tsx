@@ -59,8 +59,8 @@ export const CustomMediaModal: React.FC<CustomMediaModalProps> = ({
       fileId,
       type: mediaType,
       thumbnail: finalThumbnail,
-      quality: mediaType === 'audio' ? 'Hi-Fi 24-bit' : '1080p Cinema',
-      genre: mediaType === 'audio' ? 'Vinyl CD Track' : 'Cinema & Video',
+      quality: '',
+      genre: targetFolder,
       folderName: targetFolder,
       folderPath: [targetFolder],
       streamUrl: `https://orange.celinewang.workers.dev/stream-media/${fileId}`,
@@ -180,7 +180,7 @@ export const CustomMediaModal: React.FC<CustomMediaModalProps> = ({
 
             <div>
               <label className="block text-xs font-bold text-neutral-300 mb-1.5 uppercase tracking-wider">
-                Target Crate:
+                Thư mục lưu:
               </label>
               <select
                 value={folder}
@@ -193,7 +193,7 @@ export const CustomMediaModal: React.FC<CustomMediaModalProps> = ({
                   </option>
                 ))}
                 <option value="__custom__" className="bg-neutral-900 text-white">
-                  + Create New Crate...
+                  + Tạo thư mục mới...
                 </option>
               </select>
             </div>
@@ -202,12 +202,12 @@ export const CustomMediaModal: React.FC<CustomMediaModalProps> = ({
           {folder === '__custom__' && (
             <div>
               <label className="block text-xs font-bold text-neutral-300 mb-1.5 uppercase tracking-wider">
-                New Crate Name:
+                Tên thư mục mới:
               </label>
               <input
                 type="text"
                 required
-                placeholder="e.g. Master Vinyl Collection..."
+                placeholder="VD: Nhạc tuyển chọn..."
                 value={customFolder}
                 onChange={(e) => setCustomFolder(e.target.value)}
                 className="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-white text-xs placeholder:text-neutral-500 focus:outline-none focus:border-[var(--theme-primary)]"

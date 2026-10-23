@@ -53,7 +53,7 @@ export const CategoryFolderBar: React.FC<CategoryFolderBarProps> = ({
             }`}
           >
             <Disc3 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            <span className="font-alegreya text-xs sm:text-sm font-bold">All Records</span>
+            <span className="font-alegreya text-xs sm:text-sm font-bold">Tất Cả</span>
             <span className="font-courier px-1.5 py-0.5 rounded-full bg-black/40 text-[9px] sm:text-[10px] font-bold">
               {counts.all}
             </span>
@@ -72,7 +72,7 @@ export const CategoryFolderBar: React.FC<CategoryFolderBarProps> = ({
             }`}
           >
             <Film className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            <span className="font-alegreya text-xs sm:text-sm font-bold">Cinema &amp; Video</span>
+            <span className="font-alegreya text-xs sm:text-sm font-bold">Video &amp; Phim</span>
             <span className="font-courier px-1.5 py-0.5 rounded-full bg-black/40 text-[9px] sm:text-[10px] font-bold">
               {counts.video}
             </span>
@@ -91,7 +91,7 @@ export const CategoryFolderBar: React.FC<CategoryFolderBarProps> = ({
             }`}
           >
             <Music className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            <span className="font-alegreya text-xs sm:text-sm font-bold">Music &amp; Audio CD</span>
+            <span className="font-alegreya text-xs sm:text-sm font-bold">Nhạc &amp; Audio</span>
             <span className="font-courier px-1.5 py-0.5 rounded-full bg-black/40 text-[9px] sm:text-[10px] font-bold">
               {counts.audio}
             </span>
@@ -110,7 +110,7 @@ export const CategoryFolderBar: React.FC<CategoryFolderBarProps> = ({
             }`}
           >
             <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-pink-400 fill-current" />
-            <span className="font-alegreya text-xs sm:text-sm font-bold">Favorites</span>
+            <span className="font-alegreya text-xs sm:text-sm font-bold">Yêu thích</span>
             <span className="font-courier px-1.5 py-0.5 rounded-full bg-black/40 text-[9px] sm:text-[10px] font-bold">
               {counts.favorites}
             </span>
@@ -124,10 +124,10 @@ export const CategoryFolderBar: React.FC<CategoryFolderBarProps> = ({
             onToggleCompactView();
           }}
           className="font-courier p-2 rounded-xl bg-white/5 border border-white/10 text-neutral-300 hover:text-white hover:bg-white/10 transition-colors hidden sm:flex items-center gap-1.5 text-xs font-bold"
-          title={isCompactView ? 'Switch to Wide Grid' : 'Switch to Compact Grid'}
+          title={isCompactView ? 'Xem lưới lớn' : 'Xem lưới gọn'}
         >
           {isCompactView ? <LayoutGrid className="w-4 h-4" /> : <List className="w-4 h-4" />}
-          <span>{isCompactView ? '[COMPACT]' : '[WIDE GRID]'}</span>
+          <span>{isCompactView ? '[LƯỚI NHỎ]' : '[LƯỚI LỚN]'}</span>
         </button>
       </div>
 
@@ -143,7 +143,7 @@ export const CategoryFolderBar: React.FC<CategoryFolderBarProps> = ({
             }}
             className="hover:text-white underline font-bold shrink-0"
           >
-            [ALL CRATES]
+            🏠 Vườn Cam
           </button>
 
           {currentPath.map((crumb, idx) => {
@@ -178,7 +178,7 @@ export const CategoryFolderBar: React.FC<CategoryFolderBarProps> = ({
       {currentPath.length > 0 && subfolders.length > 0 && onPathChange && (
         <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none font-courier text-xs">
           <span className="text-neutral-500 font-bold flex items-center gap-1 shrink-0 uppercase tracking-wider text-[11px]">
-            <span>SUB-CRATES:</span>
+            <span>THƯ MỤC CON:</span>
           </span>
           {subfolders.map((subName) => (
             <button
@@ -196,12 +196,12 @@ export const CategoryFolderBar: React.FC<CategoryFolderBarProps> = ({
         </div>
       )}
 
-      {/* Primary Folder Crates Navigation Tabs (when currentPath is empty) */}
+      {/* Primary Folder Navigation Tabs (when currentPath is empty) */}
       {currentPath.length === 0 && (
         <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none font-courier text-xs">
           <span className="text-neutral-500 font-bold flex items-center gap-1 shrink-0 uppercase tracking-wider">
             <Folder className="w-3.5 h-3.5" />
-            <span>CRATE:</span>
+            <span>THƯ MỤC:</span>
           </span>
 
           {/* All Folders Option */}
@@ -217,7 +217,7 @@ export const CategoryFolderBar: React.FC<CategoryFolderBarProps> = ({
                 : 'bg-white/5 text-neutral-400 hover:text-white hover:bg-white/10'
             }`}
           >
-            [ALL CRATES]
+            Tất cả thư mục
           </button>
 
           {/* Individual Folder Tabs */}

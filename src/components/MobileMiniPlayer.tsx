@@ -84,11 +84,15 @@ export const MobileMiniPlayer: React.FC<MobileMiniPlayerProps> = ({
               </h4>
             </div>
             <p className="font-courier text-[10px] text-neutral-400 font-bold uppercase truncate mt-0.5">
-              <span>{media.folderName || 'CRATE'}</span>
-              <span className="mx-1 text-white/30">•</span>
-              <span className="text-[var(--theme-primary-light)]">
-                {media.quality || (media.type === 'audio' ? 'HI-FI' : '1080P')}
-              </span>
+              <span>{media.folderName || 'Thư mục'}</span>
+              {media.duration && (
+                <>
+                  <span className="mx-1 text-white/30">•</span>
+                  <span className="text-[var(--theme-primary-light)]">
+                    {media.duration}
+                  </span>
+                </>
+              )}
             </p>
           </div>
         </div>
