@@ -249,8 +249,8 @@ function createMediaCard(media, i) {
   const thumbContent = media.thumbnail
     ? `<img src="${media.thumbnail}" alt="${media.title}" loading="lazy">`
     : isVideo
-      ? `<svg class="card-default-icon" width="56" height="56" viewBox="0 0 24 24" fill="currentColor"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>`
-      : `<svg class="card-default-icon" width="56" height="56" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#140810" stroke="#FF2D75" stroke-width="3"/><circle cx="50" cy="50" r="36" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/><circle cx="50" cy="50" r="26" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/><circle cx="50" cy="50" r="14" fill="#FF2D75"/><circle cx="50" cy="50" r="4" fill="#0A0409"/></svg>`;
+      ? `<svg class="card-default-icon vinyl-default-svg" width="90" height="90" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#140810" stroke="#FF69B4" stroke-width="2.5"/><circle cx="50" cy="50" r="38" fill="none" stroke="rgba(255,105,180,0.3)" stroke-width="1"/><circle cx="50" cy="50" r="30" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/><circle cx="50" cy="50" r="22" fill="none" stroke="rgba(255,105,180,0.3)" stroke-width="1"/><circle cx="50" cy="50" r="14" fill="#FF1493" stroke="#FFF" stroke-width="1.2"/><circle cx="50" cy="50" r="4" fill="#0A0409"/><path d="M46 43 L58 50 L46 57 Z" fill="#FFF"/></svg>`
+      : `<svg class="card-default-icon vinyl-default-svg" width="90" height="90" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#140810" stroke="#FF69B4" stroke-width="2.5"/><circle cx="50" cy="50" r="38" fill="none" stroke="rgba(255,105,180,0.3)" stroke-width="1"/><circle cx="50" cy="50" r="30" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/><circle cx="50" cy="50" r="22" fill="none" stroke="rgba(255,105,180,0.3)" stroke-width="1"/><circle cx="50" cy="50" r="14" fill="#FF69B4" stroke="#FFF" stroke-width="1.2"/><circle cx="50" cy="50" r="4" fill="#0A0409"/></svg>`;
 
   const folderBadge = media.folderName && media.folderName !== 'Thư mục gốc'
     ? `<span class="card-meta-item" style="color:var(--text-muted);" title="Đường dẫn: ${(media.folderPath || [media.folderName]).join(' / ')}"><span style="opacity:0.75;">📁</span> ${media.folderName}</span>`
@@ -261,11 +261,11 @@ function createMediaCard(media, i) {
     : `<span class="card-meta-item meta-audio">🎵 Audio CD</span>`;
 
   card.innerHTML = `
-    <div class="card-thumbnail">
+    <span class="card-type-badge badge-${media.type}">${isVideo ? 'Video' : 'Audio CD'}</span>
+    <div class="card-thumbnail" title="Đĩa vinyl: ${media.title}">
       ${thumbContent}
-      <span class="card-type-badge badge-${media.type}">${isVideo ? 'Video' : 'Audio CD'}</span>
       <div class="card-play-overlay">
-        <div class="play-circle" title="Xem ngay">
+        <div class="play-circle" title="Phát ngay">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
         </div>
       </div>
@@ -713,15 +713,15 @@ function initOrangeVideoPlayer(media) {
       <!-- Citrus Controls Overlay -->
       <div class="citrus-controls" id="citrus-controls">
 
-        <!-- ─── Orange Seekbar / Thanh Chạy Trái Cam ─── -->
-        <div class="orange-seekbar-container" id="orange-seekbar" role="slider" aria-label="Thanh chạy trái cam">
+        <!-- ─── Vinyl Seekbar / Thanh Chạy Đĩa Than ─── -->
+        <div class="orange-seekbar-container" id="orange-seekbar" role="slider" aria-label="Thanh chạy đĩa than">
           <div class="orange-seek-track">
             <div class="orange-seek-buffered" id="seek-buffered"></div>
             <div class="orange-seek-progress" id="seek-progress"></div>
           </div>
-          <!-- Rolling Orange Handle (Trái cam đang lăn trên thanh chạy) -->
-          <div class="rolling-orange-thumb" id="orange-thumb" title="Trái cam đang chạy">
-            🍊
+          <!-- Rolling Vinyl Handle (Đĩa than đang lăn trên thanh chạy) -->
+          <div class="rolling-orange-thumb" id="orange-thumb" title="Đĩa vinyl đang chạy">
+            💿
           </div>
           <div class="seek-tooltip" id="seek-tooltip">0:00</div>
         </div>
@@ -1273,8 +1273,8 @@ function initOrangeVideoPlayer(media) {
       <div class="player-video-wrapper" style="position:relative;">
         <iframe class="player-iframe" src="${previewUrl}" allow="autoplay; fullscreen" allowfullscreen></iframe>
         <div style="position:absolute;top:10px;right:14px;z-index:25;display:flex;gap:8px;">
-          <button class="ctrl-btn fallback-toggle-btn" id="ctrl-retry-orange" style="background:rgba(20,14,8,0.85);border:1px solid rgba(255,140,40,0.35);padding:5px 12px;border-radius:20px;font-size:0.75rem;font-weight:600;color:#FFAE34;cursor:pointer;display:inline-flex;align-items:center;gap:5px;box-shadow:0 4px 12px rgba(0,0,0,0.5);">
-            <span>🍊 Thử lại Orange Player</span>
+          <button class="ctrl-btn fallback-toggle-btn" id="ctrl-retry-orange" style="background:#181818;border:1px solid #FF69B4;padding:6px 14px;border-radius:20px;font-size:0.75rem;font-weight:700;color:#FFF0F5;cursor:pointer;display:inline-flex;align-items:center;gap:6px;box-shadow:0 4px 15px rgba(255,105,180,0.35);">
+            <span>💿 Thử lại Trình phát Vinyl</span>
           </button>
         </div>
       </div>
@@ -1318,41 +1318,48 @@ function initOrangeVideoPlayer(media) {
 function initOrangeAudioPlayer(media) {
   const audioUrl = `/stream-media/${media.fileId}`;
 
+  const thumbImg = media.thumbnail
+    ? `<img src="${media.thumbnail}" alt="${media.title}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`
+    : `<svg width="80" height="80" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#140810" stroke="#FF69B4" stroke-width="2.5"/><circle cx="50" cy="50" r="38" fill="none" stroke="rgba(255,105,180,0.3)" stroke-width="1"/><circle cx="50" cy="50" r="30" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/><circle cx="50" cy="50" r="22" fill="none" stroke="rgba(255,105,180,0.3)" stroke-width="1"/><circle cx="50" cy="50" r="14" fill="#FF69B4" stroke="#FFF" stroke-width="1.2"/><circle cx="50" cy="50" r="4" fill="#0A0409"/></svg>`;
+
   playerBody.innerHTML = `
-    <div style="padding:28px 24px;background:#140e08;border-radius:0 0 16px 16px;">
-      <div style="display:flex;align-items:center;gap:20px;margin-bottom:20px;">
-        <div style="width:70px;height:70px;border-radius:14px;background:linear-gradient(135deg,#ea580c,#9a3412);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 20px rgba(255,122,0,0.3);">
-          <svg class="orange-no-leaf-icon" width="40" height="40" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#FF7A00" stroke="#FFAE34" stroke-width="1.5"/><circle cx="12" cy="12" r="7.5" fill="#FF9000"/><circle cx="12" cy="12" r="2.2" fill="#FFF" opacity="0.95"/></svg>
-        </div>
-        <div style="flex:1;min-width:0;">
-          <div style="font-weight:700;font-size:1.15rem;margin-bottom:6px;color:#FFF7ED;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${media.title}</div>
-          <div style="font-size:0.84rem;color:#FFAE34;display:flex;align-items:center;gap:6px;">
-            <svg class="orange-no-leaf-icon" width="16" height="16" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#FF7A00" stroke="#FFAE34" stroke-width="1.5"/><circle cx="12" cy="12" r="7.5" fill="#FF9000"/><circle cx="12" cy="12" r="2.2" fill="#FFF" opacity="0.95"/></svg>
-            <span>Audio</span>
+    <div class="vinyl-audio-player-box" style="padding:32px 24px;background:#0f0f0f;border-radius:0 0 18px 18px;text-align:center;">
+      <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:20px;">
+        <!-- Circular Vinyl CD (Spins on Play) -->
+        <div class="audio-vinyl-stage" style="position:relative;margin-bottom:16px;">
+          <div class="audio-vinyl-disc" id="audio-vinyl-disc" style="width:170px;height:170px;border-radius:50%;background:#140810;border:3px solid #FF69B4;box-shadow:0 0 0 2px #000, 0 0 0 4px #FF69B4, 0 0 0 8px #141414, 0 0 0 10px rgba(255,105,180,0.4), 0 0 0 14px #0d0d0d, 0 0 0 16px rgba(255,105,180,0.2), 0 0 0 19px #080808, 0 12px 30px rgba(0,0,0,0.95), 0 0 25px rgba(255,105,180,0.35);overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative;">
+            ${thumbImg}
+            <!-- Center Spindle Hole -->
+            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;background:radial-gradient(circle,#000 0%,#000 24%,#FF69B4 26%,#FF1493 85%,#000 100%);border:2px solid #FF69B4;box-shadow:0 0 10px rgba(255,105,180,0.8);pointer-events:none;"></div>
           </div>
+        </div>
+
+        <div style="font-family:'Alegreya',Georgia,serif;font-weight:700;font-size:1.35rem;margin-bottom:6px;color:#FFF0F5;max-width:92%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${media.title}</div>
+        <div style="font-family:'Courier New',Courier,monospace;font-size:0.82rem;color:#FF69B4;display:flex;align-items:center;gap:6px;">
+          <span>♪ Vinyl CD Audio Track ♫</span>
         </div>
       </div>
 
       <audio id="orange-audio-el" src="${audioUrl}" preload="auto"></audio>
 
-      <!-- Orange Seekbar for Audio -->
-      <div class="orange-seekbar-container" id="audio-seekbar" role="slider" aria-label="Thanh chạy trái cam audio">
+      <!-- Vinyl Seekbar for Audio -->
+      <div class="orange-seekbar-container" id="audio-seekbar" role="slider" aria-label="Thanh chạy đĩa than audio">
         <div class="orange-seek-track">
           <div class="orange-seek-progress" id="audio-progress"></div>
         </div>
-        <div class="rolling-orange-thumb" id="audio-thumb" title="Trái cam đang chạy">
-          🍊
+        <div class="rolling-orange-thumb" id="audio-thumb" title="Đĩa vinyl đang chạy">
+          💿
         </div>
         <div class="seek-tooltip" id="audio-tooltip">0:00</div>
       </div>
 
-      <div class="controls-bar" style="margin-top:10px;">
+      <div class="controls-bar" style="margin-top:14px;">
         <div class="controls-left">
-          <button class="ctrl-btn" id="audio-play-pause" title="Phát / Dừng">
+          <button class="ctrl-btn" id="audio-play-pause" title="Phát / Dừng" style="background:#181818;border:1px solid #FF69B4;color:#FF69B4;">
             <svg id="audio-icon-play" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
             <svg id="audio-icon-pause" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
           </button>
-          <div class="time-display">
+          <div class="time-display" style="font-family:'Courier New',Courier,monospace;">
             <span id="audio-current">0:00</span>
             <span class="time-sep">/</span>
             <span id="audio-duration">0:00</span>
@@ -1371,6 +1378,7 @@ function initOrangeAudioPlayer(media) {
   const playPauseBtn = document.getElementById('audio-play-pause');
   const iconPlay     = document.getElementById('audio-icon-play');
   const iconPause    = document.getElementById('audio-icon-pause');
+  const vinylDisc    = document.getElementById('audio-vinyl-disc');
   const seekbar      = document.getElementById('audio-seekbar');
   const seekProgress = document.getElementById('audio-progress');
   const orangeThumb  = document.getElementById('audio-thumb');
@@ -1386,10 +1394,12 @@ function initOrangeAudioPlayer(media) {
   audio.addEventListener('play', () => {
     iconPlay.style.display = 'none';
     iconPause.style.display = '';
+    if (vinylDisc) vinylDisc.classList.add('playing');
   });
   audio.addEventListener('pause', () => {
     iconPlay.style.display = '';
     iconPause.style.display = 'none';
+    if (vinylDisc) vinylDisc.classList.remove('playing');
   });
   playPauseBtn.addEventListener('click', togglePlay);
 
@@ -1423,6 +1433,11 @@ function openPlayer(media) {
   playerSubtitle.textContent = [media.genre, media.year, media.duration].filter(Boolean).join(' · ');
   playerOverlay.classList.add('active');
   document.body.style.overflow = 'hidden';
+
+  // Highlight active vinyl card and trigger continuous spin
+  document.querySelectorAll('.media-card').forEach(c => c.classList.remove('active', 'playing'));
+  const activeCard = document.getElementById(`card-${media.id}`);
+  if (activeCard) activeCard.classList.add('active', 'playing');
 
   openNewTab.href = `https://drive.google.com/file/d/${media.fileId}/view`;
   openNewTab.style.display = '';
@@ -1558,6 +1573,7 @@ function closePlayer() {
   playerBody.innerHTML = '';
   const modal = document.querySelector('.player-modal');
   if (modal) modal.classList.remove('theater');
+  document.querySelectorAll('.media-card').forEach(c => c.classList.remove('active', 'playing'));
   state.currentMedia = null;
 }
 

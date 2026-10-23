@@ -1,73 +1,70 @@
 /* =====================================================
    VinylStream — Main Stylesheet
-   Pink & Black CD Vinyl Lounge Theme 💿💖
+   Retro-Modern Vinyl CD & Musical Notes Theme 💿💖
+   Deep Black (#121212 / #000) & Hot Pink (#FF69B4 / #FF1493)
+   Typography: Alegreya (Headings) & Courier New (Body)
 ===================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&family=Alegreya+SC:ital,wght@0,400;0,700;1,400&display=swap');
 
 /* ─── Reset & Base ────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* Pink & Black Vinyl Theme Palette 💿💖 */
-  --pink-500:       #FF2D75;  /* Neon Cyber Pink */
-  --pink-600:       #E11D48;  /* Deep Rose Crimson */
-  --pink-400:       #FF5C93;  /* Vibrant Hot Pink */
-  --pink-300:       #FF85B3;  /* Soft Pastel Pink */
-  --pink-neon:      #FF007F;  /* Magenta Neon */
-  --pink-glow:      rgba(255, 45, 117, 0.45);
-  --pink-glow-sm:   rgba(255, 45, 117, 0.22);
-  --pink-glow-lg:   0 0 40px rgba(255, 45, 117, 0.35);
+  /* Black & Pink Palette: Hot Pink (#FF69B4) & Neon Pink (#FF1493) */
+  --pink-hot:        #FF69B4;  /* Hot Pink */
+  --pink-neon:       #FF1493;  /* Neon Deep Pink */
+  --pink-vibrant:    #FF2D75;  /* Electric Cyber Pink */
+  --pink-pastel:     #FFB6C1;  /* Soft Retro Pink */
+  --pink-blush:      #FFF0F5;  /* Lavender Blush White */
+  --pink-glow:       rgba(255, 105, 180, 0.55);
+  --pink-glow-sm:    rgba(255, 105, 180, 0.25);
+  --pink-glow-lg:    0 0 38px rgba(255, 105, 180, 0.45);
 
-  /* Vinyl Record Accents & Metallics */
-  --vinyl-black:    #0B070A;  /* Deep Obsidian Vinyl Grooves */
-  --vinyl-groove:   rgba(255, 255, 255, 0.04);
-  --vinyl-chrome:   #E4D9E2;
-  --gold-accent:    #F59E0B;
-
-  /* Obsidian Pink-Tinged Dark Backgrounds */
-  --bg-primary:     #080507;
-  --bg-secondary:   #120810;
-  --bg-card:        rgba(26, 11, 22, 0.65);
-  --bg-card-hover:  rgba(42, 16, 36, 0.85);
-  --border:         rgba(255, 45, 117, 0.16);
-  --border-active:  rgba(255, 45, 117, 0.65);
+  /* Deep Black Surfaces (#000000 & #121212) */
+  --bg-primary:      #080808;  /* Deepest Black Base */
+  --bg-secondary:    #121212;  /* Deep Black Surface requested */
+  --bg-card:         #121212;  /* Deep Black Card Base */
+  --bg-card-hover:   #181818;
+  --bg-modal:        #0e0e0e;
+  --border:          rgba(255, 105, 180, 0.22);
+  --border-active:   #FF69B4;
+  --border-neon:     #FF1493;
 
   /* Typography & Accents */
-  --text-primary:   #FFF0F5;  /* Lavender Blush White */
-  --text-secondary: #E8B4C8;  /* Dusty Rose */
-  --text-muted:     #8C6373;  /* Muted Mauve */
-  --accent:         var(--pink-500);
-  --accent-light:   var(--pink-400);
+  --text-primary:    #FFF0F5;  /* Crisp typewriter white */
+  --text-secondary:  #FFB6C1;  /* Soft retro pink */
+  --text-muted:      #9E7B8A;  /* Muted vintage typewriter pink-grey */
+  --accent:          #FF69B4;  /* Hot Pink Accent */
+  --accent-light:    #FF85C0;
+  --accent-neon:     #FF1493;
 
-  /* Compatibility Aliases (maps all former orange tokens to neon pink) */
-  --orange-500:     var(--pink-500);
-  --orange-600:     var(--pink-600);
-  --orange-400:     var(--pink-400);
-  --orange-300:     var(--pink-300);
-  --orange-amber:   #FF66B2;
-  --orange-glow:    var(--pink-glow);
-  --orange-glow-sm: var(--pink-glow-sm);
-
-  /* Leaf & Green Accents (Music Emerald) */
-  --leaf-green:     #10B981;
-  --leaf-light:     #34D399;
-  --leaf-deep:      #059669;
-  --leaf-glow:      rgba(16, 185, 129, 0.25);
+  /* Compatibility Aliases (maps all former tokens to hot/neon pink) */
+  --pink-500:        var(--pink-hot);
+  --pink-600:        var(--pink-neon);
+  --pink-400:        var(--pink-pastel);
+  --pink-300:        var(--pink-pastel);
+  --orange-500:      var(--pink-hot);
+  --orange-600:      var(--pink-neon);
+  --orange-400:      var(--pink-pastel);
+  --orange-300:      var(--pink-pastel);
+  --orange-amber:    var(--pink-hot);
+  --orange-glow:     var(--pink-glow);
+  --orange-glow-sm:  var(--pink-glow-sm);
 
   /* Radii & Effects */
-  --radius-sm:      10px;
-  --radius-md:      16px;
-  --radius-lg:      24px;
-  --transition:     0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  --glass:          blur(20px) saturate(180%);
-  --shadow-card:    0 10px 30px -10px rgba(0, 0, 0, 0.75), 0 0 20px rgba(255, 45, 117, 0.1);
-  --shadow-glow:    0 0 35px rgba(255, 45, 117, 0.35);
+  --radius-sm:       10px;
+  --radius-md:       16px;
+  --radius-lg:       24px;
+  --transition:      0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --glass:           blur(20px) saturate(180%);
+  --shadow-card:     0 12px 32px -10px rgba(0, 0, 0, 0.95), 0 0 20px rgba(255, 105, 180, 0.15);
+  --shadow-glow:     0 0 35px rgba(255, 105, 180, 0.45);
 
   /* Custom Vinyl & Music Cursors 💿 */
-  --cursor-vinyl: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cdefs%3E%3CradialGradient id='v1' cx='50%25' cy='50%25' r='50%25'%3E%3Cstop offset='0%25' stop-color='%23FF2D75'/%3E%3Cstop offset='38%25' stop-color='%23E11D48'/%3E%3Cstop offset='42%25' stop-color='%23120810'/%3E%3Cstop offset='75%25' stop-color='%23080407'/%3E%3Cstop offset='100%25' stop-color='%23FF2D75'/%3E%3C/radialGradient%3E%3Cfilter id='vs1' x='-25%25' y='-25%25' width='150%25' height='150%25'%3E%3CfeDropShadow dx='0' dy='1.5' stdDeviation='1.5' flood-color='%23FF2D75' flood-opacity='0.6'/%3E%3C/filter%3E%3C/defs%3E%3Cg filter='url(%23vs1)'%3E%3Ccircle cx='14' cy='14' r='10.5' fill='url(%23v1)' stroke='%23FF2D75' stroke-width='1.2'/%3E%3Ccircle cx='14' cy='14' r='8' fill='none' stroke='rgba(255,255,255,0.2)' stroke-width='0.6'/%3E%3Ccircle cx='14' cy='14' r='5.5' fill='none' stroke='rgba(255,255,255,0.15)' stroke-width='0.6'/%3E%3Ccircle cx='14' cy='14' r='3.2' fill='%23FF2D75' stroke='%23FFF' stroke-width='0.8'/%3E%3Ccircle cx='14' cy='14' r='1' fill='%23080407'/%3E%3C/g%3E%3C/svg%3E");
+  --cursor-vinyl: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cdefs%3E%3CradialGradient id='v1' cx='50%25' cy='50%25' r='50%25'%3E%3Cstop offset='0%25' stop-color='%23FF69B4'/%3E%3Cstop offset='38%25' stop-color='%23FF1493'/%3E%3Cstop offset='42%25' stop-color='%23120810'/%3E%3Cstop offset='75%25' stop-color='%23080407'/%3E%3Cstop offset='100%25' stop-color='%23FF69B4'/%3E%3C/radialGradient%3E%3Cfilter id='vs1' x='-25%25' y='-25%25' width='150%25' height='150%25'%3E%3CfeDropShadow dx='0' dy='1.5' stdDeviation='1.5' flood-color='%23FF69B4' flood-opacity='0.6'/%3E%3C/filter%3E%3C/defs%3E%3Cg filter='url(%23vs1)'%3E%3Ccircle cx='14' cy='14' r='10.5' fill='url(%23v1)' stroke='%23FF69B4' stroke-width='1.2'/%3E%3Ccircle cx='14' cy='14' r='8' fill='none' stroke='rgba(255,255,255,0.2)' stroke-width='0.6'/%3E%3Ccircle cx='14' cy='14' r='5.5' fill='none' stroke='rgba(255,255,255,0.15)' stroke-width='0.6'/%3E%3Ccircle cx='14' cy='14' r='3.2' fill='%23FF69B4' stroke='%23FFF' stroke-width='0.8'/%3E%3Ccircle cx='14' cy='14' r='1' fill='%23080407'/%3E%3C/g%3E%3C/svg%3E");
 
-  --cursor-dj-pointer: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cdefs%3E%3Cfilter id='dsh' x='-25%25' y='-25%25' width='150%25' height='150%25'%3E%3CfeDropShadow dx='1' dy='1.5' stdDeviation='1.2' flood-color='%23000' flood-opacity='0.75'/%3E%3C/filter%3E%3ClinearGradient id='pinkGrip' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23FF5C93'/%3E%3Cstop offset='50%25' stop-color='%23FF2D75'/%3E%3Cstop offset='100%25' stop-color='%23BE123C'/%3E%3C/linearGradient%3E%3ClinearGradient id='blackVelvet' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2322101E'/%3E%3Cstop offset='100%25' stop-color='%230E050C'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg filter='url(%23dsh)'%3E%3Cpath d='M11 24 L19 28.5 C20.5 29.5 23 28.5 23.5 27 L25.5 21 L15.5 17 Z' fill='%23FF2D75' stroke='%239F1239' stroke-width='1.2' stroke-linejoin='round'/%3E%3Cpath d='M12.5 25.5 L22.5 28' stroke='%23FFF' stroke-width='0.9' stroke-dasharray='1.8 1.2'/%3E%3Cpath d='M9.5 13.5 C9.5 11 11 10 13 10 C14.5 10 15.2 10.8 15.8 11.5 C16.5 10.5 17.8 10 19 10.5 C20.2 11 20.8 12 20.8 13 C21.5 12 22.8 11.8 23.8 12.8 C24.8 13.8 24.5 16 23.2 18 L21 22.5 L13 19.5 L9.5 14.5 Z' fill='url(%23blackVelvet)' stroke='%23FF2D75' stroke-width='1.3' stroke-linejoin='round'/%3E%3Cpath d='M14 13 C14.5 11.8 16 11.8 16.8 12.8 C17.5 13.8 17.2 16 16.8 17' fill='none' stroke='%23FF2D75' stroke-width='1.1'/%3E%3Cpath d='M17.5 13 C18 11.8 19.5 11.8 20.2 12.8 C21 13.8 20.8 16 20.2 17.5' fill='none' stroke='%23FF2D75' stroke-width='1.1'/%3E%3Cpath d='M21 13.8 C21.5 13 22.8 12.8 23.5 13.5 C24.2 14.5 23.8 16.5 23 18' fill='none' stroke='%23FF2D75' stroke-width='1.1'/%3E%3Cpath d='M9.5 16 C7.5 16.5 5 18 5.5 20 C6 21.5 8 22.2 10 21.5 L13 19.8 Z' fill='url(%23pinkGrip)' stroke='%23FFF' stroke-width='1.2' stroke-linejoin='round'/%3E%3Cpath d='M6.5 5.5 C6.2 2.8 8 1.5 10 1.5 C12 1.5 13 2.8 12.8 5.5 L12 13.5 L8 13.5 Z' fill='url(%23pinkGrip)' stroke='%23FFF' stroke-width='1.3' stroke-linejoin='round'/%3E%3Cpath d='M7.2 4.5 C8.5 5 11 5 12 4.5' stroke='%23FFF' stroke-width='0.8' stroke-linecap='round' fill='none'/%3E%3Cpath d='M7.5 7.5 C8.8 8 11 8 11.8 7.5' stroke='%23FFF' stroke-width='0.8' stroke-linecap='round' fill='none'/%3E%3Cpath d='M8 13.5 Q10 15 12 13.5' stroke='%23FF85B3' stroke-width='1' stroke-linecap='round'/%3E%3C/g%3E%3C/svg%3E");
+  --cursor-dj-pointer: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cdefs%3E%3Cfilter id='dsh' x='-25%25' y='-25%25' width='150%25' height='150%25'%3E%3CfeDropShadow dx='1' dy='1.5' stdDeviation='1.2' flood-color='%23000' flood-opacity='0.75'/%3E%3C/filter%3E%3ClinearGradient id='pinkGrip' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23FF85C0'/%3E%3Cstop offset='50%25' stop-color='%23FF69B4'/%3E%3Cstop offset='100%25' stop-color='%23FF1493'/%3E%3C/linearGradient%3E%3ClinearGradient id='blackVelvet' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2322101E'/%3E%3Cstop offset='100%25' stop-color='%230E050C'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg filter='url(%23dsh)'%3E%3Cpath d='M11 24 L19 28.5 C20.5 29.5 23 28.5 23.5 27 L25.5 21 L15.5 17 Z' fill='%23FF69B4' stroke='%239F1239' stroke-width='1.2' stroke-linejoin='round'/%3E%3Cpath d='M12.5 25.5 L22.5 28' stroke='%23FFF' stroke-width='0.9' stroke-dasharray='1.8 1.2'/%3E%3Cpath d='M9.5 13.5 C9.5 11 11 10 13 10 C14.5 10 15.2 10.8 15.8 11.5 C16.5 10.5 17.8 10 19 10.5 C20.2 11 20.8 12 20.8 13 C21.5 12 22.8 11.8 23.8 12.8 C24.8 13.8 24.5 16 23.2 18 L21 22.5 L13 19.5 L9.5 14.5 Z' fill='url(%23blackVelvet)' stroke='%23FF69B4' stroke-width='1.3' stroke-linejoin='round'/%3E%3Cpath d='M14 13 C14.5 11.8 16 11.8 16.8 12.8 C17.5 13.8 17.2 16 16.8 17' fill='none' stroke='%23FF69B4' stroke-width='1.1'/%3E%3Cpath d='M17.5 13 C18 11.8 19.5 11.8 20.2 12.8 C21 13.8 20.8 16 20.2 17.5' fill='none' stroke='%23FF69B4' stroke-width='1.1'/%3E%3Cpath d='M21 13.8 C21.5 13 22.8 12.8 23.5 13.5 C24.2 14.5 23.8 16.5 23 18' fill='none' stroke='%23FF69B4' stroke-width='1.1'/%3E%3Cpath d='M9.5 16 C7.5 16.5 5 18 5.5 20 C6 21.5 8 22.2 10 21.5 L13 19.8 Z' fill='url(%23pinkGrip)' stroke='%23FFF' stroke-width='1.2' stroke-linejoin='round'/%3E%3Cpath d='M6.5 5.5 C6.2 2.8 8 1.5 10 1.5 C12 1.5 13 2.8 12.8 5.5 L12 13.5 L8 13.5 Z' fill='url(%23pinkGrip)' stroke='%23FFF' stroke-width='1.3' stroke-linejoin='round'/%3E%3Cpath d='M7.2 4.5 C8.5 5 11 5 12 4.5' stroke='%23FFF' stroke-width='0.8' stroke-linecap='round' fill='none'/%3E%3Cpath d='M7.5 7.5 C8.8 8 11 8 11.8 7.5' stroke='%23FFF' stroke-width='0.8' stroke-linecap='round' fill='none'/%3E%3Cpath d='M8 13.5 Q10 15 12 13.5' stroke='%23FFB6C1' stroke-width='1' stroke-linecap='round'/%3E%3C/g%3E%3C/svg%3E");
 
   --cursor-orange: var(--cursor-vinyl);
   --cursor-farmer-glove: var(--cursor-dj-pointer);
@@ -79,14 +76,40 @@ html {
   cursor: var(--cursor-vinyl) 14 14, auto;
 }
 
+/* Retro Typewriter Monospace Body Font */
 body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Courier New', Courier, monospace;
   background: var(--bg-primary);
   color: var(--text-primary);
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
   cursor: var(--cursor-vinyl) 14 14, auto;
+}
+
+/* Headings & Artistic Editorial Decor Font: Alegreya */
+h1, h2, h3, h4, h5, h6,
+.brand-text,
+.section-title,
+.hero-title,
+.player-title,
+.sidebar-section-title,
+.shortcuts-title,
+.playlist-title,
+.card-title,
+.folder-group-name,
+.game-mode-switcher,
+.empty-state h3 {
+  font-family: 'Alegreya', Georgia, serif;
+}
+
+/* Standard Paragraphs & Data: Courier New */
+p, input, button, select, textarea, kbd,
+.card-meta, .bnav-label, .filter-btn, .mobile-cat-chip,
+.action-pill, .quality-badge, .search-shortcut, .shortcuts-grid,
+.guide-desc, .hero-subtitle, .section-count, .folder-tab, .subfolder-tab,
+.breadcrumb-crumb, .res-tag-header, .playing-pulse-badge, .game-score-badge {
+  font-family: 'Courier New', Courier, monospace;
 }
 
 /* Interactive elements get DJ pointer cursor */
@@ -167,22 +190,30 @@ body::after {
 .vinyl-item, .citrus-item {
   position: absolute;
   user-select: none;
-  opacity: 0.8;
-  filter: drop-shadow(0 6px 16px rgba(255, 45, 117, 0.45));
+  opacity: 0.85;
+  color: var(--pink-hot);
+  font-family: 'Alegreya', Georgia, serif;
+  text-shadow: 0 0 14px #FF69B4, 0 0 28px rgba(255, 20, 147, 0.6);
+  filter: drop-shadow(0 6px 18px rgba(255, 105, 180, 0.5));
   will-change: transform;
 }
-.item-disc-1, .item-orange-1  { top: 12%; left: 8%;   font-size: 2.2rem; animation: vinylSpinFloat 18s ease-in-out infinite; }
-.item-note-1, .item-leaf-1    { top: 18%; left: 4%;   font-size: 1.8rem; color: #FF85B3; animation: noteFloatWave 13s ease-in-out infinite; opacity: 0.8; }
-.item-note-2, .item-slice-1   { top: 14%; right: 10%; font-size: 2.1rem; color: #FF2D75; animation: noteFloatWave 16s ease-in-out infinite -3s; }
-.item-disc-2, .item-orange-2  { top: 46%; left: 7%;   font-size: 2.4rem; animation: vinylSpinFloat 22s ease-in-out infinite -5s; }
-.item-note-3, .item-leaf-2    { top: 35%; right: 20%; font-size: 1.7rem; color: #FF5C93; animation: noteFloatWave 14s ease-in-out infinite -2s; }
-.item-sparkle-1               { top: 28%; right: 32%; font-size: 1.5rem; animation: sparklePulse 3.5s ease-in-out infinite; opacity: 0.85; filter: drop-shadow(0 0 10px #FF85B3); }
-.item-note-4, .item-slice-2   { top: 62%; right: 8%;  font-size: 2rem;   color: #FF85B3; animation: noteFloatWave 15s ease-in-out infinite -6s; }
-.item-disc-3, .item-orange-3  { top: 76%; right: 18%; font-size: 2.5rem; animation: vinylSpinFloat 20s ease-in-out infinite -8s; }
-.item-note-5, .item-leaf-3    { top: 82%; left: 12%;  font-size: 1.9rem; color: #FF2D75; animation: noteFloatWave 12s ease-in-out infinite -4s; }
-.item-sparkle-2               { top: 70%; left: 24%;  font-size: 1.6rem; animation: sparklePulse 4.5s ease-in-out infinite -1s; opacity: 0.8; filter: drop-shadow(0 0 10px #FF2D75); }
-.item-note-6, .item-slice-3   { top: 88%; right: 34%; font-size: 1.7rem; color: #FF5C93; animation: noteFloatWave 17s ease-in-out infinite -7s; }
-.item-note-7, .item-leaf-4    { top: 42%; right: 42%; font-size: 1.8rem; color: #FF85B3; animation: noteFloatWave 19s ease-in-out infinite -5s; }
+.item-note-1  { top: 12%; left: 4%;   font-size: 2.2rem; color: #FF69B4; animation: noteFloatWave 13s ease-in-out infinite; }
+.item-note-2  { top: 14%; right: 9%;  font-size: 2.5rem; color: #FF1493; animation: noteFloatWave 16s ease-in-out infinite -3s; }
+.item-disc-1  { top: 22%; left: 9%;   font-size: 2.2rem; animation: vinylSpinFloat 18s ease-in-out infinite; }
+.item-note-3  { top: 32%; right: 18%; font-size: 2.2rem; color: #FF69B4; animation: noteFloatWave 14s ease-in-out infinite -2s; }
+.item-sparkle-1 { top: 26%; right: 30%; font-size: 1.5rem; animation: sparklePulse 3.5s ease-in-out infinite; opacity: 0.85; }
+.item-note-4  { top: 48%; left: 3%;   font-size: 2.3rem; color: #FF85C0; animation: noteFloatWave 15s ease-in-out infinite -6s; }
+.item-clef-1  { top: 38%; left: 16%;  font-size: 3rem;   color: #FF1493; animation: noteFloatWave 17s ease-in-out infinite -5s; }
+.item-disc-2  { top: 56%; right: 8%;  font-size: 2.6rem; animation: vinylSpinFloat 22s ease-in-out infinite -4s; }
+.item-note-5  { top: 65%; left: 11%;  font-size: 2.2rem; color: #FF69B4; animation: noteFloatWave 12s ease-in-out infinite -1s; }
+.item-sparkle-2 { top: 68%; right: 26%; font-size: 1.6rem; animation: sparklePulse 4.5s ease-in-out infinite -2s; }
+.item-note-6  { top: 78%; right: 14%; font-size: 2.1rem; color: #FF85C0; animation: noteFloatWave 18s ease-in-out infinite -7s; }
+.item-note-7  { top: 82%; left: 5%;   font-size: 2.4rem; color: #FF69B4; animation: noteFloatWave 15s ease-in-out infinite -4s; }
+.item-clef-2  { top: 86%; right: 36%; font-size: 2.8rem; color: #FF1493; animation: noteFloatWave 20s ease-in-out infinite -8s; }
+.item-note-8  { top: 45%; right: 42%; font-size: 2rem;   color: #FF69B4; animation: noteFloatWave 14s ease-in-out infinite -5s; }
+.item-disc-3  { top: 90%; left: 22%;  font-size: 2.6rem; animation: vinylSpinFloat 20s ease-in-out infinite -9s; }
+.item-note-9  { top: 28%; left: 38%;  font-size: 2rem;   color: #FF85C0; animation: noteFloatWave 16s ease-in-out infinite -3s; }
+.item-note-10 { top: 74%; left: 44%;  font-size: 2.3rem; color: #FF1493; animation: noteFloatWave 19s ease-in-out infinite -6s; }
 
 @keyframes vinylSpinFloat {
   0%   { transform: translateY(0px) rotate(0deg) scale(1); }
@@ -262,33 +293,36 @@ body::after {
 }
 
 .brand-text {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.55rem;
+  font-family: 'Alegreya', Georgia, serif;
+  font-size: 1.75rem;
   font-weight: 800;
-  letter-spacing: -0.02em;
-  color: #FFF;
+  letter-spacing: 0.02em;
+  color: #FFF0F5;
 }
 .brand-accent {
-  background: linear-gradient(135deg, var(--orange-300), var(--orange-500));
+  background: linear-gradient(135deg, var(--pink-hot), var(--pink-neon));
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text;
+  text-shadow: 0 0 15px rgba(255, 105, 180, 0.45);
 }
 .brand-tag {
+  font-family: 'Courier New', Courier, monospace;
   font-size: 0.65rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  padding: 2px 7px;
+  letter-spacing: 0.12em;
+  padding: 3px 8px;
   border-radius: 6px;
-  background: rgba(255, 122, 0, 0.15);
-  color: var(--orange-400);
-  border: 1px solid rgba(255, 122, 0, 0.25);
+  background: rgba(255, 105, 180, 0.14);
+  color: var(--pink-hot);
+  border: 1px solid rgba(255, 105, 180, 0.35);
+  box-shadow: 0 0 10px rgba(255, 105, 180, 0.2);
 }
 
 /* Navbar Search */
 .navbar-search {
   display: flex; align-items: center; gap: 10px;
-  background: rgba(255, 140, 40, 0.05);
+  background: #141414;
   border: 1px solid var(--border);
   border-radius: 50px;
   padding: 9px 18px;
@@ -296,9 +330,9 @@ body::after {
   transition: var(--transition);
 }
 .navbar-search:focus-within {
-  border-color: var(--border-active);
-  background: rgba(255, 140, 40, 0.08);
-  box-shadow: 0 0 0 4px var(--orange-glow-sm);
+  border-color: var(--pink-hot);
+  background: #181818;
+  box-shadow: 0 0 16px rgba(255, 105, 180, 0.45);
 }
 .navbar-search input {
   background: none; border: none; outline: none;
@@ -642,59 +676,64 @@ body.basket-game-active * {
   overflow-y: auto;
 }
 
-/* ─── Hero Banner ─────────────────────────────────── */
-.orange-hero {
+/* ─── Hero Banner (Retro-Modern Vinyl Lounge) ─────── */
+.orange-hero, .vinyl-hero {
   position: relative;
-  background: linear-gradient(135deg, rgba(45, 26, 14, 0.85) 0%, rgba(26, 16, 9, 0.95) 100%);
-  border: 1px solid rgba(255, 140, 40, 0.22);
+  background: radial-gradient(ellipse at 85% 40%, rgba(255, 105, 180, 0.16) 0%, rgba(255, 20, 147, 0.06) 45%, #121212 80%);
+  border: 1px solid rgba(255, 105, 180, 0.28);
   border-radius: var(--radius-lg);
-  padding: 2.2rem 2.5rem;
+  padding: 2.4rem 2.8rem;
   margin-bottom: 2rem;
   display: flex; align-items: center; justify-content: space-between;
   overflow: hidden;
-  box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 122, 0, 0.1);
+  box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.95), 0 0 35px rgba(255, 105, 180, 0.18);
 }
-.orange-hero::after {
+.orange-hero::after, .vinyl-hero::after {
   content: '';
   position: absolute; right: -50px; top: -50px;
-  width: 250px; height: 250px;
-  background: radial-gradient(circle, rgba(255, 122, 0, 0.25) 0%, transparent 70%);
+  width: 280px; height: 280px;
+  background: radial-gradient(circle, rgba(255, 105, 180, 0.22) 0%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
 }
 .hero-content { max-width: 650px; position: relative; z-index: 2; }
 .hero-badge {
   display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(255, 122, 0, 0.14);
-  border: 1px solid rgba(255, 122, 0, 0.3);
-  padding: 4px 12px; border-radius: 50px;
+  background: rgba(255, 105, 180, 0.12);
+  border: 1px solid rgba(255, 105, 180, 0.35);
+  padding: 5px 14px; border-radius: 50px;
+  font-family: 'Courier New', Courier, monospace;
   font-size: 0.72rem; font-weight: 700;
-  color: var(--orange-300);
+  color: var(--pink-hot);
   letter-spacing: 0.08em;
   margin-bottom: 12px;
+  box-shadow: 0 0 12px rgba(255, 105, 180, 0.2);
 }
 .pulse-dot {
   width: 7px; height: 7px; border-radius: 50%;
-  background: var(--leaf-green);
-  box-shadow: 0 0 8px var(--leaf-green);
-  animation: pulseGreen 2s infinite;
+  background: var(--pink-hot);
+  box-shadow: 0 0 8px var(--pink-hot);
+  animation: pulsePink 2s infinite;
 }
-@keyframes pulseGreen {
+@keyframes pulsePink {
   0%, 100% { opacity: 1; transform: scale(1); }
   50%      { opacity: 0.4; transform: scale(1.4); }
 }
 .hero-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.85rem; font-weight: 800;
+  font-family: 'Alegreya', Georgia, serif;
+  font-size: 2.15rem; font-weight: 800;
   line-height: 1.25; margin-bottom: 10px;
+  letter-spacing: 0.01em;
 }
 .hero-gradient {
-  background: linear-gradient(135deg, #FFF, var(--orange-300) 50%, var(--orange-500) 100%);
+  background: linear-gradient(135deg, #FFF0F5, #FF69B4 50%, #FF1493 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text;
+  text-shadow: 0 0 20px rgba(255, 105, 180, 0.4);
 }
 .hero-subtitle {
-  font-size: 0.92rem; color: var(--text-secondary);
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.94rem; color: var(--text-secondary);
   line-height: 1.6;
 }
 .hero-art {
@@ -889,25 +928,30 @@ body.basket-game-active * {
 /* ─── Section Header ──────────────────────────────── */
 .section-header {
   display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 1.4rem;
+  margin-bottom: 1.6rem;
 }
 .section-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.45rem; font-weight: 700;
-  display: flex; align-items: center; gap: 8px;
+  font-family: 'Alegreya', Georgia, serif;
+  font-size: 1.65rem; font-weight: 700;
+  display: flex; align-items: center; gap: 10px;
+  color: #FFF0F5;
+  letter-spacing: 0.02em;
 }
 .citrus-emoji {
   animation: swayEmoji 3s ease-in-out infinite;
   display: inline-block;
+  filter: drop-shadow(0 0 10px rgba(255, 105, 180, 0.6));
 }
 @keyframes swayEmoji {
   0%, 100% { transform: rotate(0deg); }
   50%      { transform: rotate(12deg) scale(1.1); }
 }
 .section-count {
-  font-size: 0.82rem; font-weight: 600; color: var(--orange-300);
-  background: rgba(255, 140, 40, 0.1); border: 1px solid rgba(255, 140, 40, 0.2);
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.82rem; font-weight: 700; color: var(--pink-hot);
+  background: rgba(255, 105, 180, 0.12); border: 1px solid rgba(255, 105, 180, 0.3);
   padding: 5px 14px; border-radius: 50px;
+  box-shadow: 0 0 12px rgba(255, 105, 180, 0.15);
 }
 
 /* ─── Folder Grouped Sections ─────────────────────── */
@@ -915,16 +959,16 @@ body.basket-game-active * {
   grid-column: 1 / -1;
   width: 100%;
   margin-bottom: 2.5rem;
-  background: rgba(24, 16, 9, 0.45);
-  border: 1px solid rgba(255, 140, 40, 0.16);
+  background: rgba(18, 18, 18, 0.7);
+  border: 1px solid rgba(255, 105, 180, 0.2);
   border-radius: var(--radius-lg);
   padding: 20px 22px 24px 22px;
   backdrop-filter: blur(10px);
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 .folder-group-section:hover {
-  border-color: rgba(255, 140, 40, 0.3);
-  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 105, 180, 0.4);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 105, 180, 0.15);
 }
 .folder-group-header {
   display: flex;
@@ -932,7 +976,7 @@ body.basket-game-active * {
   justify-content: space-between;
   margin-bottom: 1.4rem;
   padding-bottom: 12px;
-  border-bottom: 1px solid rgba(255, 140, 40, 0.14);
+  border-bottom: 1px solid rgba(255, 105, 180, 0.18);
   gap: 12px;
   flex-wrap: wrap;
 }
@@ -943,21 +987,22 @@ body.basket-game-active * {
 }
 .folder-group-icon {
   font-size: 1.35rem;
-  filter: drop-shadow(0 2px 6px rgba(255, 140, 40, 0.3));
+  filter: drop-shadow(0 2px 8px rgba(255, 105, 180, 0.5));
 }
 .folder-group-name {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.22rem;
+  font-family: 'Alegreya', Georgia, serif;
+  font-size: 1.35rem;
   font-weight: 700;
   color: var(--text-primary);
-  letter-spacing: -0.01em;
+  letter-spacing: 0.01em;
 }
 .folder-group-count {
-  font-size: 0.74rem;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.75rem;
   font-weight: 700;
-  color: var(--orange-300);
-  background: rgba(255, 140, 40, 0.12);
-  border: 1px solid rgba(255, 140, 40, 0.22);
+  color: var(--pink-hot);
+  background: rgba(255, 105, 180, 0.12);
+  border: 1px solid rgba(255, 105, 180, 0.3);
   padding: 3px 10px;
   border-radius: 50px;
 }
@@ -1003,108 +1048,224 @@ body.basket-game-active * {
   margin-bottom: 4rem;
 }
 
-/* Card */
+/* Card Container (Retro Turntable Plinth / Record Sleeve Stand) */
 .media-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  cursor: var(--cursor-farmer-glove) 10 2, pointer;
-  transition: var(--transition);
+  background: var(--bg-card); /* #121212 */
+  border: 1px solid var(--border); /* rgba(255, 105, 180, 0.22) */
+  border-radius: 20px;
+  overflow: visible;
+  cursor: var(--cursor-dj-pointer) 10 2, pointer !important;
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.3s ease, box-shadow 0.35s ease, background 0.3s ease;
   position: relative;
-  display: flex; flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 18px 14px 16px 14px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.85), 0 0 15px rgba(255, 105, 180, 0.05);
 }
 .media-card:hover {
-  background: var(--bg-card-hover);
-  border-color: var(--border-active);
-  transform: translateY(-6px);
-  box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.7), 0 0 30px var(--orange-glow-sm);
+  background: var(--bg-card-hover); /* #181818 */
+  border-color: var(--pink-hot);
+  transform: translateY(-8px);
+  box-shadow: 0 20px 42px -10px rgba(0, 0, 0, 0.98), 0 0 32px rgba(255, 105, 180, 0.35);
+}
+.media-card.active, .media-card.playing {
+  border-color: var(--pink-neon);
+  box-shadow: 0 15px 36px rgba(0, 0, 0, 0.95), 0 0 35px rgba(255, 20, 147, 0.5);
+  background: #181818;
 }
 
-/* Thumbnail */
+/* Vinyl Layout: Transform image containers into perfect circles with multi-layered groove borders */
 .card-thumbnail {
   position: relative;
-  aspect-ratio: 16/9;
-  background: linear-gradient(135deg, #2a1608, #180e06);
-  display: flex; align-items: center; justify-content: center;
+  width: 190px;
+  height: 190px;
+  max-width: 86%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  margin: 10px auto 14px auto;
+  background: radial-gradient(circle at center, #180812 0%, #0d040a 45%, #050204 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
+  border: 3px solid var(--pink-hot); /* Hot Pink border */
+  /* Multi-layered borders resembling vinyl record grooves */
+  box-shadow:
+    0 0 0 2px #000000,
+    0 0 0 4px var(--pink-hot),
+    0 0 0 7px #141414,
+    0 0 0 9px rgba(255, 105, 180, 0.4),
+    0 0 0 13px #0d0d0d,
+    0 0 0 15px rgba(255, 105, 180, 0.2),
+    0 0 0 18px #080808,
+    0 12px 32px rgba(0, 0, 0, 0.95),
+    0 0 22px rgba(255, 105, 180, 0.3);
+  transition: box-shadow 0.4s ease, border-color 0.4s ease, transform 0.4s ease;
+  will-change: transform;
 }
+
+/* Vinyl Grooves Reflection Sheen Overlay */
+.card-thumbnail::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, transparent 38%, rgba(255, 255, 255, 0.05) 39%, transparent 40%, transparent 58%, rgba(255, 255, 255, 0.05) 59%, transparent 60%, transparent 78%, rgba(255, 255, 255, 0.05) 79%, transparent 80%),
+    conic-gradient(
+      from 0deg at 50% 50%,
+      rgba(255, 105, 180, 0.22) 0deg,
+      rgba(255, 255, 255, 0.16) 45deg,
+      transparent 90deg,
+      rgba(255, 105, 180, 0.22) 180deg,
+      rgba(255, 255, 255, 0.16) 225deg,
+      transparent 270deg,
+      rgba(255, 105, 180, 0.22) 360deg
+    );
+  z-index: 3;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+/* Center Vinyl Label & Spindle Hole */
+.card-thumbnail::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, #000000 0%, #000000 24%, var(--pink-hot) 26%, var(--pink-neon) 82%, #000000 100%);
+  border: 2px solid var(--pink-hot);
+  box-shadow: 0 0 10px rgba(255, 105, 180, 0.75), inset 0 0 5px #000;
+  z-index: 5;
+  pointer-events: none;
+}
+
 .card-thumbnail img {
-  width: 100%; height: 100%; object-fit: cover;
-  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
 }
-.media-card:hover .card-thumbnail img {
-  transform: scale(1.07);
+
+/* Spinning Animation: Infinite 360-degree rotation simulating playing vinyl record */
+@keyframes spinVinylRecord {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.media-card:hover .card-thumbnail,
+.media-card:focus-visible .card-thumbnail,
+.media-card.active .card-thumbnail,
+.media-card.playing .card-thumbnail {
+  animation: spinVinylRecord 3.6s linear infinite;
+  border-color: var(--pink-neon);
+  box-shadow:
+    0 0 0 2px #000000,
+    0 0 0 4px var(--pink-hot),
+    0 0 0 7px #141414,
+    0 0 0 10px rgba(255, 105, 180, 0.75),
+    0 0 0 14px #0d0d0d,
+    0 0 0 17px rgba(255, 105, 180, 0.45),
+    0 0 0 21px #080808,
+    0 16px 40px rgba(0, 0, 0, 0.98),
+    0 0 35px rgba(255, 105, 180, 0.65);
 }
 
 /* Badges */
 .card-type-badge {
-  position: absolute; top: 10px; left: 10px;
+  position: absolute; top: 12px; left: 12px;
   padding: 3px 9px; border-radius: 6px;
-  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em;
   text-transform: uppercase;
   backdrop-filter: blur(8px);
+  z-index: 6;
 }
 .badge-video {
-  background: rgba(234, 88, 12, 0.85);
-  color: #FFF;
-  box-shadow: 0 2px 8px rgba(234, 88, 12, 0.4);
+  background: rgba(18, 18, 18, 0.88);
+  border: 1px solid var(--pink-hot);
+  color: var(--pink-hot);
+  box-shadow: 0 0 10px rgba(255, 105, 180, 0.35);
 }
 .badge-audio {
-  background: rgba(255, 122, 0, 0.9);
-  color: #FFF;
-  box-shadow: 0 2px 8px rgba(255, 122, 0, 0.45);
+  background: rgba(18, 18, 18, 0.88);
+  border: 1px solid var(--pink-neon);
+  color: var(--pink-pastel);
+  box-shadow: 0 0 10px rgba(255, 20, 147, 0.35);
 }
 
-/* Play Overlay with Orange Slice Play Button */
+/* Play Overlay with Hot Pink Play Button */
 .card-play-overlay {
   position: absolute; inset: 0;
-  background: radial-gradient(circle, rgba(255, 122, 0, 0.3) 0%, rgba(12, 9, 6, 0.65) 90%);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
   display: flex; align-items: center; justify-content: center;
   opacity: 0; transition: var(--transition);
+  z-index: 6;
 }
 .media-card:hover .card-play-overlay { opacity: 1; }
 
 .play-circle {
-  width: 52px; height: 52px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--orange-400), var(--orange-600));
+  width: 50px; height: 50px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--pink-hot), var(--pink-neon));
   border: 2px solid #FFF;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 0 25px var(--orange-glow);
+  box-shadow: 0 0 25px rgba(255, 105, 180, 0.7);
   transform: scale(0.7) rotate(-45deg);
   transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  color: #FFF;
 }
 .media-card:hover .play-circle {
   transform: scale(1) rotate(0deg);
 }
 .card-default-icon {
-  color: rgba(255, 140, 40, 0.2);
+  color: rgba(255, 105, 180, 0.35);
+}
+.vinyl-default-svg {
+  filter: drop-shadow(0 0 8px rgba(255, 105, 180, 0.4));
 }
 
 /* Card Info */
-.card-info { padding: 14px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.card-info {
+  padding: 4px 6px;
+  width: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
 .card-title {
-  font-weight: 600; font-size: 0.94rem;
-  line-height: 1.4;
+  font-family: 'Alegreya', Georgia, serif;
+  font-weight: 700; font-size: 1.15rem;
+  line-height: 1.35;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 100%;
   margin-bottom: 8px; color: var(--text-primary);
   transition: color 0.2s;
+  letter-spacing: 0.01em;
 }
-.media-card:hover .card-title { color: var(--orange-300); }
+.media-card:hover .card-title { color: var(--pink-hot); text-shadow: 0 0 10px rgba(255, 105, 180, 0.5); }
 .card-meta {
-  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;
+  font-family: 'Courier New', Courier, monospace;
 }
 .card-meta-item {
-  font-size: 0.74rem; color: var(--text-secondary);
+  font-size: 0.76rem; color: var(--text-secondary);
   display: flex; align-items: center; gap: 4px;
 }
 .card-meta-item.meta-video {
-  color: var(--orange-300);
-  font-weight: 600;
+  color: var(--pink-hot);
+  font-weight: 700;
 }
 .card-meta-item.meta-audio {
-  color: var(--orange-amber);
-  font-weight: 600;
+  color: var(--pink-pastel);
+  font-weight: 700;
 }
 .orange-no-leaf-icon {
   display: inline-block;
@@ -1112,10 +1273,12 @@ body.basket-game-active * {
   flex-shrink: 0;
 }
 .quality-badge {
+  font-family: 'Courier New', Courier, monospace;
   font-size: 0.65rem; font-weight: 700;
   padding: 2px 7px; border-radius: 4px;
-  background: rgba(255, 183, 3, 0.15);
-  color: var(--orange-amber); border: 1px solid rgba(255, 183, 3, 0.3);
+  background: rgba(255, 105, 180, 0.14);
+  color: var(--pink-hot); border: 1px solid rgba(255, 105, 180, 0.35);
+  box-shadow: 0 0 8px rgba(255, 105, 180, 0.15);
 }
 
 /* ─── Empty State ─────────────────────────────────── */
@@ -1180,40 +1343,50 @@ body.basket-game-active * {
 }
 .res-tag-header {
   margin-left: 8px;
+  font-family: 'Courier New', Courier, monospace;
   font-size: 0.65rem;
   font-weight: 800;
-  padding: 1px 7px;
+  padding: 2px 8px;
   border-radius: 4px;
-  background: rgba(255, 122, 0, 0.2);
-  border: 1px solid rgba(255, 140, 40, 0.4);
-  color: #FFAE34;
+  background: rgba(255, 105, 180, 0.15);
+  border: 1px solid rgba(255, 105, 180, 0.4);
+  color: var(--pink-hot);
   letter-spacing: 0.5px;
   display: inline-flex;
   align-items: center;
-  box-shadow: 0 0 10px rgba(255, 122, 0, 0.25);
+  box-shadow: 0 0 10px rgba(255, 105, 180, 0.25);
 }
 .citrus-bullet {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--orange-500); box-shadow: 0 0 6px var(--orange-500);
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--pink-hot); box-shadow: 0 0 8px var(--pink-hot);
 }
 .player-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.2rem; font-weight: 700;
+  font-family: 'Alegreya', Georgia, serif;
+  font-size: 1.35rem; font-weight: 700;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   color: var(--text-primary);
+  letter-spacing: 0.01em;
 }
-.player-subtitle { font-size: 0.8rem; color: var(--text-secondary); margin-top: 3px; }
+.player-subtitle {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.82rem; color: var(--pink-pastel); margin-top: 3px;
+}
 
 .close-btn {
   width: 40px; height: 40px; border-radius: 50%;
   background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border);
-  color: var(--text-secondary); cursor: var(--cursor-farmer-glove) 10 2, pointer;
+  color: var(--text-secondary); cursor: var(--cursor-dj-pointer) 10 2, pointer;
   display: flex; align-items: center; justify-content: center;
   transition: var(--transition); flex-shrink: 0; margin-left: 16px;
 }
 .close-btn:hover {
-  background: var(--orange-600); border-color: var(--orange-500);
+  background: var(--pink-neon); border-color: var(--pink-hot);
   color: #FFF; transform: rotate(90deg);
+  box-shadow: 0 0 14px rgba(255, 20, 147, 0.6);
+}
+
+.audio-vinyl-disc.playing {
+  animation: spinVinylRecord 3.2s linear infinite !important;
 }
 
 /* Player Body & Video Container */
@@ -1787,32 +1960,7 @@ body.basket-game-active * {
   100% { transform: rotate(15deg); }
 }
 
-/* Vinyl Sleeve Album Disc Peek Effect on Card Hover */
-.media-card {
-  position: relative;
-  overflow: visible;
-}
-.media-card::before {
-  content: '';
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  width: 85px;
-  height: 85px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #FF2D75 0%, #FF2D75 22%, #140810 24%, #080407 65%, #FF2D75 67%, #080407 70%, #080407 100%);
-  border: 1px solid rgba(255, 45, 117, 0.5);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.8), 0 0 10px rgba(255, 45, 117, 0.35);
-  z-index: 0;
-  transform: translate(0, 0) rotate(0deg);
-  transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s;
-  opacity: 0;
-  pointer-events: none;
-}
-.media-card:hover::before {
-  transform: translate(22px, -8px) rotate(140deg);
-  opacity: 1;
-}
+/* Card Vinyl Clean State */
 .card-thumbnail {
   z-index: 1;
   position: relative;
@@ -2116,16 +2264,18 @@ body.basket-game-active * {
   gap: 10px;
 }
 .playlist-title {
-  font-size: 0.92rem;
+  font-size: 1.15rem;
   font-weight: 700;
-  color: var(--orange-300);
-  font-family: 'Outfit', sans-serif;
+  color: #FFF0F5;
+  font-family: 'Alegreya', Georgia, serif;
   letter-spacing: 0.02em;
 }
 .playlist-count {
+  font-family: 'Courier New', Courier, monospace;
   font-size: 0.72rem;
-  background: rgba(255, 140, 40, 0.15);
-  color: var(--orange-400);
+  background: rgba(255, 105, 180, 0.15);
+  border: 1px solid rgba(255, 105, 180, 0.3);
+  color: var(--pink-hot);
   padding: 2px 8px;
   border-radius: 12px;
   font-weight: 700;
@@ -2139,103 +2289,131 @@ body.basket-game-active * {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: rgba(255, 140, 40, 0.12);
-  border: 1px solid rgba(255, 140, 40, 0.25);
-  color: var(--orange-300);
+  background: #181818;
+  border: 1px solid rgba(255, 105, 180, 0.3);
+  color: var(--pink-hot);
   font-size: 1.15rem;
   font-weight: 700;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  cursor: var(--cursor-farmer-glove) 10 2, pointer;
+  cursor: var(--cursor-dj-pointer) 10 2, pointer;
   transition: all 0.2s ease;
   line-height: 1;
   padding: 0;
 }
 .carousel-nav-btn:hover {
-  background: var(--orange-500);
-  border-color: var(--orange-400);
-  color: #FFF;
+  background: var(--pink-hot);
+  border-color: var(--pink-hot);
+  color: #000;
   transform: scale(1.08);
+  box-shadow: 0 0 12px rgba(255, 105, 180, 0.5);
 }
 
 .playlist-carousel {
   display: flex;
-  gap: 12px;
+  gap: 14px;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 140, 40, 0.25) transparent;
-  padding: 4px 2px 8px 2px;
+  scrollbar-color: rgba(255, 105, 180, 0.3) transparent;
+  padding: 6px 2px 10px 2px;
   scroll-behavior: smooth;
 }
 .playlist-carousel::-webkit-scrollbar {
   height: 6px;
 }
 .playlist-carousel::-webkit-scrollbar-thumb {
-  background: rgba(255, 140, 40, 0.2);
+  background: rgba(255, 105, 180, 0.25);
   border-radius: 4px;
 }
 .playlist-carousel::-webkit-scrollbar-thumb:hover {
-  background: var(--orange-500);
+  background: var(--pink-hot);
 }
 
 .playlist-card {
-  flex: 0 0 165px;
-  background: rgba(25, 16, 10, 0.85);
-  border: 1px solid rgba(255, 140, 40, 0.18);
-  border-radius: 10px;
-  padding: 8px;
-  cursor: var(--cursor-farmer-glove) 10 2, pointer;
-  transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+  flex: 0 0 145px;
+  background: #121212;
+  border: 1px solid rgba(255, 105, 180, 0.22);
+  border-radius: 14px;
+  padding: 10px 8px;
+  cursor: var(--cursor-dj-pointer) 10 2, pointer;
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
   user-select: none;
   position: relative;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
 }
 .playlist-card:hover {
-  border-color: var(--orange-400);
-  background: rgba(255, 122, 0, 0.15);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.55), 0 0 12px rgba(255, 122, 0, 0.3);
+  border-color: var(--pink-hot);
+  background: #181818;
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.85), 0 0 18px rgba(255, 105, 180, 0.35);
 }
 .playlist-card.active-ep {
-  border-color: var(--orange-500);
-  background: linear-gradient(135deg, rgba(255, 122, 0, 0.25), rgba(255, 122, 0, 0.08));
-  box-shadow: 0 0 14px rgba(255, 122, 0, 0.35);
+  border-color: var(--pink-neon);
+  background: rgba(255, 105, 180, 0.12);
+  box-shadow: 0 0 16px rgba(255, 20, 147, 0.45);
 }
+
+/* Circular Vinyl Disc Thumbnail for Playlist */
 .playlist-thumb {
-  width: 100%;
-  aspect-ratio: 16/9;
-  border-radius: 6px;
-  background: #1e130b;
+  width: 74px;
+  height: 74px;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background: #140810;
   overflow: hidden;
   position: relative;
-  margin-bottom: 6px;
+  margin: 4px auto 8px auto;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 2px solid var(--pink-hot);
+  box-shadow:
+    0 0 0 1.5px #000,
+    0 0 0 3px var(--pink-hot),
+    0 0 0 5px #141414,
+    0 0 0 7px rgba(255, 105, 180, 0.35),
+    0 4px 12px rgba(0, 0, 0, 0.8);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .playlist-thumb img {
-  width: 100%; height: 100%; object-fit: cover;
+  width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+}
+.playlist-card:hover .playlist-thumb,
+.playlist-card.active-ep .playlist-thumb {
+  animation: spinVinylRecord 3s linear infinite;
+  box-shadow:
+    0 0 0 1.5px #000,
+    0 0 0 3px var(--pink-neon),
+    0 0 0 5px #141414,
+    0 0 0 8px rgba(255, 105, 180, 0.65),
+    0 6px 18px rgba(0, 0, 0, 0.9),
+    0 0 16px rgba(255, 105, 180, 0.5);
 }
 .playlist-card:hover .playlist-thumb::after {
   content: '▶';
   position: absolute;
   inset: 0;
+  border-radius: 50%;
   background: rgba(0, 0, 0, 0.45);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: #FFF;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
 }
 .playlist-card-title {
-  font-size: 0.78rem;
-  font-weight: 600;
+  font-family: 'Alegreya', Georgia, serif;
+  font-size: 0.92rem;
+  font-weight: 700;
   color: var(--text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  letter-spacing: 0.01em;
 }
 
 /* Sound bars indicator for current playing episode */
