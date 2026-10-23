@@ -51,7 +51,9 @@
   /* Custom Orange Mouse Cursors */
   --cursor-orange: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'%3E%3Cdefs%3E%3CradialGradient id='g1' cx='35%25' cy='35%25' r='65%25'%3E%3Cstop offset='0%25' stop-color='%23FFAE34'/%3E%3Cstop offset='55%25' stop-color='%23FF7A00'/%3E%3Cstop offset='100%25' stop-color='%23EA580C'/%3E%3C/radialGradient%3E%3Cfilter id='s1' x='-20%25' y='-20%25' width='140%25' height='140%25'%3E%3CfeDropShadow dx='0' dy='1.2' stdDeviation='1.2' flood-color='%23000' flood-opacity='0.65'/%3E%3C/filter%3E%3C/defs%3E%3Cg filter='url(%23s1)'%3E%3Cpath d='M13 5 C10 1, 6 2, 7 4 C8 6, 11 6.5, 13 5 Z' fill='%2334D399'/%3E%3Ccircle cx='13' cy='15' r='8.5' fill='url(%23g1)' stroke='%23FFAE34' stroke-width='1.2'/%3E%3Ccircle cx='10.8' cy='12.8' r='1.8' fill='%23FFF' opacity='0.5'/%3E%3C/g%3E%3C/svg%3E");
 
-  --cursor-orange-pointer: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cdefs%3E%3CradialGradient id='g2' cx='35%25' cy='35%25' r='65%25'%3E%3Cstop offset='0%25' stop-color='%23FFC56E'/%3E%3Cstop offset='50%25' stop-color='%23FF7A00'/%3E%3Cstop offset='100%25' stop-color='%23C2410C'/%3E%3C/radialGradient%3E%3Cfilter id='s2' x='-25%25' y='-25%25' width='150%25' height='150%25'%3E%3CfeDropShadow dx='0' dy='1.5' stdDeviation='1.5' flood-color='%23FF7A00' flood-opacity='0.5'/%3E%3C/filter%3E%3C/defs%3E%3Cg filter='url(%23s2)' transform='rotate(-12 14 14)'%3E%3Cpath d='M14 4 C11 0, 6 1, 7 3.5 C8 5.5, 11 6, 14 4.5 Z' fill='%2310B981'/%3E%3Ccircle cx='14' cy='15.5' r='9.5' fill='url(%23g2)' stroke='%23FFF' stroke-width='1.5'/%3E%3Ccircle cx='11.5' cy='13' r='2' fill='%23FFF' opacity='0.65'/%3E%3C/g%3E%3C/svg%3E");
+  /* Farmer Harvest Glove Pointer Cursor (Bàn tay đeo găng nông dân thu hoạch cam) */
+  --cursor-farmer-glove: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cdefs%3E%3Cfilter id='sh' x='-25%25' y='-25%25' width='150%25' height='150%25'%3E%3CfeDropShadow dx='1' dy='1.5' stdDeviation='1.2' flood-color='%23000' flood-opacity='0.75'/%3E%3C/filter%3E%3ClinearGradient id='og' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23FFAE34'/%3E%3Cstop offset='45%25' stop-color='%23FF7A00'/%3E%3Cstop offset='100%25' stop-color='%23C2410C'/%3E%3C/linearGradient%3E%3ClinearGradient id='cv' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23FFFDF7'/%3E%3Cstop offset='100%25' stop-color='%23DDD2C1'/%3E%3C/linearGradient%3E%3ClinearGradient id='cg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23166534'/%3E%3Cstop offset='100%25' stop-color='%230B381B'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg filter='url(%23sh)'%3E%3Cpath d='M11 24 L19 28.5 C20.5 29.5 23 28.5 23.5 27 L25.5 21 L15.5 17 Z' fill='url(%23cg)' stroke='%231B3B2B' stroke-width='1.2' stroke-linejoin='round'/%3E%3Cpath d='M12.5 25.5 L22.5 28' stroke='%2334D399' stroke-width='0.9' stroke-dasharray='1.8 1.2'/%3E%3Cpath d='M9.5 13.5 C9.5 11 11 10 13 10 C14.5 10 15.2 10.8 15.8 11.5 C16.5 10.5 17.8 10 19 10.5 C20.2 11 20.8 12 20.8 13 C21.5 12 22.8 11.8 23.8 12.8 C24.8 13.8 24.5 16 23.2 18 L21 22.5 L13 19.5 L9.5 14.5 Z' fill='url(%23cv)' stroke='%233B2613' stroke-width='1.3' stroke-linejoin='round'/%3E%3Cpath d='M14 13 C14.5 11.8 16 11.8 16.8 12.8 C17.5 13.8 17.2 16 16.8 17' fill='none' stroke='%233B2613' stroke-width='1.1'/%3E%3Cpath d='M17.5 13 C18 11.8 19.5 11.8 20.2 12.8 C21 13.8 20.8 16 20.2 17.5' fill='none' stroke='%233B2613' stroke-width='1.1'/%3E%3Cpath d='M21 13.8 C21.5 13 22.8 12.8 23.5 13.5 C24.2 14.5 23.8 16.5 23 18' fill='none' stroke='%233B2613' stroke-width='1.1'/%3E%3Cpath d='M9.5 16 C7.5 16.5 5 18 5.5 20 C6 21.5 8 22.2 10 21.5 L13 19.8 Z' fill='url(%23og)' stroke='%233B2613' stroke-width='1.3' stroke-linejoin='round'/%3E%3Cpath d='M6.2 19 C7.8 18.5 9.8 18.5 10.8 18' stroke='%23FFAE34' stroke-width='0.8' stroke-linecap='round' fill='none'/%3E%3Cpath d='M6.5 5.5 C6.2 2.8 8 1.5 10 1.5 C12 1.5 13 2.8 12.8 5.5 L12 13.5 L8 13.5 Z' fill='url(%23og)' stroke='%233B2613' stroke-width='1.4' stroke-linejoin='round'/%3E%3Cpath d='M7.2 4.5 C8.5 5 11 5 12 4.5' stroke='%23FFAE34' stroke-width='0.8' stroke-linecap='round' fill='none'/%3E%3Cpath d='M7.5 7.5 C8.8 8 11 8 11.8 7.5' stroke='%23FFAE34' stroke-width='0.8' stroke-linecap='round' fill='none'/%3E%3Cpath d='M7.8 10.5 C9 11 11 11 11.8 10.5' stroke='%23FFAE34' stroke-width='0.8' stroke-linecap='round' fill='none'/%3E%3Cpath d='M8 13.5 Q10 15 12 13.5' stroke='%23FFF' stroke-width='1' stroke-linecap='round'/%3E%3C/g%3E%3C/svg%3E");
+  --cursor-orange-pointer: var(--cursor-farmer-glove);
 }
 
 html {
@@ -69,14 +71,18 @@ body {
   cursor: var(--cursor-orange) 4 4, auto;
 }
 
-/* Interactive elements get pointer orange cursor */
+/* Interactive elements get farmer harvesting glove pointer cursor */
 a, button, [role="button"], input[type="submit"], input[type="button"],
+select, label, [tabindex="0"],
 .media-card, .format-option-card, .playlist-card, .filter-btn, .mobile-cat-chip,
 .bottom-nav-item, .open-new-tab-btn, .action-pill, .carousel-nav-btn,
 .subfolder-tab, .folder-tab, .breadcrumb-crumb, .quality-opt, .speed-opt,
-.big-play-btn, .ctrl-btn, .close-btn, .orange-seekbar-container, .download-tab-btn,
-.download-submit-btn, .download-cancel-btn {
-  cursor: var(--cursor-orange-pointer) 4 4, pointer;
+.big-play-btn, .ctrl-btn, .close-btn, .orange-seekbar-container, .vol-slider-wrap,
+.download-tab-btn, .download-submit-btn, .download-cancel-btn, .brand,
+.search-clear-btn, .share-copy-btn, .download-trigger-btn, .speed-btn,
+.view-mode-btn, .hero-play-btn, .hero-details-btn, .tree-canvas-wrap,
+.clickable, [onclick] {
+  cursor: var(--cursor-farmer-glove) 10 2, pointer !important;
 }
 
 /* ─── Ambient Citrus Glowing Orbs ─────────────────── */
@@ -197,7 +203,7 @@ body::after {
 
 .navbar-brand {
   display: flex; align-items: center; gap: 12px;
-  cursor: pointer;
+  cursor: var(--cursor-farmer-glove) 10 2, pointer;
   text-decoration: none;
 }
 
@@ -308,7 +314,7 @@ body::after {
   width: 100%; padding: 11px 14px;
   background: none; border: 1px solid transparent; border-radius: var(--radius-sm);
   color: var(--text-secondary); font-size: 0.92rem; font-weight: 500;
-  cursor: pointer; transition: var(--transition);
+  cursor: var(--cursor-farmer-glove) 10 2, pointer; transition: var(--transition);
   font-family: inherit; text-align: left;
   margin-bottom: 4px;
 }
@@ -502,7 +508,7 @@ body.basket-game-active * {
   position: relative;
   width: 125px;
   height: 95px;
-  cursor: pointer;
+  cursor: var(--cursor-farmer-glove) 10 2, pointer;
   display: flex;
   justify-content: center;
   align-items: flex-end;
@@ -710,7 +716,7 @@ body.basket-game-active * {
   background: none;
   border: none;
   color: var(--orange-300);
-  cursor: pointer;
+  cursor: var(--cursor-farmer-glove) 10 2, pointer;
   font-family: inherit;
   font-size: inherit;
   font-weight: 600;
@@ -760,7 +766,7 @@ body.basket-game-active * {
   font-size: 0.84rem;
   font-weight: 600;
   color: var(--text-secondary);
-  cursor: pointer;
+  cursor: var(--cursor-farmer-glove) 10 2, pointer;
   transition: var(--transition);
   font-family: inherit;
   display: inline-flex;
@@ -831,7 +837,7 @@ body.basket-game-active * {
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--orange-300);
-  cursor: pointer;
+  cursor: var(--cursor-farmer-glove) 10 2, pointer;
   transition: var(--transition);
   font-family: inherit;
   display: inline-flex;
@@ -937,7 +943,7 @@ body.basket-game-active * {
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--orange-300);
-  cursor: pointer;
+  cursor: var(--cursor-farmer-glove) 10 2, pointer;
   transition: var(--transition);
   font-family: inherit;
 }
@@ -974,7 +980,7 @@ body.basket-game-active * {
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   overflow: hidden;
-  cursor: pointer;
+  cursor: var(--cursor-farmer-glove) 10 2, pointer;
   transition: var(--transition);
   position: relative;
   display: flex; flex-direction: column;
@@ -1172,7 +1178,7 @@ body.basket-game-active * {
 .close-btn {
   width: 40px; height: 40px; border-radius: 50%;
   background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border);
-  color: var(--text-secondary); cursor: pointer;
+  color: var(--text-secondary); cursor: var(--cursor-farmer-glove) 10 2, pointer;
   display: flex; align-items: center; justify-content: center;
   transition: var(--transition); flex-shrink: 0; margin-left: 16px;
 }
@@ -1208,7 +1214,7 @@ body.basket-game-active * {
   width: 100%; height: 100%;
   object-fit: contain;
   display: block;
-  cursor: pointer;
+  cursor: var(--cursor-farmer-glove) 10 2, pointer;
 }
 
 /* Big Center Play Button */
@@ -1222,7 +1228,7 @@ body.basket-game-active * {
   border: 3px solid #FFF;
   box-shadow: 0 0 35px var(--orange-glow);
   display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
+  cursor: var(--cursor-farmer-glove) 10 2, pointer;
   z-index: 10;
   transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s;
 }
@@ -1257,7 +1263,7 @@ body.basket-game-active * {
   width: 100%;
   height: 28px;
   display: flex; align-items: center;
-  cursor: pointer;
+  cursor: var(--cursor-farmer-glove) 10 2, pointer;
   margin-bottom: 8px;
 }
 .orange-seek-track {
@@ -1334,7 +1340,7 @@ body.basket-game-active * {
   display: flex; align-items: center; justify-content: center;
   width: 36px; height: 36px;
   border-radius: 8px;
-  cursor: pointer;
+  cursor: var(--cursor-farmer-glove) 10 2, pointer;
   transition: var(--transition);
 }
 .ctrl-btn:hover {
@@ -1358,7 +1364,7 @@ body.basket-game-active * {
 .volume-slider {
   width: 65px; height: 5px;
   accent-color: var(--orange-500);
-  cursor: pointer;
+  cursor: var(--cursor-farmer-glove) 10 2, pointer;
   background: rgba(255, 140, 40, 0.2);
   border-radius: 5px;
 }
@@ -1564,7 +1570,7 @@ body.basket-game-active * {
   border: none; background: none;
   color: var(--text-secondary);
   font-size: 0.82rem; font-weight: 600;
-  border-radius: 6px; cursor: pointer;
+  border-radius: 6px; cursor: var(--cursor-farmer-glove) 10 2, pointer;
   text-align: left; transition: var(--transition);
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
 }
@@ -1708,7 +1714,7 @@ body.basket-game-active * {
   font-size: 0.85rem;
   font-weight: 700;
   border-radius: 8px;
-  cursor: pointer;
+  cursor: var(--cursor-farmer-glove) 10 2, pointer;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
@@ -1742,7 +1748,7 @@ body.basket-game-active * {
   background: rgba(255, 140, 40, 0.05);
   border: 1px solid rgba(255, 140, 40, 0.18);
   border-radius: 12px;
-  cursor: pointer;
+  cursor: var(--cursor-farmer-glove) 10 2, pointer;
   transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
   position: relative;
 }
@@ -1889,7 +1895,7 @@ body.basket-game-active * {
   color: var(--text-secondary);
   font-size: 0.85rem;
   font-weight: 600;
-  cursor: pointer;
+  cursor: var(--cursor-farmer-glove) 10 2, pointer;
   transition: all 0.2s ease;
 }
 .download-cancel-btn:hover {
@@ -1904,7 +1910,7 @@ body.basket-game-active * {
   color: #FFF;
   font-size: 0.88rem;
   font-weight: 700;
-  cursor: pointer;
+  cursor: var(--cursor-farmer-glove) 10 2, pointer;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -2004,7 +2010,7 @@ body.basket-game-active * {
   font-size: 0.82rem;
   font-weight: 600;
   color: var(--text-secondary);
-  cursor: pointer;
+  cursor: var(--cursor-farmer-glove) 10 2, pointer;
   transition: all 0.2s ease;
   font-family: inherit;
   display: inline-flex;
@@ -2057,7 +2063,7 @@ body.basket-game-active * {
   background: none;
   border: none;
   color: var(--text-muted);
-  cursor: pointer;
+  cursor: var(--cursor-farmer-glove) 10 2, pointer;
   font-family: inherit;
   font-size: 0.68rem;
   font-weight: 600;
@@ -2112,7 +2118,7 @@ body.basket-game-active * {
   color: var(--orange-300);
   font-size: 0.82rem;
   font-weight: 600;
-  cursor: pointer;
+  cursor: var(--cursor-farmer-glove) 10 2, pointer;
   white-space: nowrap;
   display: inline-flex;
   align-items: center;
@@ -2149,7 +2155,7 @@ body.basket-game-active * {
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--text-secondary);
-  cursor: pointer;
+  cursor: var(--cursor-farmer-glove) 10 2, pointer;
   user-select: none;
   background: rgba(255, 140, 40, 0.06);
   padding: 5px 12px;
@@ -2242,7 +2248,7 @@ body.basket-game-active * {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  cursor: var(--cursor-farmer-glove) 10 2, pointer;
   transition: all 0.2s ease;
   line-height: 1;
   padding: 0;
@@ -2281,7 +2287,7 @@ body.basket-game-active * {
   border: 1px solid rgba(255, 140, 40, 0.18);
   border-radius: 10px;
   padding: 8px;
-  cursor: pointer;
+  cursor: var(--cursor-farmer-glove) 10 2, pointer;
   transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
   user-select: none;
   position: relative;
@@ -2629,3 +2635,4 @@ body.basket-game-active * {
     opacity: 0;
   }
 }
+
