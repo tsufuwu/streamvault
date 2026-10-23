@@ -224,7 +224,19 @@ export default {
 
     // Static Assets fallback (index.html, style.css, app.js, etc.)
     if (env.ASSETS) {
-      return env.ASSETS.fetch(request);
+      const res = await env.ASSETS.fetch(request);
+      if (url.pathname === '/' || url.pathname.endsWith('.html') || !url.pathname.includes('.')) {
+        const h = new Headers(res.headers);
+        h.set('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+        h.set('Pragma', 'no-cache');
+        h.set('Expires', '0');
+        return new Response(res.body, {
+          status: res.status,
+          statusText: res.statusText,
+          headers: h,
+        });
+      }
+      return res;
     }
 
     return new Response('Not found', { status: 404 });
