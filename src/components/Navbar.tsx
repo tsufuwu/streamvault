@@ -2,7 +2,6 @@ import React, { useRef, useEffect } from 'react';
 import { Search, Heart, Plus, Volume2, VolumeX, Keyboard, Palette, Disc3 } from 'lucide-react';
 import { AppTheme } from '../types';
 import { sounds } from '../utils/soundEffects';
-import { PeekingCat } from './PeekingCat';
 
 interface NavbarProps {
   searchQuery: string;
@@ -85,9 +84,8 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* Global Omnibar Search (Typewriter Courier font input) */}
-        <div className="flex-1 max-w-md relative hidden md:block group/search">
-          <PeekingCat position="top-right" size={34} className="group-hover/search:-translate-y-5" />
-          <div className="relative flex items-center z-10">
+        <div className="flex-1 max-w-md relative hidden md:block">
+          <div className="relative flex items-center">
             <Search className="w-4 h-4 text-neutral-400 absolute left-3.5 pointer-events-none" />
             <input
               ref={searchInputRef}

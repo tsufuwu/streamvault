@@ -66,7 +66,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
       {/* 🐈 Chú mèo đen lấp ló đằng sau target khi hover */}
       <PeekingCat position="top-right" size={44} />
       {/* ─── CD Sleeve Wrapper (Bọc đĩa CD bên ngoài + đĩa than) ─── */}
-      <div className="w-full flex items-center justify-center py-1 sm:py-2 px-0.5 sm:px-1 overflow-hidden">
+      <div className="w-full flex items-center justify-center py-1 sm:py-2 px-0.5 sm:px-1 overflow-visible">
         {/* Mobile View: size 105px */}
         <div className="block sm:hidden">
           <CDSleeveDiscPackage

@@ -31,10 +31,10 @@ export const CDSleeveDiscPackage: React.FC<CDSleeveDiscPackageProps> = ({
 
   return (
     <div
-      className="relative select-none flex items-center justify-start mx-auto my-2 group/package transition-all"
+      className="relative select-none flex items-center justify-start mx-auto my-1 pt-2 group/package transition-all overflow-visible"
       style={{
         width: size + slideOffset + 12,
-        height: size + 8,
+        height: size + 20,
       }}
     >
       {/* ─── 1. The Vinyl CD Disc (Tucked behind & sliding out) ─── */}

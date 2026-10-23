@@ -8,144 +8,153 @@ interface WalkingVinylCatProps {
 
 export const WalkingVinylCat: React.FC<WalkingVinylCatProps> = ({
   isWalking = false,
-  discSize = 140,
+  discSize = 150,
   className = '',
 }) => {
-  // Scale the cat proportionally to disc diameter
-  const catWidth = Math.max(30, Math.round(discSize * 0.28));
-  const catHeight = Math.round(catWidth * 0.75);
+  // Proportional sizing: sleek, slender, elegant
+  const catWidth = Math.max(34, Math.round(discSize * 0.28));
+  const catHeight = Math.round(catWidth * 0.62);
 
   return (
     <div
-      className={`absolute z-20 pointer-events-none select-none transition-transform duration-300 ${className}`}
+      className={`absolute z-30 pointer-events-none select-none transition-all duration-300 ${className}`}
       style={{
-        // Positioned along the exposed upper-right vinyl groove arc
-        top: '12%',
-        right: '18%',
+        // Perched right on the top-right curved rim (mép trên của cái đĩa)
+        top: -catHeight * 0.72,
+        right: Math.max(14, discSize * 0.16),
         width: catWidth,
         height: catHeight,
-        transform: 'rotate(15deg)',
+        transform: 'rotate(16deg)',
       }}
-      title="Chú mèo đen trên đĩa than"
+      title="Chú mèo đen bước đi trên mép đĩa than"
     >
       <svg
-        viewBox="0 0 64 48"
-        className="w-full h-full overflow-visible drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]"
+        viewBox="0 0 76 46"
+        className="w-full h-full overflow-visible drop-shadow-[0_4px_8px_rgba(0,0,0,0.85)]"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        {/* Cat Body Bob Group when walking */}
+        {/* Cat Walk Bob Container */}
         <g className={isWalking ? 'animate-cat-bob' : ''}>
-          {/* Swishing Tail */}
-          <g className="animate-cat-tail origin-[14px_22px]">
+          {/* 1. Graceful Sinuous Tail */}
+          <g className="animate-cat-tail origin-[18px_20px]">
+            {/* Elegant curved feline tail */}
             <path
-              d="M 14 22 C 8 20, 2 12, 6 4 C 8 0, 12 2, 11 6 C 10 9, 11 15, 16 19"
-              fill="#08040a"
-              stroke="rgba(255, 45, 117, 0.4)"
-              strokeWidth="0.8"
+              d="M 18 20 C 12 18, 5 12, 6 6 C 7 1, 12 2, 11 7 C 10 11, 13 14, 19 18"
+              fill="#0a050c"
+              stroke="rgba(255, 45, 117, 0.45)"
+              strokeWidth="1.2"
+              strokeLinecap="round"
+            />
+            {/* Subtle luminous tip highlight */}
+            <circle cx="8.5" cy="4" r="1.2" fill="var(--theme-primary)" opacity="0.75" />
+          </g>
+
+          {/* 2. Inner Back Leg (Phía sau) */}
+          <g className={isWalking ? 'animate-cat-paw-bwd origin-[21px_22px]' : ''}>
+            <path
+              d="M 21 21 C 19 26, 17 32, 15 37 C 14 39, 13 41, 16 41 C 18 41, 19 39, 21 34 C 23 29, 23 25, 23 21 Z"
+              fill="#060308"
             />
           </g>
 
-          {/* Back Left Leg (Inside) */}
-          <g className={isWalking ? 'animate-cat-paw-bwd origin-[18px_25px]' : ''}>
+          {/* 3. Inner Front Leg (Phía sau) */}
+          <g className={isWalking ? 'animate-cat-paw-bwd origin-[48px_22px]' : ''}>
             <path
-              d="M 18 24 L 14 36 L 12 40 L 16 40 L 20 28 Z"
-              fill="#060207"
+              d="M 48 22 C 47 27, 45 33, 44 37 C 43 39, 42 41, 45 41 C 47 41, 48 38, 49 33 C 50 28, 50 25, 50 22 Z"
+              fill="#060308"
             />
           </g>
 
-          {/* Front Left Leg (Inside) */}
-          <g className={isWalking ? 'animate-cat-paw-bwd origin-[42px_24px]' : ''}>
-            <path
-              d="M 42 24 L 40 35 L 38 40 L 42 40 L 45 28 Z"
-              fill="#060207"
-            />
-          </g>
-
-          {/* Main Cat Torso */}
+          {/* 4. Elegant Slender Cat Torso */}
+          {/* Soft ambient rim glow along back */}
           <path
-            d="M 14 20 C 14 14, 24 13, 34 14 C 42 15, 48 18, 48 24 C 48 29, 40 30, 28 29 C 18 28, 14 26, 14 20 Z"
-            fill="#0b060d"
-            stroke="rgba(255, 255, 255, 0.15)"
-            strokeWidth="0.9"
+            d="M 18 20 C 17 14, 26 12, 36 13 C 44 14, 52 17, 53 22 C 53 26, 46 27, 36 26 C 26 25, 19 25, 18 20 Z"
+            fill="#0c060e"
+            stroke="rgba(255, 255, 255, 0.18)"
+            strokeWidth="0.8"
           />
 
-          {/* Back Right Leg (Outside - Forefront) */}
-          <g className={isWalking ? 'animate-cat-paw-fwd origin-[22px_25px]' : ''}>
+          {/* 5. Outer Back Leg (Phía trước - bước ra mép đĩa) */}
+          <g className={isWalking ? 'animate-cat-paw-fwd origin-[25px_22px]' : ''}>
             <path
-              d="M 22 25 L 18 36 L 16 41 L 21 41 L 25 29 Z"
-              fill="#0e0811"
-              stroke="rgba(255, 45, 117, 0.3)"
+              d="M 25 21 C 24 26, 23 32, 21 37 C 20 40, 20 42, 24 42 C 26 42, 26 39, 27 34 C 28 29, 28 25, 28 21 Z"
+              fill="#100814"
+              stroke="rgba(255, 45, 117, 0.35)"
               strokeWidth="0.7"
             />
+            {/* Tiny paw pad touching the rim */}
+            <ellipse cx="22.5" cy="41.5" rx="2" ry="1.2" fill="#140a18" />
           </g>
 
-          {/* Front Right Leg (Outside - Forefront) */}
-          <g className={isWalking ? 'animate-cat-paw-fwd origin-[46px_25px]' : ''}>
+          {/* 6. Outer Front Leg (Phía trước - bước ra mép đĩa) */}
+          <g className={isWalking ? 'animate-cat-paw-fwd origin-[52px_22px]' : ''}>
             <path
-              d="M 46 25 L 45 36 L 43 41 L 48 41 L 49 29 Z"
-              fill="#0e0811"
-              stroke="rgba(255, 45, 117, 0.3)"
+              d="M 52 22 C 52 27, 51 33, 50 37 C 49 40, 49 42, 53 42 C 55 42, 55 39, 56 34 C 56 29, 56 25, 55 22 Z"
+              fill="#100814"
+              stroke="rgba(255, 45, 117, 0.35)"
               strokeWidth="0.7"
             />
+            {/* Tiny paw pad touching the rim */}
+            <ellipse cx="51.5" cy="41.5" rx="2" ry="1.2" fill="#140a18" />
           </g>
 
-          {/* Cat Head */}
-          <g className="origin-[48px_16px]">
-            {/* Left Ear */}
+          {/* 7. Refined Elegant Head & Ears */}
+          <g className="origin-[54px_16px]">
+            {/* Left Ear (Pointy with neon pink inner ear) */}
             <polygon
-              points="44,12 41,2 49,8"
+              points="49,12 47,2 54,8"
               fill="#09040b"
-              stroke="rgba(255, 45, 117, 0.4)"
+              stroke="rgba(255, 45, 117, 0.5)"
               strokeWidth="0.8"
             />
             <polygon
-              points="44,10 42,4 47,8"
+              points="49,10 48,4 52,8"
               fill="var(--theme-primary)"
-              opacity="0.8"
+              opacity="0.9"
             />
 
-            {/* Right Ear */}
+            {/* Right Ear (Slightly turned) */}
             <polygon
-              points="53,10 57,1 50,7"
+              points="57,10 62,2 56,7"
               fill="#09040b"
-              stroke="rgba(255, 45, 117, 0.4)"
+              stroke="rgba(255, 45, 117, 0.5)"
               strokeWidth="0.8"
             />
             <polygon
-              points="52,9 55,3 50,7"
+              points="57,9 60,4 56,7"
               fill="var(--theme-primary)"
-              opacity="0.8"
+              opacity="0.9"
             />
 
-            {/* Head Silhouette */}
+            {/* Head Contour */}
             <circle
-              cx="48"
+              cx="54"
               cy="16"
-              r="8"
-              fill="#0d0710"
-              stroke="rgba(255, 255, 255, 0.15)"
+              r="7.5"
+              fill="#0e0712"
+              stroke="rgba(255, 255, 255, 0.2)"
               strokeWidth="0.8"
             />
 
-            {/* Glowing Golden Eye */}
-            <g className="animate-cat-blink origin-[51px_15px]">
-              <ellipse cx="51" cy="15" rx="2.4" ry="3" fill="#FACC15" />
-              <ellipse cx="51.5" cy="15" rx="0.8" ry="2.5" fill="#060207" />
-              <circle cx="50.5" cy="14" r="0.7" fill="#ffffff" />
+            {/* Glowing Amber Almond Eye */}
+            <g className="animate-cat-blink origin-[56px_15px]">
+              <ellipse cx="56.5" cy="15" rx="2.5" ry="3.2" fill="#FACC15" />
+              <ellipse cx="57" cy="15" rx="0.9" ry="2.8" fill="#070308" />
+              <circle cx="56" cy="14" r="0.7" fill="#ffffff" />
             </g>
 
-            {/* Cute Pink Nose */}
-            <polygon points="55,18 53.8,17 55.5,16.5" fill="#FF85B3" />
+            {/* Delicate Pink Nose */}
+            <polygon points="60.5,17 59.5,16.2 60.5,15.6" fill="#FF85B3" />
 
-            {/* Whiskers */}
-            <line x1="53" y1="18" x2="62" y2="17" stroke="rgba(255,255,255,0.6)" strokeWidth="0.6" />
-            <line x1="53" y1="19.5" x2="61" y2="21" stroke="rgba(255,255,255,0.6)" strokeWidth="0.6" />
+            {/* Whiskers (Fine luminous lines) */}
+            <line x1="59" y1="17" x2="68" y2="16" stroke="rgba(255,255,255,0.7)" strokeWidth="0.6" strokeLinecap="round" />
+            <line x1="59" y1="18.5" x2="67" y2="20" stroke="rgba(255,255,255,0.7)" strokeWidth="0.6" strokeLinecap="round" />
           </g>
 
-          {/* Tiny Collar with Neon Gem Charm */}
-          <path d="M 43 21 C 45 23, 47 23, 49 22" stroke="var(--theme-primary)" strokeWidth="1.2" />
-          <circle cx="47" cy="23" r="1.3" fill="var(--theme-primary)" className="animate-pulse" />
+          {/* 8. Sleek Collar with glowing charm */}
+          <path d="M 49 20 C 51 22, 53 22, 55 21" stroke="var(--theme-primary)" strokeWidth="1.2" strokeLinecap="round" />
+          <circle cx="53" cy="22.2" r="1.3" fill="var(--theme-primary)" className="animate-pulse" />
         </g>
       </svg>
     </div>
