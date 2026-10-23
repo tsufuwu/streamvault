@@ -5,6 +5,9 @@ const API_ENDPOINTS = [
   '/.netlify/functions/get-media-list',
   'https://orange.celinewang.workers.dev/api/get-media-list',
 ];
+const STREAM_BASE = typeof window !== 'undefined' && (window.location.hostname.includes('localhost') || window.location.hostname.includes('workers.dev'))
+  ? '/stream-media'
+  : 'https://orange.celinewang.workers.dev/stream-media';
 const REMOTE_FALLBACK_STREAM = 'https://orange.celinewang.workers.dev/stream-media';
 const STORAGE_CUSTOM_MEDIA = 'vinylstream_custom_media';
 const STORAGE_FAVORITES = 'vinylstream_favorites';
