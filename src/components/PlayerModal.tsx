@@ -133,7 +133,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
           e.preventDefault();
           const pct = parseInt(e.key, 10) * 0.1;
           mediaEl.currentTime = mediaEl.duration * pct;
-          showToast(`Nhảy tới ${parseInt(e.key, 10) * 10}% ⏱️`);
+          showToast(`Jump to ${parseInt(e.key, 10) * 10}% ⏱️`);
           return;
         }
       }
@@ -190,7 +190,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
           e.preventDefault();
           if (nextMedia) {
             onSelectMedia(nextMedia);
-            showToast('Chuyển sang tập tiếp theo ⏭️');
+            showToast('Next track / episode ⏭️');
           }
           break;
         case 'escape':
@@ -215,11 +215,11 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
     if (playback.isPlaying) {
       mediaEl.pause();
       setPlayback((prev) => ({ ...prev, isPlaying: false }));
-      showToast('Tạm dừng ⏸️');
+      showToast('Paused ⏸️');
     } else {
       mediaEl.play().catch(() => {});
       setPlayback((prev) => ({ ...prev, isPlaying: true }));
-      showToast('Đang phát ▶️');
+      showToast('Playing ▶️');
     }
   };
 
@@ -227,7 +227,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
     const mediaEl = isAudio ? audioRef.current : videoRef.current;
     if (!mediaEl) return;
     mediaEl.currentTime = Math.max(0, Math.min(mediaEl.currentTime + seconds, mediaEl.duration || 0));
-    showToast(seconds > 0 ? `Tua tới +${seconds}s ⏩` : `Tua lùi ${seconds}s ⏪`);
+    showToast(seconds > 0 ? `Forward +${seconds}s ⏩` : `Rewind ${seconds}s ⏪`);
   };
 
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -250,7 +250,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
       volume: newVol,
       isMuted: newVol === 0,
     }));
-    showToast(newVol === 0 ? 'Đã tắt tiếng 🔇' : `Âm lượng: ${Math.round(newVol * 100)}% 🔊`);
+    showToast(newVol === 0 ? 'Muted 🔇' : `Volume: ${Math.round(newVol * 100)}% 🔊`);
   };
 
   const toggleMute = () => {
@@ -261,7 +261,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
     }
     const nextMuted = !playback.isMuted;
     setPlayback((prev) => ({ ...prev, isMuted: nextMuted }));
-    showToast(nextMuted ? 'Đã tắt tiếng 🔇' : 'Đã bật tiếng 🔊');
+    showToast(nextMuted ? 'Muted 🔇' : 'Unmuted 🔊');
   };
 
   const changePlaybackRate = (rate: number) => {
@@ -271,7 +271,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
       mediaEl.playbackRate = rate;
     }
     setPlayback((prev) => ({ ...prev, playbackRate: rate }));
-    showToast(`Tốc độ phát: ${rate}x ⚡`);
+    showToast(`Speed: ${rate}x ⚡`);
   };
 
   const toggleLoop = () => {
@@ -282,14 +282,14 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
     }
     const next = !playback.isLooping;
     setPlayback((prev) => ({ ...prev, isLooping: next }));
-    showToast(next ? 'Đã bật lặp lại 🔁' : 'Đã tắt lặp lại');
+    showToast(next ? 'Repeat On 🔁' : 'Repeat Off');
   };
 
   const toggleTheater = () => {
     sounds.playClick();
     const next = !playback.isTheater;
     setPlayback((prev) => ({ ...prev, isTheater: next }));
-    showToast(next ? 'Bật chế độ Rạp phim 🎬' : 'Thoát chế độ Rạp phim');
+    showToast(next ? 'Theater Mode On 🎬' : 'Theater Mode Off');
   };
 
   const toggleFullscreen = () => {
@@ -298,10 +298,10 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
 
     if (!document.fullscreenElement) {
       playerContainerRef.current.requestFullscreen().catch(() => {});
-      showToast('Toàn màn hình ⛶');
+      showToast('Fullscreen ⛶');
     } else {
       document.exitFullscreen().catch(() => {});
-      showToast('Thoát toàn màn hình');
+      showToast('Exit Fullscreen');
     }
   };
 
@@ -310,10 +310,10 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
     if (videoRef.current && document.pictureInPictureEnabled) {
       if (document.pictureInPictureElement) {
         await document.exitPictureInPicture();
-        showToast('Thoát PiP');
+        showToast('Exit PiP');
       } else {
         await videoRef.current.requestPictureInPicture();
-        showToast('Bật chế độ PiP 🖼️');
+        showToast('PiP Mode 🖼️');
       }
     }
   };
@@ -390,12 +390,12 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
         <div
           onClick={onClose}
           className="sm:hidden pt-2.5 pb-1 flex flex-col items-center justify-center bg-black/60 cursor-pointer border-b border-white/5 active:opacity-70"
-          title="Vuốt hoặc chạm để thu nhỏ"
+          title="Tap or swipe to minimize"
         >
           <div className="w-10 h-1 bg-white/30 rounded-full mb-1" />
           <span className="font-courier text-[9px] text-neutral-400 font-bold uppercase tracking-widest flex items-center gap-1">
             <ChevronDown className="w-3 h-3" />
-            <span>[THU NHỎ MINI-PLAYER]</span>
+            <span>[MINIMIZE MINI-PLAYER]</span>
           </span>
         </div>
 
@@ -414,7 +414,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
               </h2>
               {/* Typewriter tag in Courier */}
               <div className="font-courier flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] text-neutral-400 font-bold uppercase">
-                <span className="truncate max-w-[120px] sm:max-w-none">📁 {media.folderName || 'Thư mục'}</span>
+                <span className="truncate max-w-[120px] sm:max-w-none">📁 {media.folderName || 'Folder'}</span>
                 {media.duration && (
                   <>
                     <span>•</span>
@@ -458,7 +458,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
             <button
               onClick={onClose}
               className="p-1 sm:p-1.5 rounded-lg text-neutral-300 hover:text-white hover:bg-white/10 transition-colors"
-              title="Thu nhỏ / Đóng (Esc)"
+              title="Minimize / Close (Esc)"
             >
               <ChevronDown className="w-5 h-5 sm:hidden text-[var(--theme-primary-light)]" />
               <X className="w-5 h-5 hidden sm:block" />
@@ -797,7 +797,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
                           ? 'bg-[var(--theme-primary)] border-[var(--theme-primary)] text-white'
                           : 'bg-black/40 border-white/10 text-neutral-300 hover:text-white hover:bg-white/10'
                       }`}
-                      title="Chỉnh độ phân giải (Q)"
+                      title="Change Resolution / Quality (Q)"
                     >
                       <Sliders className="w-3.5 h-3.5" />
                       <span className="uppercase text-[10px]">
@@ -808,14 +808,14 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
                     {isQualityOpen && (
                       <div className="absolute bottom-full right-0 mb-2 w-44 rounded-xl bg-black/95 border border-[var(--theme-border)] shadow-2xl backdrop-blur-xl p-2 z-50 animate-fade-in font-courier">
                         <div className="text-[10px] uppercase font-bold text-neutral-400 px-2 py-1 border-b border-white/10 mb-1">
-                          ⚙️ ĐỘ PHÂN GIẢI (Q)
+                          ⚙️ RESOLUTION (Q)
                         </div>
                         {[
-                          { id: 'auto', label: 'Tự động (Auto)', tag: 'Gốc' },
+                          { id: 'auto', label: 'Auto (Original)', tag: 'Original' },
                           { id: '1080p', label: '1080p Cinema', tag: 'Full HD' },
-                          { id: '720p', label: '720p HD', tag: 'Mượt mà' },
-                          { id: '480p', label: '480p SD', tag: 'Ổn định' },
-                          { id: '360p', label: '360p Low', tag: 'Tiết kiệm' },
+                          { id: '720p', label: '720p HD', tag: 'Smooth' },
+                          { id: '480p', label: '480p SD', tag: 'Balanced' },
+                          { id: '360p', label: '360p Low', tag: 'Data Saver' },
                         ].map((opt) => (
                           <button
                             key={opt.id}
@@ -823,7 +823,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
                               sounds.playClick();
                               setSelectedQuality(opt.id);
                               setIsQualityOpen(false);
-                              showToast(`Chất lượng: ${opt.label} ⚙️`);
+                              showToast(`Quality: ${opt.label} ⚙️`);
                             }}
                             className={`w-full flex items-center justify-between px-2 py-1.5 rounded-lg text-[11px] font-bold text-left transition-colors ${
                               selectedQuality === opt.id
@@ -915,10 +915,10 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <span className="font-alegreya text-base font-bold text-white tracking-wide">
-                Danh Sách Phát Trong Thư Mục
+                Folder Playlist
               </span>
               <span className="font-courier text-xs text-neutral-400 font-bold">
-                [{playlist.length} FILE]
+                [{playlist.length} TRACKS]
               </span>
             </div>
 

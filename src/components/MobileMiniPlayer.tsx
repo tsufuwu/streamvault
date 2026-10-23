@@ -84,7 +84,7 @@ export const MobileMiniPlayer: React.FC<MobileMiniPlayerProps> = ({
               </h4>
             </div>
             <p className="font-courier text-[10px] text-neutral-400 font-bold uppercase truncate mt-0.5">
-              <span>{media.folderName || 'Thư mục'}</span>
+              <span>{media.folderName || 'Folder'}</span>
               {media.duration && (
                 <>
                   <span className="mx-1 text-white/30">•</span>

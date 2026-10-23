@@ -22,7 +22,7 @@ export const ShortcutsModal: React.FC<ShortcutsModalProps> = ({ isOpen, onClose 
     { key: 'T', desc: 'Toggle Theater Cinema mode' },
     { key: 'P', desc: 'Picture-in-Picture window' },
     { key: 'R', desc: 'Toggle Continuous Repeat' },
-    { key: 'N', desc: 'Phát bài tiếp theo trong thư mục' },
+    { key: 'N', desc: 'Play next item in playlist' },
     { key: '⌘K / /', desc: 'Focus Quick Search omnibar' },
     { key: 'Esc', desc: 'Dismiss player or active modal' },
   ];

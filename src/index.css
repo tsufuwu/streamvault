@@ -37,16 +37,16 @@
     --theme-accent: #06B6D4;
   }
 
-  [data-theme="vaporwave-y2k"] {
-    --theme-primary: #FF2A85;
-    --theme-primary-hover: #E60067;
-    --theme-primary-glow: rgba(255, 42, 133, 0.5);
-    --theme-primary-light: #FF71CE;
-    --theme-bg-base: #E8E0F0;
-    --theme-bg-surface: #F3EEFA;
-    --theme-bg-card: #FAF6FD;
-    --theme-border: #FF2A85;
-    --theme-accent: #01CDFE;
+  [data-theme="blush-light"] {
+    --theme-primary: #E26D8C;
+    --theme-primary-hover: #CD5172;
+    --theme-primary-glow: rgba(226, 109, 140, 0.35);
+    --theme-primary-light: #F7ADC2;
+    --theme-bg-base: #FAF2F5;
+    --theme-bg-surface: #FFFFFF;
+    --theme-bg-card: #FFF8FA;
+    --theme-border: rgba(226, 109, 140, 0.22);
+    --theme-accent: #E26D8C;
   }
 
   body {
@@ -287,192 +287,126 @@
 }
 
 /* ════════════════════════════════════════════════════════════════
-   VAPORWAVE / PASTEL CYBERPUNK (Y2K RETRO WEB & CHROMATIC GLITCH)
+   PASTEL BLUSH PINK & WHITE (LIGHT MODE)
    ════════════════════════════════════════════════════════════════ */
 
-/* Glitch Art / Chromatic Aberration Keyframe */
-@keyframes chromatic-glitch {
-  0%, 93%, 100% {
-    text-shadow: -2.5px 0 0 #FF2A85, 2.5px 0 0 #01CDFE;
-    transform: none;
-  }
-  94% {
-    text-shadow: -4px 0 0 #FF2A85, 4px 0 0 #01CDFE;
-    transform: skew(-1.5deg);
-  }
-  96% {
-    text-shadow: 3.5px 0 0 #FF2A85, -3.5px 0 0 #01CDFE;
-    transform: skew(1.2deg);
-  }
-  98% {
-    text-shadow: -2.5px 0 0 #FF2A85, 2.5px 0 0 #01CDFE;
-    transform: none;
-  }
+[data-theme="blush-light"] {
+  color-scheme: light;
 }
 
-/* Washed-Out Pastel Hazy Background & CRT Scanlines */
-[data-theme="vaporwave-y2k"] body,
-html[data-theme="vaporwave-y2k"] body {
-  background-color: #E8E0F0 !important;
+[data-theme="blush-light"] body,
+html[data-theme="blush-light"] body {
+  background-color: #FAF2F5 !important;
   background-image: 
-    radial-gradient(circle at 12% 15%, rgba(255, 113, 206, 0.28) 0%, transparent 45%),
-    radial-gradient(circle at 88% 85%, rgba(1, 205, 254, 0.28) 0%, transparent 45%),
-    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.5) 0%, transparent 60%),
-    linear-gradient(135deg, #E9E1F5 0%, #E2ECF8 50%, #F5E2EC 100%) !important;
-  color: #1A0B2E !important;
-  font-family: 'VT323', monospace !important;
-  letter-spacing: 0.03em;
+    radial-gradient(circle at 10% 15%, rgba(247, 173, 194, 0.32) 0%, transparent 45%),
+    radial-gradient(circle at 90% 85%, rgba(255, 192, 211, 0.32) 0%, transparent 45%),
+    linear-gradient(180deg, #FDF7F9 0%, #FAF0F4 100%) !important;
+  color: #2D1A25 !important;
 }
 
-/* Authentic CRT / VHS Scanlines Overlay */
-[data-theme="vaporwave-y2k"] body::after {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 99999;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(26, 11, 46, 0.032) 0px,
-    rgba(26, 11, 46, 0.032) 1px,
-    transparent 1px,
-    transparent 3px
-  );
+/* Light Mode Text Legibility */
+[data-theme="blush-light"] .text-white {
+  color: #2D1A25 !important;
 }
 
-/* Retro Web / Y2K UI: Pixel (8-bit) Typography */
-[data-theme="vaporwave-y2k"] * {
-  font-family: 'VT323', 'Courier Prime', monospace;
+[data-theme="blush-light"] .text-\[\#FFF0F5\] {
+  color: #2D1A25 !important;
 }
 
-[data-theme="vaporwave-y2k"] h1,
-[data-theme="vaporwave-y2k"] h2,
-[data-theme="vaporwave-y2k"] h3,
-[data-theme="vaporwave-y2k"] .font-alegreya,
-[data-theme="vaporwave-y2k"] .font-sans {
-  font-family: 'Silkscreen', 'VT323', monospace !important;
-  text-transform: uppercase;
-  font-weight: 700;
-  letter-spacing: -0.01em;
+[data-theme="blush-light"] .text-neutral-300 {
+  color: #5C4554 !important;
 }
 
-[data-theme="vaporwave-y2k"] .font-courier {
-  font-family: 'VT323', monospace !important;
-  font-size: 1.15em;
-  letter-spacing: 0.04em;
+[data-theme="blush-light"] .text-neutral-400 {
+  color: #7D6374 !important;
 }
 
-/* Glitch Art & Chromatic Aberration: Text Borders (Magenta left, Cyan right) */
-[data-theme="vaporwave-y2k"] h1,
-[data-theme="vaporwave-y2k"] h2,
-[data-theme="vaporwave-y2k"] h3,
-[data-theme="vaporwave-y2k"] .font-alegreya {
-  text-shadow: -2.5px 0 0 #FF2A85, 2.5px 0 0 #01CDFE !important;
-  animation: chromatic-glitch 5.5s infinite ease-in-out;
+[data-theme="blush-light"] .text-neutral-500 {
+  color: #9E8595 !important;
 }
 
-[data-theme="vaporwave-y2k"] p,
-[data-theme="vaporwave-y2k"] span,
-[data-theme="vaporwave-y2k"] button,
-[data-theme="vaporwave-y2k"] .font-courier {
-  text-shadow: -0.8px 0 0 rgba(255, 42, 133, 0.45), 0.8px 0 0 rgba(1, 205, 254, 0.45);
+/* Surfaces, Cards & Windows: Crisp white and soft rosy white */
+[data-theme="blush-light"] .bg-\[\#070509\] {
+  background-color: #FAF2F5 !important;
 }
 
-/* Chromatic Aberration: Window Frames & Cards (Hồng lệch sang trái, Xanh lơ lệch sang phải) */
-[data-theme="vaporwave-y2k"] .rounded-2xl,
-[data-theme="vaporwave-y2k"] .rounded-3xl,
-[data-theme="vaporwave-y2k"] .rounded-xl {
-  box-shadow: -3.5px 0 0 #FF2A85, 3.5px 0 0 #01CDFE, 0 8px 24px rgba(45, 18, 77, 0.1) !important;
-  border-color: rgba(1, 205, 254, 0.65) !important;
+[data-theme="blush-light"] .from-\[var\(--theme-bg-surface\)\]\/95 {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 245, 248, 0.95) 100%) !important;
 }
 
-[data-theme="vaporwave-y2k"] .group.relative:hover,
-[data-theme="vaporwave-y2k"] .rounded-2xl:hover {
-  box-shadow: -5px 0 0 #FF2A85, 5px 0 0 #01CDFE, 0 14px 30px rgba(255, 42, 133, 0.22) !important;
-  transform: translateY(-2px);
+[data-theme="blush-light"] .bg-white\/5,
+[data-theme="blush-light"] .bg-white\/10 {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(226, 109, 140, 0.18) !important;
 }
 
-/* High Legibility on Washed Pastel Background */
-[data-theme="vaporwave-y2k"] .text-white {
-  color: #1A0B2E !important;
+[data-theme="blush-light"] .bg-black\/50,
+[data-theme="blush-light"] .bg-black\/60,
+[data-theme="blush-light"] .bg-black\/40,
+[data-theme="blush-light"] .bg-black\/80 {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+  color: #2D1A25 !important;
+  border-color: rgba(226, 109, 140, 0.2) !important;
 }
 
-[data-theme="vaporwave-y2k"] .text-neutral-300,
-[data-theme="vaporwave-y2k"] .text-neutral-400 {
-  color: #47365F !important;
+[data-theme="blush-light"] .border-white\/10,
+[data-theme="blush-light"] .border-white\/5,
+[data-theme="blush-light"] .border-white\/15,
+[data-theme="blush-light"] .border-white\/20 {
+  border-color: rgba(226, 109, 140, 0.18) !important;
 }
 
-[data-theme="vaporwave-y2k"] .text-neutral-500 {
-  color: #695880 !important;
+/* Card Shadows & Hover */
+[data-theme="blush-light"] .rounded-2xl,
+[data-theme="blush-light"] .rounded-3xl,
+[data-theme="blush-light"] .rounded-xl {
+  box-shadow: 0 4px 20px rgba(226, 109, 140, 0.08) !important;
+  border-color: rgba(226, 109, 140, 0.22) !important;
 }
 
-/* Card & Surface Overrides for Bright Washed Pastel Vibe */
-[data-theme="vaporwave-y2k"] .bg-\[\#070509\] {
-  background-color: #E8E0F0 !important;
+[data-theme="blush-light"] .group.relative:hover,
+[data-theme="blush-light"] .rounded-2xl:hover {
+  box-shadow: 0 10px 28px rgba(226, 109, 140, 0.18) !important;
 }
 
-[data-theme="vaporwave-y2k"] .bg-white\/5,
-[data-theme="vaporwave-y2k"] .bg-white\/10 {
-  background-color: rgba(255, 255, 255, 0.72) !important;
-  border-color: rgba(1, 205, 254, 0.45) !important;
+/* Header & Mobile Navigation */
+[data-theme="blush-light"] header {
+  background-color: rgba(255, 248, 250, 0.92) !important;
+  border-bottom: 1px solid rgba(226, 109, 140, 0.25) !important;
+  box-shadow: 0 2px 16px rgba(226, 109, 140, 0.08) !important;
 }
 
-[data-theme="vaporwave-y2k"] .bg-black\/50,
-[data-theme="vaporwave-y2k"] .bg-black\/60,
-[data-theme="vaporwave-y2k"] .bg-black\/40 {
-  background-color: rgba(255, 255, 255, 0.88) !important;
-  color: #1A0B2E !important;
-  border-color: rgba(255, 42, 133, 0.3) !important;
+[data-theme="blush-light"] nav.md\:hidden {
+  background-color: rgba(255, 248, 250, 0.96) !important;
+  border-top: 1px solid rgba(226, 109, 140, 0.25) !important;
+  box-shadow: 0 -4px 20px rgba(226, 109, 140, 0.1) !important;
 }
 
-[data-theme="vaporwave-y2k"] .border-white\/10,
-[data-theme="vaporwave-y2k"] .border-white\/5,
-[data-theme="vaporwave-y2k"] .border-white\/15 {
-  border-color: rgba(1, 205, 254, 0.35) !important;
-}
-
-/* Retro OS Window Title Bar Effect on Header & Modals */
-[data-theme="vaporwave-y2k"] header {
-  background-color: rgba(232, 224, 240, 0.94) !important;
-  border-bottom: 2px solid #FF2A85 !important;
-  box-shadow: 0 3px 0 #01CDFE, 0 8px 24px rgba(0, 0, 0, 0.05) !important;
-}
-
-[data-theme="vaporwave-y2k"] nav.md\:hidden {
-  background-color: rgba(243, 238, 250, 0.96) !important;
-  border-top: 2px solid #FF2A85 !important;
-  box-shadow: 0 -3px 0 #01CDFE !important;
-}
-
-/* Inputs & Form Elements */
-[data-theme="vaporwave-y2k"] input,
-[data-theme="vaporwave-y2k"] select {
+/* Inputs & Form Controls */
+[data-theme="blush-light"] input,
+[data-theme="blush-light"] select {
   background-color: #FFFFFF !important;
-  color: #1A0B2E !important;
-  border: 1.5px solid #01CDFE !important;
-  box-shadow: inset 1px 1px 0 rgba(0,0,0,0.08), -2px 0 0 #FF2A85 !important;
+  color: #2D1A25 !important;
+  border: 1px solid rgba(226, 109, 140, 0.3) !important;
+  box-shadow: 0 2px 6px rgba(226, 109, 140, 0.05) !important;
 }
 
-[data-theme="vaporwave-y2k"] input::placeholder {
-  color: #7B6B92 !important;
+[data-theme="blush-light"] input::placeholder {
+  color: #9E8595 !important;
 }
 
-/* Retro Y2K Scrollbars */
-[data-theme="vaporwave-y2k"] ::-webkit-scrollbar-track {
-  background: #E1D8EB !important;
+/* Scrollbars */
+[data-theme="blush-light"] ::-webkit-scrollbar-track {
+  background: #F8EDF1 !important;
 }
 
-[data-theme="vaporwave-y2k"] ::-webkit-scrollbar-thumb {
-  background: #FF2A85 !important;
-  border-radius: 0px !important;
-  box-shadow: -1.5px 0 0 #01CDFE;
+[data-theme="blush-light"] ::-webkit-scrollbar-thumb {
+  background: #E26D8C !important;
+  border-radius: 9999px !important;
 }
 
-[data-theme="vaporwave-y2k"] ::-webkit-scrollbar-thumb:hover {
-  background: #01CDFE !important;
+[data-theme="blush-light"] ::-webkit-scrollbar-thumb:hover {
+  background: #CD5172 !important;
 }
 
 

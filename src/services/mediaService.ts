@@ -139,10 +139,10 @@ export async function fetchMediaList(): Promise<{ media: MediaItem[]; folders: F
         if (json && Array.isArray(json.data) && json.data.length > 0) {
           const streamBase = ep.startsWith('http') ? REMOTE_FALLBACK_STREAM : '/stream-media';
           const remoteMedia: MediaItem[] = json.data.map((item: any) => {
-            const folderName = (item.folderName || 'Thư mục gốc').trim();
+            const folderName = (item.folderName || 'Root').trim();
             const folderPath = Array.isArray(item.folderPath) && item.folderPath.length > 0
               ? item.folderPath
-              : (folderName !== 'Thư mục gốc' ? [folderName] : []);
+              : (folderName !== 'Root' && folderName !== 'Thư mục gốc' ? [folderName] : []);
 
             return {
               ...item,

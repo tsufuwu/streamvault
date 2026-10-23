@@ -41,16 +41,16 @@ export const CustomMediaModal: React.FC<CustomMediaModalProps> = ({
 
     const fileId = extractFileId(driveInput);
     if (!fileId || fileId.length < 5) {
-      setError('Vui lòng nhập đường link hoặc ID tệp Google Drive hợp lệ!');
+      setError('Please enter a valid Google Drive link or File ID!');
       return;
     }
 
     if (!title.trim()) {
-      setError('Vui lòng nhập tên video hoặc bài hát!');
+      setError('Please enter a title for the media!');
       return;
     }
 
-    const targetFolder = folder === '__custom__' ? customFolder.trim() || 'Thư mục cá nhân' : folder;
+    const targetFolder = folder === '__custom__' ? customFolder.trim() || 'My Collection' : folder;
     const finalThumbnail = thumbnailUrl.trim() || `https://lh3.googleusercontent.com/u/0/d/${fileId}=w800`;
 
     const newItem: MediaItem = {
@@ -91,7 +91,7 @@ export const CustomMediaModal: React.FC<CustomMediaModalProps> = ({
           <div className="flex items-center gap-2 text-[var(--theme-primary)]">
             <Plus className="w-5 h-5" />
             <h3 className="font-alegreya text-xl font-bold text-white tracking-wide">
-              Thêm Tệp Google Drive
+              Add Google Drive Media
             </h3>
           </div>
           <button
@@ -108,36 +108,36 @@ export const CustomMediaModal: React.FC<CustomMediaModalProps> = ({
         <form onSubmit={handleSubmit} className="space-y-4 font-courier">
           {error && (
             <div className="p-3 rounded-xl bg-red-950/80 border border-red-500/40 text-red-200 text-xs font-bold">
-              [LỖI]: {error}
+              [ERROR]: {error}
             </div>
           )}
 
           <div>
             <label className="block text-xs font-bold text-neutral-300 mb-1.5 flex items-center gap-1.5 uppercase tracking-wider">
               <Link2 className="w-3.5 h-3.5 text-[var(--theme-primary)]" />
-              <span>Link chia sẻ hoặc ID Google Drive:</span>
+              <span>Google Drive Share Link or File ID:</span>
             </label>
             <input
               type="text"
               required
-              placeholder="https://drive.google.com/file/d/1we2Sh... hoặc 1JF02Bx..."
+              placeholder="https://drive.google.com/file/d/1we2Sh... or 1JF02Bx..."
               value={driveInput}
               onChange={(e) => setDriveInput(e.target.value)}
               className="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-white text-xs placeholder:text-neutral-500 focus:outline-none focus:border-[var(--theme-primary)]"
             />
             <p className="text-[11px] text-neutral-400 mt-1 font-normal">
-              Đảm bảo quyền tệp Drive là: <span className="text-emerald-400 font-bold">"Bất kỳ ai có đường liên kết đều có thể xem"</span>
+              Ensure Google Drive permission is set to: <span className="text-emerald-400 font-bold">"Anyone with the link can view"</span>
             </p>
           </div>
 
           <div>
             <label className="block text-xs font-bold text-neutral-300 mb-1.5 uppercase tracking-wider">
-              Tên video hoặc bài hát:
+              Media Title:
             </label>
             <input
               type="text"
               required
-              placeholder="VD: Tuyển tập nhạc Lo-Fi..."
+              placeholder="e.g. My Favorite Song or Movie..."
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-white text-xs placeholder:text-neutral-500 focus:outline-none focus:border-[var(--theme-primary)]"
@@ -147,7 +147,7 @@ export const CustomMediaModal: React.FC<CustomMediaModalProps> = ({
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-bold text-neutral-300 mb-1.5 uppercase tracking-wider">
-                Định dạng:
+                Media Format:
               </label>
               <div className="flex gap-2">
                 <button
@@ -160,7 +160,7 @@ export const CustomMediaModal: React.FC<CustomMediaModalProps> = ({
                   }`}
                 >
                   <Film className="w-3.5 h-3.5" />
-                  <span>Phim / Video</span>
+                  <span>Video</span>
                 </button>
 
                 <button
@@ -173,14 +173,14 @@ export const CustomMediaModal: React.FC<CustomMediaModalProps> = ({
                   }`}
                 >
                   <Music className="w-3.5 h-3.5" />
-                  <span>Nhạc CD</span>
+                  <span>Audio</span>
                 </button>
               </div>
             </div>
 
             <div>
               <label className="block text-xs font-bold text-neutral-300 mb-1.5 uppercase tracking-wider">
-                Thư mục lưu:
+                Save to Folder:
               </label>
               <select
                 value={folder}
@@ -193,7 +193,7 @@ export const CustomMediaModal: React.FC<CustomMediaModalProps> = ({
                   </option>
                 ))}
                 <option value="__custom__" className="bg-neutral-900 text-white">
-                  + Tạo thư mục mới...
+                  + Create new folder...
                 </option>
               </select>
             </div>
@@ -202,12 +202,12 @@ export const CustomMediaModal: React.FC<CustomMediaModalProps> = ({
           {folder === '__custom__' && (
             <div>
               <label className="block text-xs font-bold text-neutral-300 mb-1.5 uppercase tracking-wider">
-                Tên thư mục mới:
+                New Folder Name:
               </label>
               <input
                 type="text"
                 required
-                placeholder="VD: Nhạc tuyển chọn..."
+                placeholder="e.g. Chill Session..."
                 value={customFolder}
                 onChange={(e) => setCustomFolder(e.target.value)}
                 className="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-white text-xs placeholder:text-neutral-500 focus:outline-none focus:border-[var(--theme-primary)]"
@@ -221,14 +221,14 @@ export const CustomMediaModal: React.FC<CustomMediaModalProps> = ({
               onClick={onClose}
               className="px-4 py-2 rounded-xl text-xs font-bold text-neutral-400 hover:text-white"
             >
-              Hủy
+              Cancel
             </button>
             <button
               type="submit"
               className="px-5 py-2.5 rounded-xl text-xs font-bold bg-[var(--theme-primary)] hover:bg-[var(--theme-primary-hover)] text-white shadow-lg shadow-[var(--theme-primary)]/30 flex items-center gap-1.5"
             >
               <Check className="w-4 h-4" />
-              <span>Lưu Vào Danh Sách</span>
+              <span>Save to Library</span>
             </button>
           </div>
         </form>

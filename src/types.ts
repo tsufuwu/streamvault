@@ -1,6 +1,6 @@
 export type MediaType = 'video' | 'audio';
 
-export type AppTheme = 'vinyl-pink' | 'citrus-orange' | 'amethyst-violet' | 'vaporwave-y2k';
+export type AppTheme = 'vinyl-pink' | 'citrus-orange' | 'amethyst-violet' | 'blush-light';
 
 export interface MediaItem {
   id: string;

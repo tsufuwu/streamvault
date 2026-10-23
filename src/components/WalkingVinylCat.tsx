@@ -26,7 +26,7 @@ export const WalkingVinylCat: React.FC<WalkingVinylCatProps> = ({
         height: catHeight,
         transform: 'rotate(16deg)',
       }}
-      title="Chú mèo đen bước đi trên mép đĩa than"
+      title="Black cat walking on vinyl disc rim"
     >
       <svg
         viewBox="0 0 76 46"

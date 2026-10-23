@@ -90,7 +90,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <input
               ref={searchInputRef}
               type="text"
-              placeholder="Tìm kiếm phim, video, bài hát..."
+              placeholder="Search movies, videos, music..."
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               className="font-courier w-full pl-9 pr-14 py-2 rounded-full bg-white/5 border border-white/10 hover:border-white/20 focus:border-[var(--theme-primary)] text-xs text-white placeholder:text-neutral-500 focus:outline-none transition-all shadow-inner"
@@ -106,7 +106,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Action Controls */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           {/* Theme Selector Swatches */}
-          <div className="flex items-center gap-1 bg-white/5 p-1 rounded-full border border-white/10" title="Chọn Theme giao diện">
+          <div className="flex items-center gap-1 bg-white/5 p-1 rounded-full border border-white/10" title="Select Theme">
             <button
               onClick={() => {
                 sounds.playClick();
@@ -118,7 +118,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   : 'opacity-60 hover:opacity-100'
               }`}
               style={{ backgroundColor: '#FF2D75' }}
-              title="Theme: Neon Vinyl Pink"
+              title="Theme: Neon Vinyl Pink (Dark)"
             />
             <button
               onClick={() => {
@@ -131,7 +131,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   : 'opacity-60 hover:opacity-100'
               }`}
               style={{ backgroundColor: '#FF7A00' }}
-              title="Theme: Warm Citrus Sunset"
+              title="Theme: Warm Citrus Sunset (Dark)"
             />
             <button
               onClick={() => {
@@ -144,22 +144,22 @@ export const Navbar: React.FC<NavbarProps> = ({
                   : 'opacity-60 hover:opacity-100'
               }`}
               style={{ backgroundColor: '#A855F7' }}
-              title="Theme: Amethyst Violet"
+              title="Theme: Amethyst Violet (Dark)"
             />
             <button
               onClick={() => {
                 sounds.playClick();
-                onThemeChange('vaporwave-y2k');
+                onThemeChange('blush-light');
               }}
-              className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center transition-all overflow-hidden ${
-                currentTheme === 'vaporwave-y2k'
-                  ? 'ring-2 ring-white scale-110 shadow-sm'
-                  : 'opacity-60 hover:opacity-100'
+              className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center transition-all overflow-hidden border border-pink-300 ${
+                currentTheme === 'blush-light'
+                  ? 'ring-2 ring-pink-400 scale-110 shadow-sm'
+                  : 'opacity-70 hover:opacity-100'
               }`}
               style={{
-                background: 'linear-gradient(135deg, #FF2A85 50%, #01CDFE 50%)',
+                background: 'linear-gradient(135deg, #FFFFFF 50%, #E26D8C 50%)',
               }}
-              title="Theme: Vaporwave / Pastel Cyberpunk (Y2K Glitch)"
+              title="Theme: Pastel Pink & White (Light Mode)"
             />
           </div>
 
@@ -228,7 +228,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <Search className="w-3.5 h-3.5 text-neutral-400 absolute left-3 pointer-events-none" />
           <input
             type="text"
-            placeholder="Search vinyl tracks, movies, reels..."
+            placeholder="Search movies, videos, music..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             className="font-courier w-full pl-8 pr-8 py-1.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white placeholder:text-neutral-500 focus:outline-none focus:border-[var(--theme-primary)]"
