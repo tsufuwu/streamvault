@@ -1,4 +1,5 @@
 import React from 'react';
+import { WalkingVinylCat } from './WalkingVinylCat';
 
 interface VinylDiscProps {
   size?: number;
@@ -29,15 +30,21 @@ export const VinylDisc: React.FC<VinylDiscProps> = ({
 
   return (
     <div
-      className={`relative rounded-full select-none flex-shrink-0 flex items-center justify-center ${spinClass} ${className}`}
+      className={`relative rounded-full select-none flex-shrink-0 flex items-center justify-center ${className}`}
       style={{
         width: size,
         height: size,
-        background: 'radial-gradient(circle at center, #1b0c19 0%, #100610 35%, #080307 70%, #030103 100%)',
-        boxShadow: '0 10px 25px rgba(0,0,0,0.9), inset 0 0 12px rgba(255,255,255,0.08)',
       }}
       title={title}
     >
+      {/* ─── 1. The Spinning Vinyl Record Platter ─── */}
+      <div
+        className={`w-full h-full rounded-full flex items-center justify-center ${spinClass}`}
+        style={{
+          background: 'radial-gradient(circle at center, #1b0c19 0%, #100610 35%, #080307 70%, #030103 100%)',
+          boxShadow: '0 10px 25px rgba(0,0,0,0.9), inset 0 0 12px rgba(255,255,255,0.08)',
+        }}
+      >
       {/* Grooves & Conic Light Reflection Sheen */}
       <div
         className="absolute inset-0 rounded-full pointer-events-none"
@@ -107,6 +114,10 @@ export const VinylDisc: React.FC<VinylDiscProps> = ({
           }}
         />
       </div>
+      </div>
+
+      {/* ─── 2. Cute Black Cat Walking on top of the vinyl disc! ─── */}
+      <WalkingVinylCat isWalking={isSpinning} discSize={size} />
     </div>
   );
 };

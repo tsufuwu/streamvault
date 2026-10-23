@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MediaItem } from '../types';
 import { CDSleeveDiscPackage } from './CDSleeveDiscPackage';
+import { PeekingCat } from './PeekingCat';
 import { Heart, ExternalLink, Trash2 } from 'lucide-react';
 import { sounds } from '../utils/soundEffects';
 
@@ -62,6 +63,8 @@ export const MediaCard: React.FC<MediaCardProps> = ({
           : 'hover:-translate-y-1 hover:border-[var(--theme-primary)]/50 hover:shadow-xl hover:shadow-[var(--theme-primary-glow)]/20'
       }`}
     >
+      {/* 🐈 Chú mèo đen lấp ló đằng sau target khi hover */}
+      <PeekingCat position="top-right" size={44} />
       {/* ─── CD Sleeve Wrapper (Bọc đĩa CD bên ngoài + đĩa than) ─── */}
       <div className="w-full flex items-center justify-center py-1 sm:py-2 px-0.5 sm:px-1 overflow-hidden">
         {/* Mobile View: size 105px */}

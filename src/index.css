@@ -186,3 +186,91 @@
 .eq-bar {
   animation: eq-bounce 0.8s ease-in-out infinite;
 }
+
+/* ─── Cute Black Cat Animations ─── */
+@keyframes cat-paw-fwd {
+  0%, 100% {
+    transform: rotate(-22deg);
+  }
+  50% {
+    transform: rotate(22deg);
+  }
+}
+
+@keyframes cat-paw-bwd {
+  0%, 100% {
+    transform: rotate(22deg);
+  }
+  50% {
+    transform: rotate(-22deg);
+  }
+}
+
+@keyframes cat-tail-swish {
+  0%, 100% {
+    transform: rotate(-10deg);
+  }
+  50% {
+    transform: rotate(18deg);
+  }
+}
+
+@keyframes cat-body-bob {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes cat-ear-twitch {
+  0%, 85%, 100% {
+    transform: rotate(0deg);
+  }
+  90% {
+    transform: rotate(-12deg);
+  }
+  95% {
+    transform: rotate(6deg);
+  }
+}
+
+@keyframes cat-blink {
+  0%, 92%, 100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.1);
+  }
+}
+
+.animate-cat-paw-fwd {
+  animation: cat-paw-fwd 0.45s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+.animate-cat-paw-bwd {
+  animation: cat-paw-bwd 0.45s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+.animate-cat-tail {
+  animation: cat-tail-swish 1.2s ease-in-out infinite;
+  transform-origin: bottom left;
+}
+
+.animate-cat-bob {
+  animation: cat-body-bob 0.45s ease-in-out infinite;
+}
+
+.animate-cat-blink {
+  animation: cat-blink 4s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.animate-cat-ear-twitch {
+  animation: cat-ear-twitch 3s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+

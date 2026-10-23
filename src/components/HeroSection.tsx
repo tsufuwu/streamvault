@@ -1,5 +1,6 @@
 import React from 'react';
 import { CDSleeveDiscPackage } from './CDSleeveDiscPackage';
+import { PeekingCat } from './PeekingCat';
 import { Play, Disc, Film, Music } from 'lucide-react';
 import { MediaItem } from '../types';
 import { sounds } from '../utils/soundEffects';
@@ -74,19 +75,23 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           {/* Featured Play Action */}
           {featuredMedia && (
             <div className="pt-2 sm:pt-3 flex flex-col sm:flex-row sm:items-center gap-2.5 sm:gap-4">
-              <button
-                onClick={() => {
-                  sounds.playNeedleDrop();
-                  onPlayFeatured(featuredMedia);
-                }}
-                className="w-full sm:w-auto px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-[var(--theme-primary)] hover:bg-[var(--theme-primary-hover)] text-white text-xs sm:text-sm font-bold shadow-xl shadow-[var(--theme-primary-glow)] flex items-center justify-center gap-2 transform active:scale-[0.98] transition-all"
-              >
-                <Play className="w-4 h-4 fill-current shrink-0" />
-                <span className="font-alegreya text-sm sm:text-base font-bold">Phát nổi bật:</span>
-                <span className="font-courier text-xs opacity-90 truncate max-w-[180px] sm:max-w-[200px]">
-                  {featuredMedia.title}
-                </span>
-              </button>
+              <div className="relative group/play inline-block">
+                {/* 🐈 Chú mèo đen lấp ló đằng sau nút Play khi hover */}
+                <PeekingCat position="top-right" size={38} className="group-hover/play:-translate-y-6" />
+                <button
+                  onClick={() => {
+                    sounds.playNeedleDrop();
+                    onPlayFeatured(featuredMedia);
+                  }}
+                  className="w-full sm:w-auto px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-[var(--theme-primary)] hover:bg-[var(--theme-primary-hover)] text-white text-xs sm:text-sm font-bold shadow-xl shadow-[var(--theme-primary-glow)] flex items-center justify-center gap-2 transform active:scale-[0.98] transition-all relative z-10"
+                >
+                  <Play className="w-4 h-4 fill-current shrink-0" />
+                  <span className="font-alegreya text-sm sm:text-base font-bold">Phát nổi bật:</span>
+                  <span className="font-courier text-xs opacity-90 truncate max-w-[180px] sm:max-w-[200px]">
+                    {featuredMedia.title}
+                  </span>
+                </button>
+              </div>
 
               <div className="font-courier text-[10px] sm:text-xs text-neutral-400 text-center sm:text-left">
                 THƯ MỤC: <span className="text-white font-bold">{featuredMedia.folderName || 'Thư mục gốc'}</span>
@@ -106,6 +111,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             className="cursor-pointer group relative p-1 sm:p-2"
             title="Click to play featured vinyl CD album!"
           >
+            {/* 🐈 Chú mèo đen lấp ló đằng sau album khi hover */}
+            <PeekingCat position="top-center" size={54} className="group-hover:-translate-y-8" />
             {/* Concentric soundwave pulsing rings */}
             <div className="absolute inset-0 rounded-3xl border border-[var(--theme-primary)]/20 animate-pulse opacity-40 pointer-events-none" />
 

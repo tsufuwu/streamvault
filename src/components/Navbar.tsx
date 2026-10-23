@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { Search, Heart, Plus, Volume2, VolumeX, Keyboard, Palette, Disc3 } from 'lucide-react';
 import { AppTheme } from '../types';
 import { sounds } from '../utils/soundEffects';
+import { PeekingCat } from './PeekingCat';
 
 interface NavbarProps {
   searchQuery: string;
@@ -56,7 +57,23 @@ export const Navbar: React.FC<NavbarProps> = ({
           className="flex items-center gap-2.5 cursor-pointer select-none group"
           title="VinylStream"
         >
-          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white/5 border border-white/10 group-hover:border-[var(--theme-primary)]/50 flex items-center justify-center transition-all group-hover:scale-105 shadow-sm">
+          <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white/5 border border-white/10 group-hover:border-[var(--theme-primary)]/50 flex items-center justify-center transition-all group-hover:scale-105 shadow-sm">
+            {/* Left Cat Ear */}
+            <div className="absolute -top-2 left-0.5 w-2.5 h-3 pointer-events-none transition-transform origin-bottom-right group-hover:-rotate-12 group-hover:scale-110">
+              <svg viewBox="0 0 10 12" className="w-full h-full overflow-visible" fill="none">
+                <polygon points="1,12 3,1 9,9" fill="#140816" stroke="rgba(255, 45, 117, 0.6)" strokeWidth="1" />
+                <polygon points="2.5,10 4,3 7.5,8" fill="var(--theme-primary)" opacity="0.85" />
+              </svg>
+            </div>
+
+            {/* Right Cat Ear */}
+            <div className="absolute -top-2 right-0.5 w-2.5 h-3 pointer-events-none transition-transform origin-bottom-left group-hover:rotate-12 group-hover:scale-110">
+              <svg viewBox="0 0 10 12" className="w-full h-full overflow-visible" fill="none">
+                <polygon points="9,12 7,1 1,9" fill="#140816" stroke="rgba(255, 45, 117, 0.6)" strokeWidth="1" />
+                <polygon points="7.5,10 6,3 2.5,8" fill="var(--theme-primary)" opacity="0.85" />
+              </svg>
+            </div>
+
             <Disc3 className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--theme-primary)] group-hover:rotate-45 transition-transform duration-300" />
           </div>
 
@@ -68,8 +85,9 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* Global Omnibar Search (Typewriter Courier font input) */}
-        <div className="flex-1 max-w-md relative hidden md:block">
-          <div className="relative flex items-center">
+        <div className="flex-1 max-w-md relative hidden md:block group/search">
+          <PeekingCat position="top-right" size={34} className="group-hover/search:-translate-y-5" />
+          <div className="relative flex items-center z-10">
             <Search className="w-4 h-4 text-neutral-400 absolute left-3.5 pointer-events-none" />
             <input
               ref={searchInputRef}
