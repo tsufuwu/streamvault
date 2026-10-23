@@ -1627,6 +1627,43 @@ if (shortcutsModal) {
   });
 }
 
+// ─── Mobile Bottom Nav: Trang Chủ ──────────────────────
+const bnavHome = document.getElementById('bnav-home');
+if (bnavHome) {
+  bnavHome.addEventListener('click', (e) => {
+    createJuiceSplash(e.clientX, e.clientY);
+    // 1. Đóng video player nếu đang mở trên mobile
+    closePlayer();
+
+    // 2. Reset tìm kiếm
+    if (searchInput) {
+      searchInput.value = '';
+      state.search = '';
+    }
+
+    // 3. Reset filter về 'all' và thư mục gốc
+    state.filter = 'all';
+    state.currentPath = [];
+
+    // 4. Đồng bộ active: bnav-home sáng, các nút filter khác tắt active ở bottom-nav
+    document.querySelectorAll('.bottom-nav-item').forEach(b => b.classList.remove('active'));
+    bnavHome.classList.add('active');
+
+    // Đồng bộ các filter button trên sidebar & mobile top chip
+    document.querySelectorAll('[data-filter]').forEach(b => {
+      const isAll = b.dataset.filter === 'all';
+      b.classList.toggle('active', isAll);
+      b.setAttribute('aria-pressed', isAll ? 'true' : 'false');
+    });
+
+    // 5. Cuộn mượt lên đỉnh đầu trang
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    renderFolderNavigation();
+    renderGrid();
+  });
+}
+
 // ─── Unified Filter (Sidebar, Mobile Top Chips & Mobile Bottom Nav) ───
 document.querySelectorAll('[data-filter]').forEach(btn => {
   btn.addEventListener('click', (e) => {
@@ -1634,6 +1671,22 @@ document.querySelectorAll('[data-filter]').forEach(btn => {
     const selectedFilter = btn.dataset.filter;
     state.filter = selectedFilter;
     state.currentPath = []; // Quay về thư mục mẹ để xem toàn bộ file theo nhóm thư mục con
+
+    // Nếu bấm từ mobile bottom nav hoặc player đang mở thì đóng player
+    const isBottomNav = btn.classList.contains('bottom-nav-item');
+    if (isBottomNav || document.getElementById('player-overlay')?.classList.contains('active')) {
+      closePlayer();
+      const libSection = document.getElementById('library-section') || document.querySelector('.main-layout');
+      if (libSection) {
+        libSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    // Tắt active ở Trang Chủ nếu chọn phân loại
+    const bHome = document.getElementById('bnav-home');
+    if (bHome) {
+      bHome.classList.remove('active');
+    }
 
     // Đồng bộ trạng thái active trên toàn bộ giao diện
     document.querySelectorAll('[data-filter]').forEach(b => {
@@ -2095,15 +2148,6 @@ function initOrangeMiniGame() {
 
   if (treeWrapper) {
     treeWrapper.addEventListener('click', toggleGame);
-  }
-  const bnavTree = document.getElementById('bnav-tree-game');
-  if (bnavTree) {
-    bnavTree.addEventListener('click', () => {
-      toggleGame();
-      if (isPlaying) {
-        toast('Đã bật giỏ hứng cam! Di chuyển ngón tay trên màn hình để hứng cam nhé! 🧺🍊', 'info');
-      }
-    });
   }
 }
 

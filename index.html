@@ -7,7 +7,7 @@
   <meta name="description" content="Orangestream — Nền tảng xem phim và nghe nhạc trực tuyến từ Google Drive. Trải nghiệm mượt mà, không quảng cáo." />
   <meta name="theme-color" content="#ff7a00" />
   <meta name="referrer" content="no-referrer" />
-  <link rel="stylesheet" href="style.css?v=3.6" />
+  <link rel="stylesheet" href="style.css?v=3.7" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍊</text></svg>" />
 </head>
 <body>
@@ -539,11 +539,20 @@
     <span class="basket-cursor-icon">🧺</span>
   </div>
 
-  <!-- ─── Mobile Bottom Navigation (YouTube / Bilibili Style) ─── -->
+  <!-- ─── Mobile Bottom Navigation (YouTube / Bilibili Style: 4 Nút Trang Chủ - Tất Cả - Video - Audio) ─── -->
   <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Điều hướng chính mobile">
-    <button class="bottom-nav-item active" data-filter="all" id="bnav-all">
+    <button class="bottom-nav-item active" id="bnav-home">
+      <span class="bnav-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+      </span>
+      <span class="bnav-label">Trang Chủ</span>
+    </button>
+    <button class="bottom-nav-item" data-filter="all" id="bnav-all">
       <span class="bnav-icon">🍊</span>
-      <span class="bnav-label">Tất cả</span>
+      <span class="bnav-label">Tất Cả</span>
     </button>
     <button class="bottom-nav-item" data-filter="video" id="bnav-video">
       <span class="bnav-icon">🎬</span>
@@ -559,13 +568,9 @@
       </span>
       <span class="bnav-label">Audio</span>
     </button>
-    <button class="bottom-nav-item" id="bnav-tree-game">
-      <span class="bnav-icon">🌳</span>
-      <span class="bnav-label">Vườn Cam</span>
-    </button>
   </nav>
 
 </div><!-- /app -->
-<script type="module" src="app.js?v=3.6"></script>
+<script type="module" src="app.js?v=3.7"></script>
 </body>
 </html>
