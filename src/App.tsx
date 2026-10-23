@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { MediaItem, FolderItem, MediaType, AppTheme } from './types';
 import { fetchMediaList, saveCustomMedia, deleteCustomMedia, getFavorites, toggleFavorite, getRecents, recordRecent } from './services/mediaService';
 import { AmbientBackground } from './components/AmbientBackground';
@@ -7,11 +7,12 @@ import { HeroSection } from './components/HeroSection';
 import { CategoryFolderBar } from './components/CategoryFolderBar';
 import { MediaCard } from './components/MediaCard';
 import { PlayerModal } from './components/PlayerModal';
+import { MobileMiniPlayer } from './components/MobileMiniPlayer';
 import { MiniGameLounge } from './components/MiniGameLounge';
 import { CustomMediaModal } from './components/CustomMediaModal';
 import { ShortcutsModal } from './components/ShortcutsModal';
 import { sounds } from './utils/soundEffects';
-import { Disc3, History, Sparkles, Film, Music, Heart } from 'lucide-react';
+import { Disc3, History, Sparkles, Film, Music, Heart, Plus } from 'lucide-react';
 
 export default function App() {
   const [mediaList, setMediaList] = useState<MediaItem[]>([]);
@@ -30,6 +31,14 @@ export default function App() {
   const [isCompactView, setIsCompactView] = useState<boolean>(false);
   const [isCustomModalOpen, setIsCustomModalOpen] = useState<boolean>(false);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState<boolean>(false);
+
+  // Synchronized playback state for MobileMiniPlayer
+  const [miniPlayback, setMiniPlayback] = useState<{ isPlaying: boolean; currentTime: number; duration: number }>({
+    isPlaying: false,
+    currentTime: 0,
+    duration: 0,
+  });
+  const playbackControlRef = useRef<{ togglePlay: () => void; next: () => void } | null>(null);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('vinylstream_theme') as AppTheme;
@@ -245,6 +254,48 @@ export default function App() {
               onToggleCompactView={() => setIsCompactView(!isCompactView)}
             />
 
+            {/* Mobile Recently Spun Records Shelf (Spotify / Stories style) */}
+            {recentItems.length > 0 && (
+              <div className="lg:hidden mb-4 p-3 rounded-2xl bg-[var(--theme-bg-surface)]/70 border border-[var(--theme-border)]/50 backdrop-blur-md">
+                <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/5 font-courier text-[10px] font-bold text-neutral-400 uppercase tracking-wider">
+                  <span className="flex items-center gap-1.5 text-[var(--theme-primary-light)]">
+                    <History className="w-3.5 h-3.5" />
+                    <span>VỪA PHÁT GẦN ĐÂY</span>
+                  </span>
+                  <span className="text-[9px] text-neutral-500 font-normal">[{recentItems.length} đĩa]</span>
+                </div>
+
+                <div className="flex items-center gap-3 overflow-x-auto scrollbar-none pb-1">
+                  {recentItems.map((item) => (
+                    <div
+                      key={item.id}
+                      onClick={() => handlePlayMedia(item)}
+                      className="flex flex-col items-center shrink-0 w-20 cursor-pointer group select-none text-center"
+                    >
+                      <div className="relative w-14 h-14 rounded-full p-0.5 bg-gradient-to-tr from-[var(--theme-primary)] to-[var(--theme-primary-light)] shadow-md group-hover:scale-105 active:scale-95 transition-transform">
+                        <div className="w-full h-full rounded-full overflow-hidden bg-black relative">
+                          <img
+                            src={item.thumbnail}
+                            alt={item.title}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Disc3 className="w-5 h-5 text-white animate-spin" />
+                          </div>
+                        </div>
+                      </div>
+                      <span className="font-alegreya text-xs font-bold text-neutral-200 group-hover:text-[var(--theme-primary-light)] truncate w-full mt-1.5">
+                        {item.title}
+                      </span>
+                      <span className="font-courier text-[9px] text-neutral-400 uppercase truncate w-full -mt-0.5">
+                        {item.folderName || 'CRATE'}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Loading Indicator */}
             {loading && (
               <div className="py-24 flex flex-col items-center justify-center space-y-4">
@@ -255,15 +306,15 @@ export default function App() {
               </div>
             )}
 
-            {/* Media Items Grid */}
+            {/* Media Items Grid - 2 columns on mobile (Spotify / Apple Music style) */}
             {!loading && (
               <>
                 {filteredMedia.length > 0 ? (
                   <div
-                    className={`grid gap-5 ${
+                    className={`grid gap-3 sm:gap-5 ${
                       isCompactView
-                        ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3'
-                        : 'grid-cols-1 sm:grid-cols-2'
+                        ? 'grid-cols-2 sm:grid-cols-2 md:grid-cols-3'
+                        : 'grid-cols-2 sm:grid-cols-2'
                     }`}
                   >
                     {filteredMedia.map((media) => (
@@ -378,7 +429,26 @@ export default function App() {
         onClose={() => setIsPlayerOpen(false)}
         onSelectMedia={handlePlayMedia}
         onOpenShortcuts={() => setIsShortcutsOpen(true)}
+        onPlaybackChange={setMiniPlayback}
+        playbackControlRef={playbackControlRef}
       />
+
+      {/* Spotify & Apple Music style Floating Mini-Player on Mobile */}
+      {activeMedia && !isPlayerOpen && (
+        <MobileMiniPlayer
+          media={activeMedia}
+          isPlaying={miniPlayback.isPlaying}
+          currentTime={miniPlayback.currentTime}
+          duration={miniPlayback.duration}
+          onTogglePlay={() => playbackControlRef.current?.togglePlay()}
+          onNext={() => playbackControlRef.current?.next()}
+          onExpand={() => setIsPlayerOpen(true)}
+          onClose={() => {
+            setActiveMedia(null);
+            setIsPlayerOpen(false);
+          }}
+        />
+      )}
 
       {/* Add Custom Google Drive Media Modal */}
       <CustomMediaModal
@@ -419,8 +489,15 @@ export default function App() {
         </div>
       </footer>
       
-      {/* Mobile Bottom Navigation Bar (YouTube / Bilibili Style) */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[var(--theme-bg-base)]/95 backdrop-blur-2xl border-t border-[var(--theme-border)]/60 py-2 px-3 flex items-center justify-around font-courier text-[11px] shadow-2xl">
+      {/* Mobile Bottom Navigation Bar (iOS / Spotify / Bilibili Glassmorphism Style) */}
+      <nav
+        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0c050b]/90 backdrop-blur-2xl border-t border-[var(--theme-border)]/70 px-2 pt-2 flex items-center justify-around font-courier text-[10px] shadow-2xl"
+        style={{
+          paddingBottom: 'max(0.6rem, env(safe-area-inset-bottom, 0.6rem))',
+          boxShadow: '0 -10px 30px rgba(0,0,0,0.7)',
+        }}
+      >
+        {/* Tab 1: Khám Phá */}
         <button
           onClick={() => {
             sounds.playClick();
@@ -431,33 +508,22 @@ export default function App() {
             setIsPlayerOpen(false);
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
-          className={`flex flex-col items-center gap-1 transition-colors ${
+          className={`flex flex-col items-center gap-1 transition-all flex-1 py-1 ${
             mediaTypeFilter === 'all' && currentPath.length === 0 && !searchQuery
-              ? 'text-[var(--theme-primary)] font-bold'
-              : 'text-neutral-400 hover:text-white'
+              ? 'text-[var(--theme-primary)] font-bold scale-105'
+              : 'text-neutral-400 hover:text-white active:scale-95'
           }`}
         >
-          <Disc3 className="w-4 h-4" />
-          <span>Trang Chủ</span>
+          <div className="relative">
+            <Disc3 className="w-4 h-4" />
+            {mediaTypeFilter === 'all' && currentPath.length === 0 && !searchQuery && (
+              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[var(--theme-primary)]" />
+            )}
+          </div>
+          <span className="tracking-tight">Khám Phá</span>
         </button>
 
-        <button
-          onClick={() => {
-            sounds.playClick();
-            setMediaTypeFilter('all');
-            setCurrentPath([]);
-            setSelectedFolder(null);
-          }}
-          className={`flex flex-col items-center gap-1 transition-colors ${
-            mediaTypeFilter === 'all'
-              ? 'text-[var(--theme-primary)] font-bold'
-              : 'text-neutral-400 hover:text-white'
-          }`}
-        >
-          <Disc3 className="w-4 h-4" />
-          <span>Tất Cả</span>
-        </button>
-
+        {/* Tab 2: Phim */}
         <button
           onClick={() => {
             sounds.playClick();
@@ -465,16 +531,22 @@ export default function App() {
             setCurrentPath([]);
             setSelectedFolder(null);
           }}
-          className={`flex flex-col items-center gap-1 transition-colors ${
+          className={`flex flex-col items-center gap-1 transition-all flex-1 py-1 ${
             mediaTypeFilter === 'video'
-              ? 'text-[var(--theme-primary)] font-bold'
-              : 'text-neutral-400 hover:text-white'
+              ? 'text-[var(--theme-primary)] font-bold scale-105'
+              : 'text-neutral-400 hover:text-white active:scale-95'
           }`}
         >
-          <Film className="w-4 h-4" />
-          <span>Phim</span>
+          <div className="relative">
+            <Film className="w-4 h-4" />
+            {mediaTypeFilter === 'video' && (
+              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[var(--theme-primary)]" />
+            )}
+          </div>
+          <span className="tracking-tight">Phim</span>
         </button>
 
+        {/* Tab 3: Nhạc CD */}
         <button
           onClick={() => {
             sounds.playClick();
@@ -482,34 +554,60 @@ export default function App() {
             setCurrentPath([]);
             setSelectedFolder(null);
           }}
-          className={`flex flex-col items-center gap-1 transition-colors ${
+          className={`flex flex-col items-center gap-1 transition-all flex-1 py-1 ${
             mediaTypeFilter === 'audio'
-              ? 'text-[var(--theme-primary)] font-bold'
-              : 'text-neutral-400 hover:text-white'
+              ? 'text-[var(--theme-primary)] font-bold scale-105'
+              : 'text-neutral-400 hover:text-white active:scale-95'
           }`}
         >
-          <Music className="w-4 h-4" />
-          <span>Nhạc CD</span>
+          <div className="relative">
+            <Music className="w-4 h-4" />
+            {mediaTypeFilter === 'audio' && (
+              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[var(--theme-primary)]" />
+            )}
+          </div>
+          <span className="tracking-tight">Nhạc CD</span>
         </button>
 
+        {/* Tab 4: Yêu thích */}
         <button
           onClick={() => {
             sounds.playClick();
             setMediaTypeFilter(mediaTypeFilter === 'favorites' ? 'all' : 'favorites');
           }}
-          className={`flex flex-col items-center gap-1 transition-colors relative ${
+          className={`flex flex-col items-center gap-1 transition-all flex-1 py-1 relative ${
             mediaTypeFilter === 'favorites'
-              ? 'text-pink-500 font-bold'
-              : 'text-neutral-400 hover:text-white'
+              ? 'text-pink-500 font-bold scale-105'
+              : 'text-neutral-400 hover:text-white active:scale-95'
           }`}
         >
-          <Heart className={`w-4 h-4 ${mediaTypeFilter === 'favorites' ? 'fill-current text-pink-500' : ''}`} />
-          <span>Yêu thích</span>
-          {counts.favorites > 0 && (
-            <span className="absolute -top-1 right-2 px-1 rounded-full bg-pink-500 text-white text-[9px] font-bold">
-              {counts.favorites}
-            </span>
-          )}
+          <div className="relative">
+            <Heart className={`w-4 h-4 ${mediaTypeFilter === 'favorites' ? 'fill-current text-pink-500' : ''}`} />
+            {counts.favorites > 0 && (
+              <span className="absolute -top-1.5 -right-2 px-1 py-0.2 rounded-full bg-pink-500 text-white text-[8px] font-bold">
+                {counts.favorites}
+              </span>
+            )}
+            {mediaTypeFilter === 'favorites' && (
+              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-pink-500" />
+            )}
+          </div>
+          <span className="tracking-tight">Yêu thích</span>
+        </button>
+
+        {/* Tab 5: + Thêm Drive */}
+        <button
+          onClick={() => {
+            sounds.playClick();
+            setIsCustomModalOpen(true);
+          }}
+          className="flex flex-col items-center gap-1 transition-all flex-1 py-1 text-neutral-400 hover:text-white active:scale-95"
+          title="Thêm link Google Drive của bạn"
+        >
+          <div className="w-4 h-4 rounded-full bg-[var(--theme-primary)]/20 border border-[var(--theme-primary)] text-[var(--theme-primary-light)] flex items-center justify-center">
+            <Plus className="w-3 h-3" />
+          </div>
+          <span className="tracking-tight text-[var(--theme-primary-light)]">+ Thêm</span>
         </button>
       </nav>
     </div>

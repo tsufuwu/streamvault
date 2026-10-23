@@ -9,6 +9,7 @@ interface MiniGameLoungeProps {
 
 export const MiniGameLounge: React.FC<MiniGameLoungeProps> = ({ currentTheme }) => {
   const [activeTab, setActiveTab] = useState<'dj' | 'orange'>('dj');
+  const [isMobileExpanded, setIsMobileExpanded] = useState<boolean>(false);
   const [djScore, setDjScore] = useState<number>(0);
   const [orangeScore, setOrangeScore] = useState<number>(0);
   const [combo, setCombo] = useState<number>(1);
@@ -85,9 +86,27 @@ export const MiniGameLounge: React.FC<MiniGameLoungeProps> = ({ currentTheme }) 
   }, [combo, djScore, orangeScore]);
 
   return (
-    <div className="rounded-2xl border border-[var(--theme-border)] bg-[var(--theme-bg-surface)]/90 backdrop-blur-xl p-4 shadow-xl overflow-hidden relative group">
-      {/* Header and Switcher Tabs with Interleaved Fonts */}
-      <div className="flex items-center justify-between pb-3 mb-3 border-b border-[var(--theme-border)]/50">
+    <div className="rounded-2xl border border-[var(--theme-border)] bg-[var(--theme-bg-surface)]/90 backdrop-blur-xl p-3 sm:p-4 shadow-xl overflow-hidden relative group">
+      {/* Mobile Accordion Toggle Bar */}
+      <div
+        onClick={() => {
+          sounds.playClick();
+          setIsMobileExpanded(!isMobileExpanded);
+        }}
+        className="lg:hidden flex items-center justify-between pb-2 mb-2 border-b border-white/10 cursor-pointer font-courier text-xs font-bold text-[var(--theme-primary-light)] uppercase tracking-wider select-none active:opacity-75"
+      >
+        <span className="flex items-center gap-1.5">
+          <Disc3 className="w-3.5 h-3.5 animate-spin" />
+          <span>MINI-GAME LOUNGE</span>
+        </span>
+        <span className="px-2 py-0.5 rounded-full bg-white/10 text-[10px] text-white">
+          {isMobileExpanded ? '[THU GỌN ▲]' : '[CHƠI GAME ▼]'}
+        </span>
+      </div>
+
+      <div className={`${isMobileExpanded ? 'block' : 'hidden lg:block'}`}>
+        {/* Header and Switcher Tabs with Interleaved Fonts */}
+        <div className="flex items-center justify-between pb-3 mb-3 border-b border-[var(--theme-border)]/50">
         <div className="flex items-center gap-1.5 bg-black/40 p-1 rounded-xl border border-white/5">
           <button
             onClick={() => {
@@ -268,6 +287,7 @@ export const MiniGameLounge: React.FC<MiniGameLoungeProps> = ({ currentTheme }) 
           )}
         </div>
       )}
+      </div>
     </div>
   );
 };

@@ -36,25 +36,25 @@ export const CategoryFolderBar: React.FC<CategoryFolderBarProps> = ({
   onToggleCompactView,
 }) => {
   return (
-    <div className="space-y-4 mb-6">
-      {/* Top Media Type Segmented Chips */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-2">
+    <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
+      {/* Top Media Type Segmented Chips - Horizontal Scrollable on Mobile like Spotify/YouTube */}
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-1 sm:pb-0 flex-nowrap sm:flex-wrap w-full sm:w-auto">
           {/* All */}
           <button
             onClick={() => {
               sounds.playClick();
               onMediaTypeChange('all');
             }}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all ${
+            className={`flex items-center gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs font-semibold border shrink-0 transition-all ${
               mediaTypeFilter === 'all'
                 ? 'bg-[var(--theme-primary)] border-[var(--theme-primary)] text-white shadow-lg shadow-[var(--theme-primary-glow)]/40 scale-[1.02]'
                 : 'bg-white/5 border-white/10 text-neutral-300 hover:text-white hover:bg-white/10'
             }`}
           >
-            <Disc3 className="w-4 h-4" />
-            <span className="font-alegreya text-sm font-bold">All Records</span>
-            <span className="font-courier px-1.5 py-0.5 rounded-full bg-black/40 text-[10px] font-bold">
+            <Disc3 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <span className="font-alegreya text-xs sm:text-sm font-bold">All Records</span>
+            <span className="font-courier px-1.5 py-0.5 rounded-full bg-black/40 text-[9px] sm:text-[10px] font-bold">
               {counts.all}
             </span>
           </button>
@@ -65,15 +65,15 @@ export const CategoryFolderBar: React.FC<CategoryFolderBarProps> = ({
               sounds.playClick();
               onMediaTypeChange('video');
             }}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all ${
+            className={`flex items-center gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs font-semibold border shrink-0 transition-all ${
               mediaTypeFilter === 'video'
                 ? 'bg-[var(--theme-primary)] border-[var(--theme-primary)] text-white shadow-lg shadow-[var(--theme-primary-glow)]/40 scale-[1.02]'
                 : 'bg-white/5 border-white/10 text-neutral-300 hover:text-white hover:bg-white/10'
             }`}
           >
-            <Film className="w-4 h-4" />
-            <span className="font-alegreya text-sm font-bold">Cinema &amp; Video</span>
-            <span className="font-courier px-1.5 py-0.5 rounded-full bg-black/40 text-[10px] font-bold">
+            <Film className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <span className="font-alegreya text-xs sm:text-sm font-bold">Cinema &amp; Video</span>
+            <span className="font-courier px-1.5 py-0.5 rounded-full bg-black/40 text-[9px] sm:text-[10px] font-bold">
               {counts.video}
             </span>
           </button>
@@ -84,15 +84,15 @@ export const CategoryFolderBar: React.FC<CategoryFolderBarProps> = ({
               sounds.playClick();
               onMediaTypeChange('audio');
             }}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all ${
+            className={`flex items-center gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs font-semibold border shrink-0 transition-all ${
               mediaTypeFilter === 'audio'
                 ? 'bg-[var(--theme-primary)] border-[var(--theme-primary)] text-white shadow-lg shadow-[var(--theme-primary-glow)]/40 scale-[1.02]'
                 : 'bg-white/5 border-white/10 text-neutral-300 hover:text-white hover:bg-white/10'
             }`}
           >
-            <Music className="w-4 h-4" />
-            <span className="font-alegreya text-sm font-bold">Music &amp; Audio CD</span>
-            <span className="font-courier px-1.5 py-0.5 rounded-full bg-black/40 text-[10px] font-bold">
+            <Music className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <span className="font-alegreya text-xs sm:text-sm font-bold">Music &amp; Audio CD</span>
+            <span className="font-courier px-1.5 py-0.5 rounded-full bg-black/40 text-[9px] sm:text-[10px] font-bold">
               {counts.audio}
             </span>
           </button>
@@ -103,15 +103,15 @@ export const CategoryFolderBar: React.FC<CategoryFolderBarProps> = ({
               sounds.playClick();
               onMediaTypeChange('favorites');
             }}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all ${
+            className={`flex items-center gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs font-semibold border shrink-0 transition-all ${
               mediaTypeFilter === 'favorites'
                 ? 'bg-pink-600 border-pink-500 text-white shadow-lg shadow-pink-600/40 scale-[1.02]'
                 : 'bg-white/5 border-white/10 text-neutral-300 hover:text-white hover:bg-white/10'
             }`}
           >
-            <Heart className="w-4 h-4 text-pink-400 fill-current" />
-            <span className="font-alegreya text-sm font-bold">Favorites</span>
-            <span className="font-courier px-1.5 py-0.5 rounded-full bg-black/40 text-[10px] font-bold">
+            <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-pink-400 fill-current" />
+            <span className="font-alegreya text-xs sm:text-sm font-bold">Favorites</span>
+            <span className="font-courier px-1.5 py-0.5 rounded-full bg-black/40 text-[9px] sm:text-[10px] font-bold">
               {counts.favorites}
             </span>
           </button>

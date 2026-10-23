@@ -96,7 +96,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* Action Controls */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           {/* Theme Selector Swatches */}
           <div className="flex items-center gap-1 bg-white/5 p-1 rounded-full border border-white/10" title="Select Visual Theme">
             <button
@@ -104,7 +104,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 sounds.playClick();
                 onThemeChange('vinyl-pink');
               }}
-              className={`w-6 h-6 rounded-full flex items-center justify-center transition-all ${
+              className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center transition-all ${
                 currentTheme === 'vinyl-pink'
                   ? 'ring-2 ring-white scale-110 shadow-sm'
                   : 'opacity-60 hover:opacity-100'
@@ -117,7 +117,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 sounds.playClick();
                 onThemeChange('citrus-orange');
               }}
-              className={`w-6 h-6 rounded-full flex items-center justify-center transition-all ${
+              className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center transition-all ${
                 currentTheme === 'citrus-orange'
                   ? 'ring-2 ring-white scale-110 shadow-sm'
                   : 'opacity-60 hover:opacity-100'
@@ -130,7 +130,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 sounds.playClick();
                 onThemeChange('amethyst-violet');
               }}
-              className={`w-6 h-6 rounded-full flex items-center justify-center transition-all ${
+              className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center transition-all ${
                 currentTheme === 'amethyst-violet'
                   ? 'ring-2 ring-white scale-110 shadow-sm'
                   : 'opacity-60 hover:opacity-100'
@@ -140,26 +140,26 @@ export const Navbar: React.FC<NavbarProps> = ({
             />
           </div>
 
-          {/* Sound FX Toggle with Monospace Label */}
+          {/* Sound FX Toggle */}
           <button
             onClick={onToggleSound}
-            className={`p-2 rounded-xl border transition-all ${
+            className={`p-1.5 sm:p-2 rounded-xl border transition-all ${
               soundEnabled
                 ? 'bg-white/5 border-white/15 text-[var(--theme-primary-light)]'
                 : 'bg-white/5 border-white/5 text-neutral-500'
             }`}
             title={soundEnabled ? 'Analog Sound FX: ON' : 'Analog Sound FX: MUTED'}
           >
-            {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+            {soundEnabled ? <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
           </button>
 
-          {/* Favorites Filter Toggle */}
+          {/* Favorites Filter Toggle - Hidden on mobile because it's in the bottom bar */}
           <button
             onClick={() => {
               sounds.playClick();
               onToggleFavoritesFilter();
             }}
-            className={`p-2 rounded-xl border flex items-center gap-1.5 transition-all ${
+            className={`p-2 rounded-xl border hidden sm:flex items-center gap-1.5 transition-all ${
               showFavoritesOnly
                 ? 'bg-pink-500/20 border-pink-500 text-pink-400 font-bold'
                 : 'bg-white/5 border-white/10 text-neutral-300 hover:text-white hover:bg-white/10'
@@ -178,7 +178,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               sounds.playClick();
               onOpenCustomModal();
             }}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--theme-primary)] hover:bg-[var(--theme-primary-hover)] text-white text-xs font-bold shadow-md shadow-[var(--theme-primary-glow)] transition-all transform hover:scale-[1.02]"
+            className="flex items-center gap-1.5 p-1.5 sm:px-3 sm:py-2 rounded-xl bg-[var(--theme-primary)] hover:bg-[var(--theme-primary-hover)] text-white text-xs font-bold shadow-md shadow-[var(--theme-primary-glow)] transition-all transform active:scale-95"
             title="Add your own Google Drive file or stream"
           >
             <Plus className="w-4 h-4" />
@@ -200,16 +200,24 @@ export const Navbar: React.FC<NavbarProps> = ({
       </div>
 
       {/* Mobile search bar */}
-      <div className="mt-3 md:hidden">
+      <div className="mt-2.5 md:hidden">
         <div className="relative flex items-center">
-          <Search className="w-4 h-4 text-neutral-400 absolute left-3 pointer-events-none" />
+          <Search className="w-3.5 h-3.5 text-neutral-400 absolute left-3 pointer-events-none" />
           <input
             type="text"
-            placeholder="Search tracks, movies, reels..."
+            placeholder="Search vinyl tracks, movies, reels..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="font-courier w-full pl-9 pr-4 py-2 rounded-xl bg-white/5 border border-white/10 text-xs text-white placeholder:text-neutral-500 focus:outline-none"
+            className="font-courier w-full pl-8 pr-8 py-1.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white placeholder:text-neutral-500 focus:outline-none focus:border-[var(--theme-primary)]"
           />
+          {searchQuery && (
+            <button
+              onClick={() => onSearchChange('')}
+              className="absolute right-2.5 text-neutral-400 hover:text-white text-xs p-1"
+            >
+              ✕
+            </button>
+          )}
         </div>
       </div>
     </header>

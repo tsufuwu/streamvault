@@ -16,6 +16,7 @@ import {
   ExternalLink,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   X,
   Keyboard,
   Radio,
@@ -29,6 +30,11 @@ interface PlayerModalProps {
   onClose: () => void;
   onSelectMedia: (item: MediaItem) => void;
   onOpenShortcuts: () => void;
+  onPlaybackChange?: (state: { isPlaying: boolean; currentTime: number; duration: number }) => void;
+  playbackControlRef?: React.MutableRefObject<{
+    togglePlay: () => void;
+    next: () => void;
+  } | null>;
 }
 
 export const PlayerModal: React.FC<PlayerModalProps> = ({
@@ -38,6 +44,8 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
   onClose,
   onSelectMedia,
   onOpenShortcuts,
+  onPlaybackChange,
+  playbackControlRef,
 }) => {
   const [playback, setPlayback] = useState<PlaybackState>({
     isPlaying: false,
@@ -326,11 +334,32 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
     setPlayback((prev) => ({ ...prev, analogCrackle: nextCrackle }));
   };
 
-  if (!isOpen || !media) return null;
+  useEffect(() => {
+    if (playbackControlRef) {
+      playbackControlRef.current = {
+        togglePlay,
+        next: () => {
+          if (nextMedia) onSelectMedia(nextMedia);
+        },
+      };
+    }
+  });
+
+  useEffect(() => {
+    onPlaybackChange?.({
+      isPlaying: playback.isPlaying,
+      currentTime: playback.currentTime,
+      duration: playback.duration,
+    });
+  }, [playback.isPlaying, playback.currentTime, playback.duration]);
+
+  if (!media) return null;
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-2xl overflow-y-auto animate-fade-in"
+      className={`fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 bg-black/85 backdrop-blur-2xl overflow-y-auto transition-all duration-300 ${
+        isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none scale-95'
+      }`}
       onClick={onClose}
     >
       {/* Dynamic Ambient Cinema Glow behind modal */}
@@ -357,44 +386,57 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
           </div>
         )}
 
+        {/* Mobile Swipe / Drag Indicator Bar */}
+        <div
+          onClick={onClose}
+          className="sm:hidden pt-2.5 pb-1 flex flex-col items-center justify-center bg-black/60 cursor-pointer border-b border-white/5 active:opacity-70"
+          title="Vuốt hoặc chạm để thu nhỏ"
+        >
+          <div className="w-10 h-1 bg-white/30 rounded-full mb-1" />
+          <span className="font-courier text-[9px] text-neutral-400 font-bold uppercase tracking-widest flex items-center gap-1">
+            <ChevronDown className="w-3 h-3" />
+            <span>[THU NHỎ MINI-PLAYER]</span>
+          </span>
+        </div>
+
         {/* Top Header */}
-        <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/10 bg-black/40">
-          <div className="flex items-center gap-3 overflow-hidden pr-4">
-            <span className="flex h-2.5 w-2.5 relative">
+        <div className="flex items-center justify-between px-3.5 sm:px-5 py-2.5 sm:py-3.5 border-b border-white/10 bg-black/40">
+          <div className="flex items-center gap-2.5 sm:gap-3 overflow-hidden pr-2 sm:pr-4">
+            <span className="flex h-2.5 w-2.5 relative shrink-0">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--theme-primary)] opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[var(--theme-primary)]"></span>
             </span>
 
             <div className="truncate">
               {/* Title in Alegreya */}
-              <h2 className="font-alegreya text-base sm:text-lg font-bold text-white truncate" title={media.title}>
+              <h2 className="font-alegreya text-sm sm:text-lg font-bold text-white truncate" title={media.title}>
                 {media.title}
               </h2>
               {/* Typewriter tag in Courier */}
-              <div className="font-courier flex items-center gap-2 text-[11px] text-neutral-400 font-bold uppercase">
-                <span>{media.folderName || 'MAIN CRATE'}</span>
+              <div className="font-courier flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] text-neutral-400 font-bold uppercase">
+                <span className="truncate max-w-[120px] sm:max-w-none">{media.folderName || 'MAIN CRATE'}</span>
                 <span>•</span>
                 <span className="text-[var(--theme-primary-light)]">
-                  {media.quality || (isAudio ? '24-BIT HI-FI FLAC' : '1080P MASTER')}
+                  {media.quality || (isAudio ? '24-BIT HI-FI' : '1080P')}
                 </span>
               </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 font-courier">
+          <div className="flex items-center gap-1 sm:gap-2 font-courier shrink-0">
             <button
               onClick={() => {
                 sounds.playClick();
                 setPlayback((prev) => ({ ...prev, useDriveIframe: !prev.useDriveIframe }));
               }}
-              className={`px-2.5 py-1 rounded-lg text-xs font-bold border transition-all ${
+              className={`px-2 py-1 rounded-lg text-[10px] sm:text-xs font-bold border transition-all ${
                 playback.useDriveIframe
                   ? 'bg-[var(--theme-primary)] border-[var(--theme-primary)] text-white'
                   : 'bg-white/5 border-white/15 text-neutral-300 hover:text-white'
               }`}
               title="Toggle between HTML5 Vinyl Player and Google Drive Preview Iframe"
             >
-              🔄 {playback.useDriveIframe ? 'Vinyl Player' : 'Drive Player'}
+              🔄 <span className="hidden sm:inline">{playback.useDriveIframe ? 'Vinyl Player' : 'Drive Player'}</span>
             </button>
 
             <button
@@ -402,18 +444,20 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
                 sounds.playClick();
                 window.open(`https://drive.google.com/file/d/${media.fileId}/view`, '_blank');
               }}
-              className="p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-white/10 transition-colors"
+              className="p-1 sm:p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-white/10 transition-colors"
               title="Open file on Google Drive"
             >
-              <ExternalLink className="w-4 h-4" />
+              <ExternalLink className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </button>
 
+            {/* Mobile Minimize / Close button */}
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-white/10 transition-colors"
-              title="Close player (Esc)"
+              className="p-1 sm:p-1.5 rounded-lg text-neutral-300 hover:text-white hover:bg-white/10 transition-colors"
+              title="Thu nhỏ / Đóng (Esc)"
             >
-              <X className="w-5 h-5" />
+              <ChevronDown className="w-5 h-5 sm:hidden text-[var(--theme-primary-light)]" />
+              <X className="w-5 h-5 hidden sm:block" />
             </button>
           </div>
         </div>
@@ -484,7 +528,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
                 </div>
 
                 {/* 2. Realistic Turntable Plinth */}
-                <div className="relative w-64 h-64 sm:w-72 sm:h-72 rounded-full flex items-center justify-center shrink-0">
+                <div className="relative w-52 h-52 sm:w-72 sm:h-72 rounded-full flex items-center justify-center shrink-0">
                   {/* Stroboscope Rim */}
                   <div className="absolute inset-0 rounded-full border-4 border-dashed border-white/20 animate-spin" style={{ animationDuration: '24s' }} />
                   
@@ -495,19 +539,30 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
                       boxShadow: '0 0 40px var(--theme-primary-glow)',
                     }}
                   >
-                    <VinylDisc
-                      size={210}
-                      isSpinning={playback.isPlaying}
-                      speed={playback.audioRpm === 78 ? 'fast' : playback.audioRpm === 33 ? 'slow' : 'normal'}
-                      coverImage={media.thumbnail}
-                      labelColor="var(--theme-primary)"
-                    />
+                    <div className="block sm:hidden">
+                      <VinylDisc
+                        size={165}
+                        isSpinning={playback.isPlaying}
+                        speed={playback.audioRpm === 78 ? 'fast' : playback.audioRpm === 33 ? 'slow' : 'normal'}
+                        coverImage={media.thumbnail}
+                        labelColor="var(--theme-primary)"
+                      />
+                    </div>
+                    <div className="hidden sm:block">
+                      <VinylDisc
+                        size={210}
+                        isSpinning={playback.isPlaying}
+                        speed={playback.audioRpm === 78 ? 'fast' : playback.audioRpm === 33 ? 'slow' : 'normal'}
+                        coverImage={media.thumbnail}
+                        labelColor="var(--theme-primary)"
+                      />
+                    </div>
                   </div>
 
                   {/* Animated Mechanical Tonearm */}
                   <div
-                    className={`absolute -top-4 -right-2 w-28 h-48 pointer-events-none transition-transform duration-700 origin-top-right ${
-                      playback.isPlaying ? 'rotate-12 translate-x-1' : '-rotate-12 translate-x-4'
+                    className={`absolute -top-3 sm:-top-4 -right-1 sm:-right-2 w-20 h-36 sm:w-28 sm:h-48 pointer-events-none transition-transform duration-700 origin-top-right ${
+                      playback.isPlaying ? 'rotate-12 translate-x-1' : '-rotate-12 translate-x-3'
                     }`}
                   >
                     <svg viewBox="0 0 80 160" className="w-full h-full drop-shadow-2xl">
@@ -700,7 +755,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
                   <RotateCw className="w-4 h-4" />
                 </button>
 
-                <div className="flex items-center gap-1.5 group/vol">
+                <div className="hidden sm:flex items-center gap-1.5 group/vol">
                   <button
                     onClick={toggleMute}
                     className="p-1.5 rounded-lg text-neutral-300 hover:text-white hover:bg-white/10 transition-colors"
