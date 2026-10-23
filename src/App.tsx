@@ -436,7 +436,7 @@ export default function App() {
               <div className="rounded-2xl border border-[var(--theme-border)]/60 bg-[var(--theme-bg-surface)]/80 backdrop-blur-xl p-4 shadow-xl">
                 <div className="flex items-center gap-2 pb-3 mb-3 border-b border-white/10 font-courier text-xs font-bold text-white uppercase tracking-wider">
                   <History className="w-4 h-4 text-[var(--theme-primary)]" />
-                  <span>RECENTLY SPUN RECORDS</span>
+                  <span>VỪA PHÁT GẦN ĐÂY</span>
                 </div>
 
                 <div className="space-y-2">
@@ -475,16 +475,16 @@ export default function App() {
             <div className="rounded-2xl border border-[var(--theme-border)]/50 bg-gradient-to-br from-[var(--theme-bg-surface)]/90 to-black/90 backdrop-blur-xl p-4 text-xs space-y-2.5 font-courier">
               <div className="flex items-center gap-2 text-[var(--theme-primary-light)] font-bold">
                 <Sparkles className="w-4 h-4 text-[var(--theme-primary)]" />
-                <span className="font-alegreya text-base font-bold text-white">Direct Drive Streaming</span>
+                <span className="font-alegreya text-base font-bold text-white">Phát Từ Google Drive</span>
               </div>
               <p className="text-neutral-300 leading-relaxed text-[11px] font-normal">
-                Audio and cinema streams are piped losslessly without transcoding or forced compression. You can paste any public Google Drive URL or ID to stream custom reels instantly.
+                Dán link hoặc ID Google Drive công khai để phát video và âm nhạc trực tiếp, không quảng cáo, giữ nguyên chất lượng gốc.
               </p>
               <button
                 onClick={() => setIsCustomModalOpen(true)}
                 className="w-full py-2.5 rounded-xl border border-[var(--theme-border)] bg-black/40 hover:bg-[var(--theme-primary)]/20 text-white font-bold transition-colors flex items-center justify-center gap-1.5 uppercase tracking-wider text-[11px]"
               >
-                <span>+ ADD YOUR DRIVE REEL</span>
+                <span>+ THÊM LINK GOOGLE DRIVE</span>
               </button>
             </div>
           </div>
@@ -538,16 +538,16 @@ export default function App() {
       <footer className="mt-auto border-t border-[var(--theme-border)]/40 bg-[var(--theme-bg-surface)]/60 backdrop-blur-lg py-6 px-4 text-center font-courier text-xs text-neutral-400 z-10">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="font-alegreya text-base font-bold text-[var(--theme-primary)]">VinylStream Noir</span>
+            <span className="font-alegreya text-base font-bold text-[var(--theme-primary)]">VinylStream</span>
             <span>—</span>
-            <span className="uppercase text-[11px] tracking-wider">[HIGH-FIDELITY VINYL CD &amp; CINEMA STREAMING &bull; 2026]</span>
+            <span className="uppercase text-[11px] tracking-wider">[PHÁT VIDEO &amp; NHẠC TRỰC TUYẾN TỪ GOOGLE DRIVE]</span>
           </div>
           <div className="flex items-center gap-4 text-[11px] font-bold">
             <button
               onClick={() => setIsShortcutsOpen(true)}
               className="hover:text-white transition-colors uppercase tracking-wider"
             >
-              [⌨️ SHORTCUTS]
+              [⌨️ PHÍM TẮT]
             </button>
             <button
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
