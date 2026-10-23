@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VinylStream — Không Gian Streaming Đĩa Than CD Hồng Đen 💿💖</title>
+  <meta name="description" content="VinylStream — Nền tảng xem phim và nghe nhạc trực tuyến phong cách đĩa than CD Vinyl hồng đen sang trọng. Trải nghiệm mượt mà, không quảng cáo." />
+  <meta name="theme-color" content="#FF69B4" />
+  <meta name="referrer" content="no-referrer" />
+  <!-- Google Fonts: Alegreya, Press Start 2P (8-bit Pixel), VT323 (CRT) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&family=Alegreya+SC:ital,wght@0,400;0,700;1,400&family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=6.0" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💿</text></svg>" />
+</head>
+<body>
+
+<!-- ─── Floating Vinyl Records & Dancing Music Notes Background ─── -->
+<div class="vinyl-ambient" aria-hidden="true">
+  <!-- Glowing Neon Pink Aura Orbs -->
+  <div class="vinyl-glow-orb orb-1"></div>
+  <div class="vinyl-glow-orb orb-2"></div>
+  <div class="vinyl-glow-orb orb-3"></div>
+
+  <!-- Gentle Floating Musical Notes (Hot Pink Glow) & Spinning Vinyl Discs -->
+  <div class="vinyl-item item-note-1">♪</div>
+  <div class="vinyl-item item-note-2">♫</div>
+  <div class="vinyl-item item-disc-1">💿</div>
+  <div class="vinyl-item item-note-3">♬</div>
+  <div class="vinyl-item item-sparkle-1">✨</div>
+  <div class="vinyl-item item-note-4">♩</div>
+  <div class="vinyl-item item-clef-1">𝄞</div>
+  <div class="vinyl-item item-disc-2">💿</div>
+  <div class="vinyl-item item-note-5">🎵</div>
+  <div class="vinyl-item item-sparkle-2">💖</div>
+  <div class="vinyl-item item-note-6">♪</div>
+  <div class="vinyl-item item-note-7">♫</div>
+  <div class="vinyl-item item-clef-2">𝄢</div>
+  <div class="vinyl-item item-note-8">♬</div>
+  <div class="vinyl-item item-disc-3">💿</div>
+  <div class="vinyl-item item-note-9">♩</div>
+  <div class="vinyl-item item-note-10">🎶</div>
+</div>
+
+<div id="app">
+
+  <!-- ─── Navbar ─── -->
+  <nav class="navbar" role="navigation" aria-label="Thanh điều hướng chính">
+    <div class="navbar-brand">
+      <!-- Animated Spinning Pink Vinyl Record Logo -->
+      <div class="vinyl-mascot" title="VinylStream — Mượt mà từng giai điệu">
+        <svg class="vinyl-svg" width="36" height="36" viewBox="0 0 100 100">
+          <defs>
+            <radialGradient id="vinyl-disc-grad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#FF2D75"/>
+              <stop offset="35%" stop-color="#E11D48"/>
+              <stop offset="38%" stop-color="#140810"/>
+              <stop offset="70%" stop-color="#080407"/>
+              <stop offset="73%" stop-color="#1A0A16"/>
+              <stop offset="96%" stop-color="#050204"/>
+              <stop offset="100%" stop-color="#FF2D75"/>
+            </radialGradient>
+            <filter id="vinyl-glow-filter" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#FF2D75" flood-opacity="0.6"/>
+            </filter>
+          </defs>
+          <circle cx="50" cy="50" r="46" fill="url(#vinyl-disc-grad)" filter="url(#vinyl-glow-filter)"/>
+          <circle cx="50" cy="50" r="38" fill="none" stroke="rgba(255, 255, 255, 0.15)" stroke-width="1.2"/>
+          <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1.2"/>
+          <circle cx="50" cy="50" r="22" fill="none" stroke="rgba(255, 255, 255, 0.15)" stroke-width="1.2"/>
+          <!-- Pink Center Label -->
+          <circle cx="50" cy="50" r="14" fill="#FF2D75" stroke="#FFF" stroke-width="1.5"/>
+          <circle cx="50" cy="50" r="4" fill="#0A0409"/>
+          <!-- Shine highlight -->
+          <path d="M50 8 A42 42 0 0 1 88 50 L50 50 Z" fill="rgba(255, 255, 255, 0.08)"/>
+        </svg>
+      </div>
+      <span class="brand-text chromatic-text glitch-on-hover">Vinyl<span class="brand-accent">Stream</span></span>
+      <span class="brand-tag">8-BIT Y2K</span>
+    </div>
+
+    <div class="navbar-search" role="search">
+      <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <input type="search" id="search-input" placeholder="Tìm kiếm phim, video, bài hát đĩa than..." aria-label="Tìm kiếm media" autocomplete="off" />
+      <span class="search-shortcut">⌘K</span>
+    </div>
+
+    <!-- ─── Quick Dark Mode / Vaporwave Light Mode Switcher ─── -->
+    <div class="navbar-actions">
+      <button id="theme-toggle-btn" class="theme-toggle-btn" type="button" aria-label="Chuyển chế độ Dark / Vaporwave Light" title="Chuyển đổi Dark Mode / Vaporwave Pastel Light Mode">
+        <span class="theme-btn-badge">THEME</span>
+        <span class="theme-icon-indicator" id="theme-icon-indicator">🌙</span>
+        <span class="theme-text" id="theme-text">DARK</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ─── Main Layout ─── -->
+  <div class="main-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" aria-label="Bộ lọc">
+      <div class="sidebar-section-title">
+        <span class="tree-icon">💿</span> Bộ Sưu Tập Vinyl
+      </div>
+
+      <button class="filter-btn active" data-filter="all" id="filter-all" aria-pressed="true">
+        <span class="filter-icon">💿</span>
+        Tất cả đĩa & video
+        <span class="count">0</span>
+      </button>
+      <button class="filter-btn" data-filter="video" id="filter-video" aria-pressed="false">
+        <span class="filter-icon">🎬</span>
+        Phim & Video
+        <span class="count">0</span>
+      </button>
+      <button class="filter-btn" data-filter="audio" id="filter-audio" aria-pressed="false">
+        <span class="filter-icon">🎵</span>
+        Nhạc & Audio CD
+        <span class="count">0</span>
+      </button>
+
+      <hr class="sidebar-divider" />
+
+      <div class="sidebar-section-title">
+        <span class="tree-icon">✨</span> Không Gian Vinyl
+      </div>
+
+      <div class="orange-guide-card">
+        <p class="guide-desc" style="margin-bottom:0;">
+          Thưởng thức từng thanh âm và thước phim chân thực cùng phong cách CD Vinyl Hồng Đen thượng hạng.
+        </p>
+      </div>
+
+      <!-- ─── Mini Game Lounge: 2 Chế Độ Chơi (Đĩa Than DJ 💿 & Vườn Cam 🍊 8-BIT) ─── -->
+      <div class="mini-game-lounge y2k-window" id="mini-game-lounge">
+        <!-- Y2K Retro OS Window Header -->
+        <div class="y2k-window-bar">
+          <div class="y2k-window-title">
+            <span class="y2k-icon">🕹️</span> RETRO_8BIT_ARCADE.EXE
+          </div>
+          <div class="y2k-window-controls" aria-hidden="true">
+            <span class="y2k-btn">_</span>
+            <span class="y2k-btn">□</span>
+            <span class="y2k-btn">✕</span>
+          </div>
+        </div>
+
+        <div class="mini-game-inner-body crt-scanlines">
+          <!-- Switcher Tabs -->
+          <div class="game-mode-switcher">
+            <button type="button" class="game-tab-btn active" id="tab-game-vinyl" data-game="vinyl">
+              <span>💿 8-BIT DJ</span>
+            </button>
+            <button type="button" class="game-tab-btn" id="tab-game-orange" data-game="orange">
+              <span>🍊 8-BIT CAM</span>
+            </button>
+          </div>
+
+          <!-- 1. DJ Vinyl Beat Game (8-bit Pixel Art) -->
+          <div class="game-view-panel active" id="game-panel-vinyl">
+            <div class="game-hud y2k-hud">
+              <span class="game-score-badge" title="Điểm beat DJ">
+                <span class="hud-label">SCORE</span>
+                <span id="vinyl-score-count">00000</span>
+              </span>
+              <span id="vinyl-combo-tag" class="game-combo-tag" style="display:none;">GROOVE x2</span>
+              <span id="vinyl-status-tag" class="game-status-tag" style="display:none;">TIME 25</span>
+            </div>
+
+            <div class="turntable-wrapper pixel-art-turntable" id="turntable-wrapper" title="Bấm vào đĩa than để biến chuột thành mâm DJ hứng nốt nhạc!">
+              <!-- Authentic 8-Bit Pixel Art DJ Turntable with Animated Equalizer Bars -->
+              <svg class="turntable-svg pixel-svg" viewBox="0 0 160 120" width="136" height="102" shape-rendering="crispEdges">
+                <!-- Chassis Base (Stepped 8-Bit Plinth) -->
+                <rect x="8" y="14" width="144" height="92" fill="#140816"/>
+                <!-- Beveled 3D Edges: Cyan Top/Left highlight, Hot Pink Bottom/Right shadow -->
+                <rect x="8" y="14" width="144" height="4" fill="#01CDFE"/>
+                <rect x="8" y="14" width="4" height="92" fill="#01CDFE"/>
+                <rect x="148" y="14" width="4" height="92" fill="#FF2A8D"/>
+                <rect x="8" y="102" width="144" height="4" fill="#FF2A8D"/>
+                <!-- Inner Panel Inset -->
+                <rect x="14" y="20" width="132" height="80" fill="#200E24"/>
+
+                <!-- Pixel Speaker Grille Dots / Ventilation (Left) -->
+                <rect x="18" y="24" width="2" height="2" fill="#FF71CE"/>
+                <rect x="22" y="24" width="2" height="2" fill="#01CDFE"/>
+                <rect x="18" y="28" width="2" height="2" fill="#01CDFE"/>
+                <rect x="22" y="28" width="2" height="2" fill="#FF71CE"/>
+                <rect x="18" y="32" width="2" height="2" fill="#FF71CE"/>
+                <rect x="22" y="32" width="2" height="2" fill="#01CDFE"/>
+
+                <!-- Platter Bed Outer Inset (Stepped Octagonal/Pixel Circle) -->
+                <rect x="30" y="26" width="72" height="68" fill="#0E0510"/>
+                <rect x="36" y="22" width="60" height="76" fill="#0E0510"/>
+                <rect x="42" y="20" width="48" height="80" fill="#0E0510"/>
+                <rect x="48" y="18" width="36" height="84" fill="#0E0510"/>
+
+                <!-- 8-Bit Spinning Vinyl Disc -->
+                <g class="spinning-vinyl-disc pixel-disc-group" id="turntable-disc-group">
+                  <!-- Stepped Pixel Disc Layers -->
+                  <rect x="34" y="30" width="64" height="60" fill="#1C091A"/>
+                  <rect x="40" y="24" width="52" height="72" fill="#1C091A"/>
+                  <rect x="46" y="22" width="40" height="76" fill="#1C091A"/>
+                  <!-- Outer Groove Ring (Magenta) -->
+                  <rect x="42" y="28" width="48" height="64" fill="none" stroke="#FF2A8D" stroke-width="2"/>
+                  <rect x="38" y="34" width="56" height="52" fill="none" stroke="#FF2A8D" stroke-width="2"/>
+                  <!-- Middle Groove Ring (Cyan) -->
+                  <rect x="48" y="36" width="36" height="48" fill="none" stroke="#01CDFE" stroke-width="2"/>
+                  <rect x="44" y="42" width="44" height="36" fill="none" stroke="#01CDFE" stroke-width="2"/>
+                  <!-- Inner Groove Ring (Pastel Pink) -->
+                  <rect x="54" y="44" width="24" height="32" fill="none" stroke="#FF71CE" stroke-width="2"/>
+                  <!-- Center Vinyl Label (Pixel Diamond/Octagon) -->
+                  <rect x="56" y="50" width="20" height="20" fill="#FF2A8D"/>
+                  <rect x="58" y="48" width="16" height="24" fill="#FF2A8D"/>
+                  <!-- Center Label Text / Star -->
+                  <rect x="62" y="56" width="8" height="8" fill="#FFF"/>
+                  <!-- Center Spindle -->
+                  <rect x="64" y="58" width="4" height="4" fill="#080309"/>
+                </g>
+
+                <!-- 8-Bit Animated Graphic Equalizer (Right Side) -->
+                <g class="pixel-equalizer">
+                  <!-- EQ Frame -->
+                  <rect x="110" y="48" width="30" height="46" fill="#08030B" stroke="#01CDFE" stroke-width="1"/>
+                  <!-- Column 1 (Cyan) -->
+                  <g class="eq-col eq-col-1">
+                    <rect x="113" y="86" width="4" height="4" fill="#01CDFE"/>
+                    <rect x="113" y="80" width="4" height="4" fill="#01CDFE"/>
+                    <rect x="113" y="74" width="4" height="4" fill="#01CDFE"/>
+                    <rect x="113" y="68" width="4" height="4" fill="#01CDFE"/>
+                    <rect x="113" y="62" width="4" height="4" fill="#01CDFE"/>
+                    <rect x="113" y="56" width="4" height="4" fill="#01CDFE"/>
+                  </g>
+                  <!-- Column 2 (Aqua / Neon Green) -->
+                  <g class="eq-col eq-col-2">
+                    <rect x="120" y="86" width="4" height="4" fill="#05FFA1"/>
+                    <rect x="120" y="80" width="4" height="4" fill="#05FFA1"/>
+                    <rect x="120" y="74" width="4" height="4" fill="#05FFA1"/>
+                    <rect x="120" y="68" width="4" height="4" fill="#05FFA1"/>
+                    <rect x="120" y="62" width="4" height="4" fill="#05FFA1"/>
+                    <rect x="120" y="56" width="4" height="4" fill="#05FFA1"/>
+                  </g>
+                  <!-- Column 3 (Hot Pink) -->
+                  <g class="eq-col eq-col-3">
+                    <rect x="127" y="86" width="4" height="4" fill="#FF2A8D"/>
+                    <rect x="127" y="80" width="4" height="4" fill="#FF2A8D"/>
+                    <rect x="127" y="74" width="4" height="4" fill="#FF2A8D"/>
+                    <rect x="127" y="68" width="4" height="4" fill="#FF2A8D"/>
+                    <rect x="127" y="62" width="4" height="4" fill="#FF2A8D"/>
+                    <rect x="127" y="56" width="4" height="4" fill="#FF2A8D"/>
+                  </g>
+                  <!-- Column 4 (Magenta) -->
+                  <g class="eq-col eq-col-4">
+                    <rect x="134" y="86" width="4" height="4" fill="#FF71CE"/>
+                    <rect x="134" y="80" width="4" height="4" fill="#FF71CE"/>
+                    <rect x="134" y="74" width="4" height="4" fill="#FF71CE"/>
+                    <rect x="134" y="68" width="4" height="4" fill="#FF71CE"/>
+                    <rect x="134" y="62" width="4" height="4" fill="#FF71CE"/>
+                    <rect x="134" y="56" width="4" height="4" fill="#FF71CE"/>
+                  </g>
+                </g>
+
+                <!-- 8-Bit Pixel Tonearm -->
+                <!-- Pivot Base -->
+                <rect x="126" y="24" width="10" height="10" fill="#FF2A8D"/>
+                <rect x="128" y="26" width="6" height="6" fill="#FFF"/>
+                <!-- Stepped Arm Path -->
+                <rect x="122" y="32" width="6" height="4" fill="#C0C0C0"/>
+                <rect x="116" y="36" width="8" height="4" fill="#E4D9E2"/>
+                <rect x="110" y="40" width="8" height="4" fill="#FFF"/>
+                <rect x="104" y="44" width="8" height="4" fill="#E4D9E2"/>
+                <rect x="98" y="48" width="8" height="4" fill="#FFF"/>
+                <rect x="92" y="52" width="8" height="4" fill="#E4D9E2"/>
+                <rect x="86" y="56" width="8" height="4" fill="#FFF"/>
+                <!-- Cartridge Head & Needle -->
+                <rect x="82" y="58" width="8" height="6" fill="#FF2A8D"/>
+                <rect x="80" y="62" width="4" height="4" fill="#01CDFE"/>
+
+                <!-- Pixel Power Indicator LED -->
+                <rect x="18" y="88" width="4" height="4" fill="#05FFA1" class="pixel-power-led"/>
+                <rect x="24" y="88" width="6" height="4" fill="#FF2A8D"/>
+                <rect x="32" y="88" width="6" height="4" fill="#01CDFE"/>
+              </svg>
+              <div class="vinyl-dropzone" id="vinyl-dropzone"></div>
+            </div>
+          </div>
+
+          <!-- 2. Classic Orange Tree Game (8-bit Pixel Art) -->
+          <div class="game-view-panel" id="game-panel-orange" style="display:none;">
+            <div class="game-hud y2k-hud">
+              <span class="game-basket" title="Giỏ cam thu hoạch">
+                <span class="hud-label">SCORE</span>
+                <span id="game-score-count">00000</span>
+              </span>
+              <span id="game-combo-tag" class="game-combo-tag" style="display:none;">COMBO x2</span>
+              <span id="game-status-tag" class="game-status-tag" style="display:none;">TIME 25</span>
+            </div>
+
+            <div class="tree-canvas-wrapper pixel-art-tree" id="tree-canvas-wrapper" title="Bấm vào cây để biến chuột thành rổ hứng cam!">
+              <!-- Authentic 8-Bit Pixel Art Orange Tree SVG -->
+              <svg class="compact-tree-svg pixel-tree-svg" id="compact-tree-svg" viewBox="0 0 160 120" width="128" height="96" shape-rendering="crispEdges">
+                <!-- Ground (Stepped 8-Bit Grass & Earth) -->
+                <rect x="20" y="112" width="120" height="4" fill="#05FFA1"/>
+                <rect x="12" y="114" width="136" height="3" fill="#10B981"/>
+                <rect x="8" y="117" width="144" height="3" fill="#3D1B06"/>
+
+                <!-- 8-Bit Tree Trunk (Stepped Pixel Bark) -->
+                <rect x="64" y="108" width="32" height="4" fill="#4E2608"/>
+                <rect x="68" y="104" width="24" height="4" fill="#5C2E0B"/>
+                <rect x="70" y="96" width="20" height="8" fill="#8B4513"/>
+                <rect x="72" y="88" width="16" height="8" fill="#8B4513"/>
+                <rect x="72" y="80" width="16" height="8" fill="#A0522D"/>
+                <rect x="74" y="70" width="12" height="10" fill="#8B4513"/>
+                <!-- Left Branch -->
+                <rect x="64" y="66" width="12" height="6" fill="#8B4513"/>
+                <rect x="54" y="62" width="12" height="6" fill="#8B4513"/>
+                <rect x="46" y="58" width="10" height="6" fill="#5C2E0B"/>
+                <!-- Right Branch -->
+                <rect x="84" y="66" width="12" height="6" fill="#8B4513"/>
+                <rect x="94" y="62" width="12" height="6" fill="#8B4513"/>
+                <rect x="104" y="58" width="10" height="6" fill="#5C2E0B"/>
+                <!-- Trunk Highlights -->
+                <rect x="74" y="92" width="4" height="8" fill="#A0522D"/>
+                <rect x="76" y="82" width="4" height="6" fill="#CD853F"/>
+
+                <!-- 8-Bit Foliage Canopy (Clustered Stepped Pixel Clouds) -->
+                <g class="tree-foliage-canopy pixel-canopy">
+                  <!-- Dark Green Shadow Blocks -->
+                  <rect x="36" y="54" width="88" height="20" fill="#044E39"/>
+                  <rect x="28" y="44" width="104" height="20" fill="#044E39"/>
+                  
+                  <!-- Medium Green Blocks -->
+                  <rect x="32" y="38" width="96" height="26" fill="#059669"/>
+                  <rect x="42" y="28" width="76" height="24" fill="#059669"/>
+
+                  <!-- Light Emerald Blocks -->
+                  <rect x="38" y="32" width="36" height="24" fill="#10B981"/>
+                  <rect x="86" y="32" width="36" height="24" fill="#10B981"/>
+                  <rect x="52" y="20" width="56" height="28" fill="#10B981"/>
+
+                  <!-- Top Neon Aqua Highlights (#05FFA1) -->
+                  <rect x="58" y="16" width="44" height="8" fill="#05FFA1"/>
+                  <rect x="42" y="28" width="20" height="6" fill="#05FFA1"/>
+                  <rect x="98" y="28" width="20" height="6" fill="#05FFA1"/>
+                  <rect x="70" y="12" width="20" height="6" fill="#05FFA1"/>
+                </g>
+
+                <!-- 8-Bit Hanging Pixel Oranges -->
+                <g class="tree-hanging-oranges pixel-oranges">
+                  <!-- Orange 1 -->
+                  <g transform="translate(42, 48)">
+                    <rect x="2" y="0" width="4" height="2" fill="#05FFA1"/>
+                    <rect x="0" y="2" width="8" height="8" fill="#FF5E00"/>
+                    <rect x="2" y="4" width="4" height="4" fill="#FFAE34"/>
+                    <rect x="2" y="4" width="2" height="2" fill="#FFEA79"/>
+                  </g>
+                  <!-- Orange 2 -->
+                  <g transform="translate(76, 30)">
+                    <rect x="2" y="0" width="4" height="2" fill="#05FFA1"/>
+                    <rect x="0" y="2" width="8" height="8" fill="#FF5E00"/>
+                    <rect x="2" y="4" width="4" height="4" fill="#FFAE34"/>
+                    <rect x="2" y="4" width="2" height="2" fill="#FFEA79"/>
+                  </g>
+                  <!-- Orange 3 -->
+                  <g transform="translate(110, 48)">
+                    <rect x="2" y="0" width="4" height="2" fill="#05FFA1"/>
+                    <rect x="0" y="2" width="8" height="8" fill="#FF5E00"/>
+                    <rect x="2" y="4" width="4" height="4" fill="#FFAE34"/>
+                    <rect x="2" y="4" width="2" height="2" fill="#FFEA79"/>
+                  </g>
+                  <!-- Orange 4 -->
+                  <g transform="translate(56, 62)">
+                    <rect x="2" y="0" width="4" height="2" fill="#05FFA1"/>
+                    <rect x="0" y="2" width="8" height="8" fill="#FF5E00"/>
+                    <rect x="2" y="4" width="4" height="4" fill="#FFAE34"/>
+                    <rect x="2" y="4" width="2" height="2" fill="#FFEA79"/>
+                  </g>
+                  <!-- Orange 5 -->
+                  <g transform="translate(94, 62)">
+                    <rect x="2" y="0" width="4" height="2" fill="#05FFA1"/>
+                    <rect x="0" y="2" width="8" height="8" fill="#FF5E00"/>
+                    <rect x="2" y="4" width="4" height="4" fill="#FFAE34"/>
+                    <rect x="2" y="4" width="2" height="2" fill="#FFEA79"/>
+                  </g>
+                </g>
+              </svg>
+
+              <!-- Dropzone where active oranges fall and can be caught -->
+              <div class="tree-dropzone" id="tree-dropzone"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Content -->
+    <main class="content-area" role="main">
+
+      <!-- ─── Hero Banner with Y2K Window & Chromatic Aberration ─── -->
+      <section class="orange-hero vinyl-hero y2k-window">
+        <!-- Y2K Retro Window Header -->
+        <div class="y2k-window-bar">
+          <div class="y2k-window-title">
+            <span class="y2k-icon">💿</span> VINYLSTREAM_OS_v98.EXE
+          </div>
+          <div class="y2k-window-controls" aria-hidden="true">
+            <span class="y2k-btn">_</span>
+            <span class="y2k-btn">□</span>
+            <span class="y2k-btn">✕</span>
+          </div>
+        </div>
+
+        <div class="hero-inner-wrap crt-scanlines">
+          <div class="hero-content">
+            <div class="hero-badge pixel-badge">
+              <span class="pulse-dot"></span> RETRO STREAMING HI-FI 32-BIT
+            </div>
+            <h2 class="hero-title"><span class="hero-gradient chromatic-text glitch-on-hover">Giai Điệu & Điện Ảnh Đĩa Than Hồng Đen</span></h2>
+            <p class="hero-subtitle">Thưởng thức từng khung hình và âm thanh sống động trong không gian CD Vinyl sang trọng</p>
+          </div>
+          <div class="hero-art" aria-hidden="true">
+            <div class="rotating-citrus-wheel rotating-vinyl-wheel">
+              <!-- 3D Neon Vinyl Record -->
+              <svg width="128" height="128" viewBox="0 0 100 100">
+                <defs>
+                  <radialGradient id="heroVinylGrad" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#FF2D75"/>
+                    <stop offset="35%" stop-color="#E11D48"/>
+                    <stop offset="38%" stop-color="#120810"/>
+                    <stop offset="70%" stop-color="#080407"/>
+                    <stop offset="74%" stop-color="#1A0A16"/>
+                    <stop offset="97%" stop-color="#050204"/>
+                    <stop offset="100%" stop-color="#FF2D75"/>
+                  </radialGradient>
+                </defs>
+                <circle cx="50" cy="50" r="48" fill="url(#heroVinylGrad)" stroke="#FF2D75" stroke-width="2"/>
+                <circle cx="50" cy="50" r="41" fill="none" stroke="rgba(255, 255, 255, 0.18)" stroke-width="1"/>
+                <circle cx="50" cy="50" r="34" fill="none" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1"/>
+                <circle cx="50" cy="50" r="27" fill="none" stroke="rgba(255, 255, 255, 0.18)" stroke-width="1"/>
+                <circle cx="50" cy="50" r="20" fill="none" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1"/>
+                <!-- Center Label -->
+                <circle cx="50" cy="50" r="14" fill="#FF2D75" stroke="#FFF" stroke-width="2"/>
+                <circle cx="50" cy="50" r="4" fill="#0A0409"/>
+                <text x="50" y="52" font-size="5" fill="#FFF" font-weight="bold" text-anchor="middle">VINYL</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── Mobile Horizontal Category Bar (YouTube / Bilibili Style) ─── -->
+      <nav class="mobile-category-bar" id="mobile-category-bar" aria-label="Bộ lọc chuyên mục mobile">
+        <button class="mobile-cat-chip active" data-filter="all">
+          <span class="chip-icon">💿</span> Tất cả đĩa & video
+          <span class="count">0</span>
+        </button>
+        <button class="mobile-cat-chip" data-filter="video">
+          <span class="chip-icon">🎬</span> Phim & Video
+          <span class="count">0</span>
+        </button>
+        <button class="mobile-cat-chip" data-filter="audio">
+          <span class="chip-icon">🎵</span> Nhạc & Audio CD
+          <span class="count">0</span>
+        </button>
+      </nav>
+
+      <!-- ─── Folder Navigation & Tabs (Hỗ trợ đa tầng thư mục) ─── -->
+      <section class="folder-browser-section" id="folder-browser-section">
+        <!-- Breadcrumbs bar (đường dẫn khi vào sâu thư mục con) -->
+        <nav class="folder-breadcrumbs" id="folder-breadcrumbs" aria-label="Đường dẫn thư mục"></nav>
+
+        <!-- Current Level Tabs (Thanh Tab thư mục) -->
+        <div class="folder-tabs-wrapper">
+          <div class="folder-tabs" id="folder-tabs" role="tablist" aria-label="Danh sách thư mục"></div>
+        </div>
+
+        <!-- Subfolder Tabs (hiện ra khi thư mục có thư mục con bên trong) -->
+        <div class="subfolder-tabs-wrapper" id="subfolder-tabs-wrapper" style="display:none;">
+          <div class="subfolder-label">
+            <span>🎵 Thư mục con:</span>
+          </div>
+          <div class="subfolder-tabs" id="subfolder-tabs" role="tablist" aria-label="Thư mục con"></div>
+        </div>
+      </section>
+
+      <!-- Section header -->
+      <div class="section-header" id="library-section">
+        <h1 class="section-title">
+          <span class="citrus-emoji">💿</span> <span id="section-title-text">Tất cả đĩa nhạc & video</span>
+        </h1>
+        <span class="section-count" id="section-count">Đang mở đĩa...</span>
+      </div>
+
+      <!-- Grid -->
+      <div id="media-grid" class="media-grid" role="list" aria-label="Danh sách media"></div>
+
+    </main>
+  </div><!-- /main-layout -->
+
+  <!-- ─── Player Modal (Pure Streaming Experience) ─── -->
+  <div id="player-overlay" class="player-overlay" role="dialog" aria-modal="true" aria-labelledby="player-title">
+    <div class="player-modal y2k-window">
+
+      <!-- Y2K Retro Window Header Bar -->
+      <div class="y2k-window-bar">
+        <div class="y2k-window-title">
+          <span class="y2k-icon">🎬</span> VINYL_STREAM_PLAYER_32BIT.EXE
+        </div>
+        <div class="y2k-window-controls" aria-hidden="true">
+          <span class="y2k-btn">_</span>
+          <span class="y2k-btn">□</span>
+          <span class="y2k-btn y2k-close-player-btn" onclick="document.getElementById('close-player').click()">✕</span>
+        </div>
+      </div>
+
+      <div class="player-header">
+        <div class="player-title-area">
+          <div class="player-tag">
+            <span class="citrus-bullet"></span> ĐANG PHÁT TRÊN VINYLSTREAM
+            <span id="player-res-tag" class="res-tag-header" style="display:none;">1080p HD</span>
+          </div>
+          <div id="player-title" class="player-title chromatic-text">Đang tải...</div>
+          <div id="player-subtitle" class="player-subtitle"></div>
+        </div>
+        <button id="close-player" class="close-btn" aria-label="Đóng trình phát">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <div id="player-body" class="player-body"></div>
+
+      <!-- ─── Bilibili/YouTube Style Below Video Info & Playlist ─── -->
+      <div class="player-below-content" id="player-below-content">
+        <div class="player-action-pills" id="player-action-pills">
+          <button class="action-pill" id="action-btn-switch-player" title="Đổi giữa Trình phát Vinyl và Google Drive">
+            <span>🔄 Drive Player</span>
+          </button>
+          <a class="action-pill" id="action-btn-open-drive" href="#" target="_blank" rel="noopener" title="Mở file trên Google Drive">
+            <span>↗ Mở Drive</span>
+          </a>
+          <button class="action-pill" id="action-btn-theater" title="Bật/Tắt chế độ Rạp phim (Phím T)">
+            <span>🍿 Rạp phim</span>
+          </button>
+          <button class="action-pill" id="action-btn-loop" title="Bật/Tắt phát lặp lại (Phím R)">
+            <span>🔁 Lặp lại</span>
+          </button>
+          <button class="action-pill" id="action-btn-shortcuts" title="Xem bảng phím tắt tiện lợi">
+            <span>⌨️ Phím tắt</span>
+          </button>
+          <div class="action-pill-spacer"></div>
+          <!-- YouTube/Bilibili style Auto-play next toggle -->
+          <label class="auto-next-toggle" title="Tự động phát tập tiếp theo khi hết video">
+            <input type="checkbox" id="auto-next-checkbox" checked>
+            <span class="toggle-slider"></span>
+            <span class="toggle-label">Tự chuyển tập</span>
+          </label>
+        </div>
+
+        <div class="player-playlist-section" id="player-playlist-section">
+          <div class="playlist-header">
+            <div class="playlist-title-wrap">
+              <span class="playlist-title">📺 Danh sách tập & liên quan</span>
+              <span class="playlist-count" id="player-playlist-count">0 mục</span>
+            </div>
+            <div class="playlist-nav-arrows">
+              <button class="carousel-nav-btn" id="playlist-nav-prev" title="Cuộn sang trái" aria-label="Cuộn trái">‹</button>
+              <button class="carousel-nav-btn" id="playlist-nav-next" title="Cuộn sang phải" aria-label="Cuộn phải">›</button>
+            </div>
+          </div>
+          <div class="playlist-carousel" id="player-playlist-items"></div>
+        </div>
+      </div>
+
+      <div class="player-footer">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <a id="open-new-tab" href="#" target="_blank" rel="noopener" class="open-new-tab-btn" style="display:none;" aria-label="Mở trong tab mới">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Mở tab mới
+          </a>
+          <button id="btn-show-shortcuts" class="open-new-tab-btn" style="cursor:pointer;" title="Xem bảng phím tắt">
+            ⌨️ Phím tắt
+          </button>
+        </div>
+        <span class="esc-hint">
+          Nhấn <kbd>Esc</kbd> hoặc click bên ngoài để đóng
+        </span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─── Keyboard Shortcuts Modal ─── -->
+  <div id="shortcuts-modal" class="shortcuts-overlay" role="dialog" aria-modal="true" aria-labelledby="shortcuts-title">
+    <div class="shortcuts-card">
+      <div class="shortcuts-title">
+        <span>⌨️ Phím Tắt VinylStream (YouTube / Bilibili)</span>
+        <button id="close-shortcuts" class="close-btn" style="width:32px;height:32px;" aria-label="Đóng phím tắt">✕</button>
+      </div>
+      <div class="shortcuts-grid">
+        <div class="shortcut-item"><span>Phát / Dừng</span> <kbd>Space / K</kbd></div>
+        <div class="shortcut-item"><span>Toàn màn hình</span> <kbd>F / Double-Click</kbd></div>
+        <div class="shortcut-item"><span>Tập tiếp theo</span> <kbd>N</kbd></div>
+        <div class="shortcut-item"><span>Tua lùi 10s</span> <kbd>← / J</kbd></div>
+        <div class="shortcut-item"><span>Tua tới 10s</span> <kbd>→ / L</kbd></div>
+        <div class="shortcut-item"><span>Nhảy 0% - 90%</span> <kbd>0 - 9</kbd></div>
+        <div class="shortcut-item"><span>Tăng / Giảm Volume</span> <kbd>↑ / ↓ / Cuộn chuột</kbd></div>
+        <div class="shortcut-item"><span>Tắt / Bật tiếng</span> <kbd>M</kbd></div>
+        <div class="shortcut-item"><span>Chế độ Rạp phim</span> <kbd>T</kbd></div>
+        <div class="shortcut-item"><span>Độ phân giải</span> <kbd>Q</kbd></div>
+        <div class="shortcut-item"><span>Hình trong hình (PiP)</span> <kbd>P</kbd></div>
+        <div class="shortcut-item"><span>Lặp lại video</span> <kbd>R</kbd></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Toast Container ─── -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- ─── Mouse Basket Cursor for Orange Mini Game ─── -->
+  <div id="game-basket-cursor" class="game-basket-cursor" aria-hidden="true" style="display:none;">
+    <div class="basket-cursor-glow"></div>
+    <span class="basket-cursor-icon">🧺</span>
+  </div>
+
+  <!-- ─── Mouse DJ Slipmat Cursor for Vinyl Mini Game ─── -->
+  <div id="game-dj-cursor" class="game-dj-cursor" aria-hidden="true" style="display:none;">
+    <div class="dj-cursor-glow"></div>
+    <span class="dj-cursor-icon">💿</span>
+  </div>
+
+  <!-- ─── Mobile Bottom Navigation (YouTube / Bilibili Style: 4 Nút Trang Chủ - Tất Cả - Video - Audio) ─── -->
+  <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Điều hướng chính mobile">
+    <button class="bottom-nav-item active" id="bnav-home">
+      <span class="bnav-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+      </span>
+      <span class="bnav-label">Trang Chủ</span>
+    </button>
+    <button class="bottom-nav-item" data-filter="all" id="bnav-all">
+      <span class="bnav-icon">💿</span>
+      <span class="bnav-label">Tất Cả</span>
+    </button>
+    <button class="bottom-nav-item" data-filter="video" id="bnav-video">
+      <span class="bnav-icon">🎬</span>
+      <span class="bnav-label">Video</span>
+    </button>
+    <button class="bottom-nav-item" data-filter="audio" id="bnav-audio">
+      <span class="bnav-icon">🎵</span>
+      <span class="bnav-label">Audio</span>
+    </button>
+  </nav>
+
+</div><!-- /app -->
+<script type="module" src="app.js?v=6.0"></script>
+</body>
+</html>

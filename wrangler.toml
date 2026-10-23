@@ -1,7 +1,7 @@
-name = "orangestream"
+name = "vinylstream"
 main = "worker.js"
 compatibility_date = "2024-04-01"
 
 [assets]
-directory = "."
+directory = "dist"
 binding = "ASSETS"

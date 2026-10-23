@@ -1,0 +1,6 @@
+{
+  "name": "VinylStream Noir — Hi-Fi Vinyl CD & Cinema Streaming",
+  "description": "Retro-modern vinyl record and cinema streaming experience featuring spinning turntable mechanics, Google Drive streaming, and curated analog sound aesthetics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

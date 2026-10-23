@@ -1,0 +1,188 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --theme-primary: #FF2D75;
+    --theme-primary-hover: #FF1493;
+    --theme-primary-glow: rgba(255, 45, 117, 0.45);
+    --theme-primary-light: #FF85B3;
+    --theme-bg-base: #070509;
+    --theme-bg-surface: #120914;
+    --theme-bg-card: #160D19;
+    --theme-border: rgba(255, 45, 117, 0.22);
+    --theme-accent: #FF2D75;
+  }
+
+  [data-theme="citrus-orange"] {
+    --theme-primary: #FF7A00;
+    --theme-primary-hover: #EA580C;
+    --theme-primary-glow: rgba(255, 122, 0, 0.45);
+    --theme-primary-light: #FDBA74;
+    --theme-bg-base: #0A0704;
+    --theme-bg-surface: #140F0A;
+    --theme-bg-card: #1A130C;
+    --theme-border: rgba(255, 122, 0, 0.25);
+    --theme-accent: #10B981;
+  }
+
+  [data-theme="amethyst-violet"] {
+    --theme-primary: #A855F7;
+    --theme-primary-hover: #9333EA;
+    --theme-primary-glow: rgba(168, 85, 247, 0.45);
+    --theme-primary-light: #D8B4FE;
+    --theme-bg-base: #06040B;
+    --theme-bg-surface: #0E0919;
+    --theme-bg-card: #150E24;
+    --theme-border: rgba(168, 85, 247, 0.25);
+    --theme-accent: #06B6D4;
+  }
+
+  body {
+    font-family: 'Courier Prime', 'Courier New', Courier, monospace;
+    letter-spacing: -0.01em;
+  }
+}
+
+.font-alegreya {
+  font-family: 'Alegreya', Georgia, serif;
+}
+
+.font-courier {
+  font-family: 'Courier Prime', 'Courier New', Courier, monospace;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.4);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--theme-border);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--theme-primary);
+}
+
+/* Rotating vinyl animations */
+@keyframes vinyl-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-vinyl-spin {
+  animation: vinyl-spin 4s linear infinite;
+}
+
+.animate-vinyl-spin-fast {
+  animation: vinyl-spin 1.8s linear infinite;
+}
+
+.animate-vinyl-spin-slow {
+  animation: vinyl-spin 9s linear infinite;
+}
+
+/* Float note animation */
+@keyframes float-note {
+  0% {
+    transform: translateY(0px) rotate(0deg) scale(0.9);
+    opacity: 0.15;
+  }
+  50% {
+    transform: translateY(-24px) rotate(12deg) scale(1.05);
+    opacity: 0.45;
+  }
+  100% {
+    transform: translateY(0px) rotate(-5deg) scale(0.9);
+    opacity: 0.15;
+  }
+}
+
+.animate-float-note-1 {
+  animation: float-note 6s ease-in-out infinite;
+}
+.animate-float-note-2 {
+  animation: float-note 8s ease-in-out infinite 1.5s;
+}
+.animate-float-note-3 {
+  animation: float-note 7s ease-in-out infinite 3s;
+}
+
+/* Radial pulse glow */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.08);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 5s ease-in-out infinite;
+}
+
+/* Tonearm swing */
+.tonearm {
+  transform-origin: 132px 26px;
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tonearm-active {
+  transform: rotate(26deg);
+}
+
+.tonearm-idle {
+  transform: rotate(0deg);
+}
+
+/* Custom vinyl groove texture */
+.vinyl-grooves {
+  background: repeating-radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.08) 0,
+    rgba(255, 255, 255, 0.08) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+}
+
+/* CD Sleeve Cellophane Gloss Reflection */
+.cd-sleeve-sheen {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(255, 255, 255, 0.05) 25%,
+    rgba(255, 255, 255, 0.0) 50%,
+    rgba(255, 255, 255, 0.08) 75%,
+    rgba(255, 255, 255, 0.15) 100%
+  );
+}
+
+/* CD Jewel Case / Sleeve Spine */
+.cd-spine-shadow {
+  box-shadow: inset 6px 0 12px -3px rgba(0, 0, 0, 0.8), inset -2px 0 5px rgba(255, 255, 255, 0.1);
+}
+
+/* Equalizer bar animation */
+@keyframes eq-bounce {
+  0%, 100% {
+    height: 15%;
+  }
+  50% {
+    height: 95%;
+  }
+}
+
+.eq-bar {
+  animation: eq-bounce 0.8s ease-in-out infinite;
+}
