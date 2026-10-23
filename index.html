@@ -3,35 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Orangestream — Vườn Cam Streaming Tươi Mát 🍊</title>
-  <meta name="description" content="Orangestream — Nền tảng xem phim và nghe nhạc trực tuyến từ Google Drive. Trải nghiệm mượt mà, không quảng cáo." />
-  <meta name="theme-color" content="#ff7a00" />
+  <title>VinylStream — Không Gian Streaming Đĩa Than CD Hồng Đen 💿💖</title>
+  <meta name="description" content="VinylStream — Nền tảng xem phim và nghe nhạc trực tuyến phong cách đĩa than CD Vinyl hồng đen sang trọng. Trải nghiệm mượt mà, không quảng cáo." />
+  <meta name="theme-color" content="#ff2d75" />
   <meta name="referrer" content="no-referrer" />
-  <link rel="stylesheet" href="style.css?v=3.7" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍊</text></svg>" />
+  <link rel="stylesheet" href="style.css?v=4.0" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💿</text></svg>" />
 </head>
 <body>
 
-<!-- ─── Floating Citrus Particles Background (Sống động & Rực rỡ) ─── -->
-<div class="citrus-ambient" aria-hidden="true">
-  <!-- Soft glowing citrus aura orbs -->
-  <div class="citrus-glow-orb orb-1"></div>
-  <div class="citrus-glow-orb orb-2"></div>
-  <div class="citrus-glow-orb orb-3"></div>
+<!-- ─── Floating Vinyl Records & Dancing Music Notes Background ─── -->
+<div class="vinyl-ambient" aria-hidden="true">
+  <!-- Glowing Neon Pink Aura Orbs -->
+  <div class="vinyl-glow-orb orb-1"></div>
+  <div class="vinyl-glow-orb orb-2"></div>
+  <div class="vinyl-glow-orb orb-3"></div>
 
-  <!-- Vivid floating oranges & citrus slices -->
-  <div class="citrus-item item-orange-1">🍊</div>
-  <div class="citrus-item item-leaf-1">🍃</div>
-  <div class="citrus-item item-slice-1">🍊</div>
-  <div class="citrus-item item-leaf-2">🌿</div>
-  <div class="citrus-item item-sparkle-1">✨</div>
-  <div class="citrus-item item-orange-2">🍊</div>
-  <div class="citrus-item item-slice-2">🍊</div>
-  <div class="citrus-item item-leaf-3">🍃</div>
-  <div class="citrus-item item-sparkle-2">✨</div>
-  <div class="citrus-item item-orange-3">🍊</div>
-  <div class="citrus-item item-slice-3">🍊</div>
-  <div class="citrus-item item-leaf-4">🌿</div>
+  <!-- Floating Spinning Vinyl Discs & Floating Music Notes -->
+  <div class="vinyl-item item-disc-1">💿</div>
+  <div class="vinyl-item item-note-1">♪</div>
+  <div class="vinyl-item item-note-2">♫</div>
+  <div class="vinyl-item item-disc-2">💿</div>
+  <div class="vinyl-item item-note-3">♬</div>
+  <div class="vinyl-item item-sparkle-1">✨</div>
+  <div class="vinyl-item item-note-4">♩</div>
+  <div class="vinyl-item item-disc-3">💿</div>
+  <div class="vinyl-item item-note-5">🎵</div>
+  <div class="vinyl-item item-sparkle-2">💖</div>
+  <div class="vinyl-item item-note-6">♪</div>
+  <div class="vinyl-item item-note-7">♫</div>
 </div>
 
 <div id="app">
@@ -39,45 +39,43 @@
   <!-- ─── Navbar ─── -->
   <nav class="navbar" role="navigation" aria-label="Thanh điều hướng chính">
     <div class="navbar-brand">
-      <!-- Animated Orange Mascot Logo -->
-      <div class="orange-mascot" title="Orangestream — Mượt mà từng khung hình">
-        <svg class="orange-svg" width="34" height="34" viewBox="0 0 100 100">
+      <!-- Animated Spinning Pink Vinyl Record Logo -->
+      <div class="vinyl-mascot" title="VinylStream — Mượt mà từng giai điệu">
+        <svg class="vinyl-svg" width="36" height="36" viewBox="0 0 100 100">
           <defs>
-            <radialGradient id="orange-body-grad" cx="35%" cy="35%" r="65%">
-              <stop offset="0%" stop-color="#FFAE34"/>
-              <stop offset="40%" stop-color="#FF7A00"/>
-              <stop offset="100%" stop-color="#E65100"/>
+            <radialGradient id="vinyl-disc-grad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#FF2D75"/>
+              <stop offset="35%" stop-color="#E11D48"/>
+              <stop offset="38%" stop-color="#140810"/>
+              <stop offset="70%" stop-color="#080407"/>
+              <stop offset="73%" stop-color="#1A0A16"/>
+              <stop offset="96%" stop-color="#050204"/>
+              <stop offset="100%" stop-color="#FF2D75"/>
             </radialGradient>
-            <linearGradient id="leaf-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#34D399"/>
-              <stop offset="100%" stop-color="#059669"/>
-            </linearGradient>
-            <filter id="orange-glow" x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#FF7A00" flood-opacity="0.45"/>
+            <filter id="vinyl-glow-filter" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#FF2D75" flood-opacity="0.6"/>
             </filter>
           </defs>
-          <!-- Leaf -->
-          <path class="orange-leaf" d="M50 24 C55 8, 78 10, 78 22 C78 34, 58 32, 50 24 Z" fill="url(#leaf-grad)"/>
-          <path class="orange-stem" d="M50 28 Q49 18 52 14" stroke="#78350F" stroke-width="3" stroke-linecap="round" fill="none"/>
-          <!-- Orange Sphere -->
-          <circle cx="50" cy="58" r="36" fill="url(#orange-body-grad)" filter="url(#orange-glow)"/>
-          <!-- Citrus Highlights -->
-          <ellipse cx="40" cy="42" rx="14" ry="7" fill="white" opacity="0.3" transform="rotate(-30 40 42)"/>
-          <!-- Little Cute Wink / Citrus Slice Ring -->
-          <circle cx="50" cy="58" r="28" fill="none" stroke="#FFF" stroke-width="2" opacity="0.25" stroke-dasharray="4 6"/>
-          <!-- Tiny fresh sparkle -->
-          <circle cx="68" cy="46" r="2.5" fill="#FFF" opacity="0.8"/>
+          <circle cx="50" cy="50" r="46" fill="url(#vinyl-disc-grad)" filter="url(#vinyl-glow-filter)"/>
+          <circle cx="50" cy="50" r="38" fill="none" stroke="rgba(255, 255, 255, 0.15)" stroke-width="1.2"/>
+          <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1.2"/>
+          <circle cx="50" cy="50" r="22" fill="none" stroke="rgba(255, 255, 255, 0.15)" stroke-width="1.2"/>
+          <!-- Pink Center Label -->
+          <circle cx="50" cy="50" r="14" fill="#FF2D75" stroke="#FFF" stroke-width="1.5"/>
+          <circle cx="50" cy="50" r="4" fill="#0A0409"/>
+          <!-- Shine highlight -->
+          <path d="M50 8 A42 42 0 0 1 88 50 L50 50 Z" fill="rgba(255, 255, 255, 0.08)"/>
         </svg>
       </div>
-      <span class="brand-text">Orange<span class="brand-accent">stream</span></span>
-      <span class="brand-tag">vườn cam</span>
+      <span class="brand-text">Vinyl<span class="brand-accent">Stream</span></span>
+      <span class="brand-tag">CD VINYL</span>
     </div>
 
     <div class="navbar-search" role="search">
       <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
         <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
       </svg>
-      <input type="search" id="search-input" placeholder="Tìm kiếm phim, video, nhạc cam..." aria-label="Tìm kiếm media" autocomplete="off" />
+      <input type="search" id="search-input" placeholder="Tìm kiếm phim, video, bài hát đĩa than..." aria-label="Tìm kiếm media" autocomplete="off" />
       <span class="search-shortcut">⌘K</span>
     </div>
   </nav>
@@ -88,12 +86,12 @@
     <!-- Sidebar -->
     <aside class="sidebar" aria-label="Bộ lọc">
       <div class="sidebar-section-title">
-        <span class="tree-icon">🌳</span> Thu Hoạch Cam
+        <span class="tree-icon">💿</span> Bộ Sưu Tập Vinyl
       </div>
 
       <button class="filter-btn active" data-filter="all" id="filter-all" aria-pressed="true">
-        <span class="filter-icon">🍊</span>
-        Tất cả quả cam
+        <span class="filter-icon">💿</span>
+        Tất cả đĩa & video
         <span class="count">0</span>
       </button>
       <button class="filter-btn" data-filter="video" id="filter-video" aria-pressed="false">
@@ -102,86 +100,145 @@
         <span class="count">0</span>
       </button>
       <button class="filter-btn" data-filter="audio" id="filter-audio" aria-pressed="false">
-        <span class="filter-icon">
-          <!-- Quả cam không lá -->
-          <svg class="orange-no-leaf-icon" width="18" height="18" viewBox="0 0 24 24" style="vertical-align:middle;display:inline-block;">
-            <circle cx="12" cy="12" r="10" fill="#FF7A00" stroke="#FFAE34" stroke-width="1.6"/>
-            <circle cx="12" cy="12" r="7.5" fill="#FF9000"/>
-            <circle cx="12" cy="12" r="2.2" fill="#FFF" opacity="0.95"/>
-          </svg>
-        </span>
-        Nhạc & Audio
+        <span class="filter-icon">🎵</span>
+        Nhạc & Audio CD
         <span class="count">0</span>
       </button>
 
       <hr class="sidebar-divider" />
 
       <div class="sidebar-section-title">
-        <span class="tree-icon">🍃</span> Thông Tin Vườn Cam
+        <span class="tree-icon">✨</span> Không Gian Vinyl
       </div>
 
       <div class="orange-guide-card">
         <p class="guide-desc" style="margin-bottom:0;">
-          đây là demo thử nên ở đây sẽ ghi cái gì đó tùy thích
+          Thưởng thức từng thanh âm và thước phim chân thực cùng phong cách CD Vinyl Hồng Đen thượng hạng.
         </p>
       </div>
 
-      <!-- ─── Mini Game: Cây Cam Hái Quả (Nhỏ gọn, không đóng khung, ở dưới cùng) ─── -->
-      <div class="orange-mini-game" id="orange-mini-game">
-        <div class="game-hud">
-          <span class="game-basket" title="Giỏ cam thu hoạch">🧺 <span id="game-score-count">0</span> quả</span>
-          <span id="game-combo-tag" class="game-combo-tag" style="display:none;">Combo x2!</span>
-          <span id="game-status-tag" class="game-status-tag" style="display:none;">⏱️ 20s</span>
+      <!-- ─── Mini Game Lounge: 2 Chế Độ Chơi (Đĩa Than DJ 💿 & Vườn Cam 🍊) ─── -->
+      <div class="mini-game-lounge" id="mini-game-lounge">
+        <!-- Switcher Tabs -->
+        <div class="game-mode-switcher">
+          <button type="button" class="game-tab-btn active" id="tab-game-vinyl" data-game="vinyl">
+            <span>💿 DJ Đĩa Than</span>
+          </button>
+          <button type="button" class="game-tab-btn" id="tab-game-orange" data-game="orange">
+            <span>🍊 Vườn Cam</span>
+          </button>
         </div>
 
-        <div class="tree-canvas-wrapper" id="tree-canvas-wrapper" title="Bấm vào cây để biến chuột thành rổ hứng cam!">
-          <!-- Compact Orange Tree SVG (Không đóng khung) -->
-          <svg class="compact-tree-svg" id="compact-tree-svg" viewBox="0 0 160 120" width="120" height="90">
-            <defs>
-              <linearGradient id="cTrunkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#8B4513"/>
-                <stop offset="100%" stop-color="#4A2508"/>
-              </linearGradient>
-              <linearGradient id="cCanopyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#34D399"/>
-                <stop offset="45%" stop-color="#059669"/>
-                <stop offset="100%" stop-color="#044E39"/>
-              </linearGradient>
-              <radialGradient id="cOrangeGrad" cx="35%" cy="35%" r="65%">
-                <stop offset="0%" stop-color="#FFAE34"/>
-                <stop offset="50%" stop-color="#FF7A00"/>
-                <stop offset="100%" stop-color="#D9480F"/>
-              </radialGradient>
-            </defs>
+        <!-- 1. DJ Vinyl Beat Game -->
+        <div class="game-view-panel active" id="game-panel-vinyl">
+          <div class="game-hud">
+            <span class="game-score-badge" title="Điểm beat DJ">💿 <span id="vinyl-score-count">0</span> beat</span>
+            <span id="vinyl-combo-tag" class="game-combo-tag" style="display:none;">Groove x2!</span>
+            <span id="vinyl-status-tag" class="game-status-tag" style="display:none;">⏱️ 20s</span>
+          </div>
 
-            <!-- Ground shadow -->
-            <ellipse cx="80" cy="115" rx="55" ry="5" fill="#180F08" opacity="0.6"/>
+          <div class="turntable-wrapper" id="turntable-wrapper" title="Bấm vào đĩa than để biến chuột thành mâm DJ hứng nốt nhạc!">
+            <!-- Spinning Turntable SVG with glowing Pink Vinyl & Tonearm -->
+            <svg class="turntable-svg" viewBox="0 0 160 120" width="130" height="96">
+              <defs>
+                <radialGradient id="turntableDiscGrad" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#FF2D75"/>
+                  <stop offset="28%" stop-color="#E11D48"/>
+                  <stop offset="32%" stop-color="#140810"/>
+                  <stop offset="68%" stop-color="#080407"/>
+                  <stop offset="72%" stop-color="#1A0A16"/>
+                  <stop offset="96%" stop-color="#050204"/>
+                  <stop offset="100%" stop-color="#FF2D75"/>
+                </radialGradient>
+                <filter id="vinylNeonGlow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feDropShadow dx="0" dy="2" stdDeviation="5" flood-color="#FF2D75" flood-opacity="0.6"/>
+                </filter>
+              </defs>
 
-            <!-- Trunk -->
-            <path d="M76 115 C75 98 72 82 66 68 C62 58 54 52 48 50 C57 53 64 61 70 70 C74 60 78 52 82 44 C85 53 88 61 93 69 C99 60 108 52 116 50 C109 54 101 60 96 72 C92 85 87 98 84 115 Z" fill="url(#cTrunkGrad)"/>
+              <!-- Turntable Base Plinth -->
+              <rect x="10" y="10" width="140" height="100" rx="14" fill="#130911" stroke="rgba(255, 45, 117, 0.35)" stroke-width="1.8"/>
+              <!-- Platter Inset -->
+              <circle cx="68" cy="60" r="46" fill="#0A0409" stroke="#FF2D75" stroke-width="0.8" opacity="0.6"/>
 
-            <!-- Foliage Canopy -->
-            <g class="tree-foliage-canopy">
-              <circle cx="50" cy="55" r="24" fill="url(#cCanopyGrad)"/>
-              <circle cx="110" cy="55" r="24" fill="url(#cCanopyGrad)"/>
-              <circle cx="80" cy="38" r="28" fill="url(#cCanopyGrad)"/>
-              <circle cx="80" cy="54" r="25" fill="#047857"/>
-              <circle cx="64" cy="46" r="21" fill="url(#cCanopyGrad)"/>
-              <circle cx="96" cy="46" r="21" fill="url(#cCanopyGrad)"/>
-            </g>
+              <!-- Vinyl Record (Spins) -->
+              <g class="spinning-vinyl-disc" id="turntable-disc-group" filter="url(#vinylNeonGlow)">
+                <circle cx="68" cy="60" r="42" fill="url(#turntableDiscGrad)"/>
+                <!-- Vinyl Grooves -->
+                <circle cx="68" cy="60" r="36" fill="none" stroke="rgba(255, 255, 255, 0.12)" stroke-width="0.75"/>
+                <circle cx="68" cy="60" r="30" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="0.75"/>
+                <circle cx="68" cy="60" r="24" fill="none" stroke="rgba(255, 255, 255, 0.12)" stroke-width="0.75"/>
+                <circle cx="68" cy="60" r="18" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="0.75"/>
+                <!-- Center Pink Vinyl Label -->
+                <circle cx="68" cy="60" r="13" fill="#FF2D75" stroke="#FFF" stroke-width="1"/>
+                <circle cx="68" cy="60" r="3.5" fill="#130911"/>
+                <text x="68" y="62" font-size="5" fill="#FFF" font-weight="bold" text-anchor="middle">VINYL</text>
+              </g>
 
-            <!-- Decorative Ripe Oranges on Tree -->
-            <g class="tree-hanging-oranges">
-              <circle cx="48" cy="52" r="6" fill="url(#cOrangeGrad)"/>
-              <circle cx="112" cy="52" r="6" fill="url(#cOrangeGrad)"/>
-              <circle cx="80" cy="36" r="6.5" fill="url(#cOrangeGrad)"/>
-              <circle cx="66" cy="62" r="5.5" fill="url(#cOrangeGrad)"/>
-              <circle cx="94" cy="62" r="5.5" fill="url(#cOrangeGrad)"/>
-            </g>
-          </svg>
+              <!-- Tonearm & Needle -->
+              <path d="M132 26 L124 55 L90 60" fill="none" stroke="#E4D9E2" stroke-width="2.5" stroke-linecap="round"/>
+              <circle cx="132" cy="26" r="6" fill="#FF2D75" stroke="#FFF" stroke-width="1.2"/>
+              <rect x="85" y="57" width="8" height="6" rx="1.5" fill="#FF5C93"/>
 
-          <!-- Dropzone where active oranges fall and can be caught -->
-          <div class="tree-dropzone" id="tree-dropzone"></div>
+              <!-- Soundwaves / sparkles -->
+              <circle cx="28" cy="24" r="2" fill="#FF2D75" opacity="0.8"/>
+              <circle cx="22" cy="34" r="1.5" fill="#FF85B3" opacity="0.8"/>
+            </svg>
+            <div class="vinyl-dropzone" id="vinyl-dropzone"></div>
+          </div>
+        </div>
+
+        <!-- 2. Classic Orange Tree Game -->
+        <div class="game-view-panel" id="game-panel-orange" style="display:none;">
+          <div class="game-hud">
+            <span class="game-basket" title="Giỏ cam thu hoạch">🧺 <span id="game-score-count">0</span> quả</span>
+            <span id="game-combo-tag" class="game-combo-tag" style="display:none;">Combo x2!</span>
+            <span id="game-status-tag" class="game-status-tag" style="display:none;">⏱️ 20s</span>
+          </div>
+
+          <div class="tree-canvas-wrapper" id="tree-canvas-wrapper" title="Bấm vào cây để biến chuột thành rổ hứng cam!">
+            <!-- Compact Orange Tree SVG (Không đóng khung) -->
+            <svg class="compact-tree-svg" id="compact-tree-svg" viewBox="0 0 160 120" width="120" height="90">
+              <defs>
+                <linearGradient id="cTrunkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#8B4513"/>
+                  <stop offset="100%" stop-color="#4A2508"/>
+                </linearGradient>
+                <linearGradient id="cCanopyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#34D399"/>
+                  <stop offset="45%" stop-color="#059669"/>
+                  <stop offset="100%" stop-color="#044E39"/>
+                </linearGradient>
+                <radialGradient id="cOrangeGrad" cx="35%" cy="35%" r="65%">
+                  <stop offset="0%" stop-color="#FFAE34"/>
+                  <stop offset="50%" stop-color="#FF7A00"/>
+                  <stop offset="100%" stop-color="#D9480F"/>
+                </radialGradient>
+              </defs>
+
+              <ellipse cx="80" cy="115" rx="55" ry="5" fill="#180F08" opacity="0.6"/>
+              <path d="M76 115 C75 98 72 82 66 68 C62 58 54 52 48 50 C57 53 64 61 70 70 C74 60 78 52 82 44 C85 53 88 61 93 69 C99 60 108 52 116 50 C109 54 101 60 96 72 C92 85 87 98 84 115 Z" fill="url(#cTrunkGrad)"/>
+
+              <g class="tree-foliage-canopy">
+                <circle cx="50" cy="55" r="24" fill="url(#cCanopyGrad)"/>
+                <circle cx="110" cy="55" r="24" fill="url(#cCanopyGrad)"/>
+                <circle cx="80" cy="38" r="28" fill="url(#cCanopyGrad)"/>
+                <circle cx="80" cy="54" r="25" fill="#047857"/>
+                <circle cx="64" cy="46" r="21" fill="url(#cCanopyGrad)"/>
+                <circle cx="96" cy="46" r="21" fill="url(#cCanopyGrad)"/>
+              </g>
+
+              <g class="tree-hanging-oranges">
+                <circle cx="48" cy="52" r="6" fill="url(#cOrangeGrad)"/>
+                <circle cx="112" cy="52" r="6" fill="url(#cOrangeGrad)"/>
+                <circle cx="80" cy="36" r="6.5" fill="url(#cOrangeGrad)"/>
+                <circle cx="66" cy="62" r="5.5" fill="url(#cOrangeGrad)"/>
+                <circle cx="94" cy="62" r="5.5" fill="url(#cOrangeGrad)"/>
+              </g>
+            </svg>
+
+            <!-- Dropzone where active oranges fall and can be caught -->
+            <div class="tree-dropzone" id="tree-dropzone"></div>
+          </div>
         </div>
       </div>
     </aside>
@@ -190,31 +247,38 @@
     <main class="content-area" role="main">
 
       <!-- ─── Hero Banner ─── -->
-      <section class="orange-hero">
+      <section class="orange-hero vinyl-hero">
         <div class="hero-content">
           <div class="hero-badge">
-            <span class="pulse-dot"></span> VƯỜN CAM STREAMING CHẤT LƯỢNG CAO
+            <span class="pulse-dot"></span> KHÔNG GIAN STREAMING ĐĨA THAN CHẤT LƯỢNG CAO
           </div>
-          <h2 class="hero-title"><span class="hero-gradient">Đây là tiêu đề của trang web</span></h2>
-          <p class="hero-subtitle">Đây là tiêu đề phụ</p>
+          <h2 class="hero-title"><span class="hero-gradient">Giai Điệu & Điện Ảnh Đĩa Than Hồng Đen</span></h2>
+          <p class="hero-subtitle">Thưởng thức từng khung hình và âm thanh sống động trong không gian CD Vinyl sang trọng</p>
         </div>
         <div class="hero-art" aria-hidden="true">
-          <div class="rotating-citrus-wheel">
-            <svg width="120" height="120" viewBox="0 0 100 100">
-              <circle cx="50" cy="50" r="46" fill="#FF7A00" stroke="#FFD166" stroke-width="4"/>
-              <circle cx="50" cy="50" r="40" fill="#FFF" opacity="0.95"/>
-              <g fill="#FFA000">
-                <!-- 8 citrus segments -->
-                <path d="M50 50 L47 16 A36 36 0 0 1 53 16 Z" transform="rotate(0 50 50)"/>
-                <path d="M50 50 L47 16 A36 36 0 0 1 53 16 Z" transform="rotate(45 50 50)"/>
-                <path d="M50 50 L47 16 A36 36 0 0 1 53 16 Z" transform="rotate(90 50 50)"/>
-                <path d="M50 50 L47 16 A36 36 0 0 1 53 16 Z" transform="rotate(135 50 50)"/>
-                <path d="M50 50 L47 16 A36 36 0 0 1 53 16 Z" transform="rotate(180 50 50)"/>
-                <path d="M50 50 L47 16 A36 36 0 0 1 53 16 Z" transform="rotate(225 50 50)"/>
-                <path d="M50 50 L47 16 A36 36 0 0 1 53 16 Z" transform="rotate(270 50 50)"/>
-                <path d="M50 50 L47 16 A36 36 0 0 1 53 16 Z" transform="rotate(315 50 50)"/>
-              </g>
-              <circle cx="50" cy="50" r="7" fill="#FFF"/>
+          <div class="rotating-citrus-wheel rotating-vinyl-wheel">
+            <!-- 3D Neon Vinyl Record -->
+            <svg width="128" height="128" viewBox="0 0 100 100">
+              <defs>
+                <radialGradient id="heroVinylGrad" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#FF2D75"/>
+                  <stop offset="35%" stop-color="#E11D48"/>
+                  <stop offset="38%" stop-color="#120810"/>
+                  <stop offset="70%" stop-color="#080407"/>
+                  <stop offset="74%" stop-color="#1A0A16"/>
+                  <stop offset="97%" stop-color="#050204"/>
+                  <stop offset="100%" stop-color="#FF2D75"/>
+                </radialGradient>
+              </defs>
+              <circle cx="50" cy="50" r="48" fill="url(#heroVinylGrad)" stroke="#FF2D75" stroke-width="2"/>
+              <circle cx="50" cy="50" r="41" fill="none" stroke="rgba(255, 255, 255, 0.18)" stroke-width="1"/>
+              <circle cx="50" cy="50" r="34" fill="none" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1"/>
+              <circle cx="50" cy="50" r="27" fill="none" stroke="rgba(255, 255, 255, 0.18)" stroke-width="1"/>
+              <circle cx="50" cy="50" r="20" fill="none" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1"/>
+              <!-- Center Label -->
+              <circle cx="50" cy="50" r="14" fill="#FF2D75" stroke="#FFF" stroke-width="2"/>
+              <circle cx="50" cy="50" r="4" fill="#0A0409"/>
+              <text x="50" y="52" font-size="5" fill="#FFF" font-weight="bold" text-anchor="middle">VINYL</text>
             </svg>
           </div>
         </div>
@@ -223,7 +287,7 @@
       <!-- ─── Mobile Horizontal Category Bar (YouTube / Bilibili Style) ─── -->
       <nav class="mobile-category-bar" id="mobile-category-bar" aria-label="Bộ lọc chuyên mục mobile">
         <button class="mobile-cat-chip active" data-filter="all">
-          <span class="chip-icon">🍊</span> Tất cả quả cam
+          <span class="chip-icon">💿</span> Tất cả đĩa & video
           <span class="count">0</span>
         </button>
         <button class="mobile-cat-chip" data-filter="video">
@@ -231,13 +295,7 @@
           <span class="count">0</span>
         </button>
         <button class="mobile-cat-chip" data-filter="audio">
-          <span class="chip-icon">
-            <svg class="orange-no-leaf-icon" width="14" height="14" viewBox="0 0 24 24" style="vertical-align:middle;display:inline-block;">
-              <circle cx="12" cy="12" r="10" fill="#FF7A00" stroke="#FFAE34" stroke-width="1.6"/>
-              <circle cx="12" cy="12" r="7.5" fill="#FF9000"/>
-              <circle cx="12" cy="12" r="2.2" fill="#FFF" opacity="0.95"/>
-            </svg>
-          </span> Nhạc & Audio
+          <span class="chip-icon">🎵</span> Nhạc & Audio CD
           <span class="count">0</span>
         </button>
       </nav>
@@ -255,18 +313,18 @@
         <!-- Subfolder Tabs (hiện ra khi thư mục có thư mục con bên trong) -->
         <div class="subfolder-tabs-wrapper" id="subfolder-tabs-wrapper" style="display:none;">
           <div class="subfolder-label">
-            <span>🌿 Thư mục con:</span>
+            <span>🎵 Thư mục con:</span>
           </div>
           <div class="subfolder-tabs" id="subfolder-tabs" role="tablist" aria-label="Thư mục con"></div>
         </div>
       </section>
 
       <!-- Section header -->
-      <div class="section-header">
+      <div class="section-header" id="library-section">
         <h1 class="section-title">
-          <span class="citrus-emoji">🍊</span> <span id="section-title-text">Tất cả quả cam</span>
+          <span class="citrus-emoji">💿</span> <span id="section-title-text">Tất cả đĩa nhạc & video</span>
         </h1>
-        <span class="section-count" id="section-count">Đang hái quả...</span>
+        <span class="section-count" id="section-count">Đang mở đĩa...</span>
       </div>
 
       <!-- Grid -->
@@ -275,14 +333,14 @@
     </main>
   </div><!-- /main-layout -->
 
-  <!-- ─── Player Modal ─── -->
+  <!-- ─── Player Modal (Pure Streaming Experience) ─── -->
   <div id="player-overlay" class="player-overlay" role="dialog" aria-modal="true" aria-labelledby="player-title">
     <div class="player-modal">
 
       <div class="player-header">
         <div class="player-title-area">
           <div class="player-tag">
-            <span class="citrus-bullet"></span> ĐANG PHÁT TRÊN ORANGESTREAM
+            <span class="citrus-bullet"></span> ĐANG PHÁT TRÊN VINYLSTREAM
             <span id="player-res-tag" class="res-tag-header" style="display:none;">1080p HD</span>
           </div>
           <div id="player-title" class="player-title">Đang tải...</div>
@@ -300,12 +358,9 @@
       <!-- ─── Bilibili/YouTube Style Below Video Info & Playlist ─── -->
       <div class="player-below-content" id="player-below-content">
         <div class="player-action-pills" id="player-action-pills">
-          <button class="action-pill" id="action-btn-switch-player" title="Đổi giữa Trình phát Cam và Google Drive">
+          <button class="action-pill" id="action-btn-switch-player" title="Đổi giữa Trình phát Vinyl và Google Drive">
             <span>🔄 Drive Player</span>
           </button>
-          <a class="action-pill" id="action-btn-download" href="#" download title="Tải video độ phân giải gốc">
-            <span>⬇ Tải về</span>
-          </a>
           <a class="action-pill" id="action-btn-open-drive" href="#" target="_blank" rel="noopener" title="Mở file trên Google Drive">
             <span>↗ Mở Drive</span>
           </a>
@@ -364,7 +419,7 @@
   <div id="shortcuts-modal" class="shortcuts-overlay" role="dialog" aria-modal="true" aria-labelledby="shortcuts-title">
     <div class="shortcuts-card">
       <div class="shortcuts-title">
-        <span>⌨️ Phím Tắt Vườn Cam (YouTube / Bilibili)</span>
+        <span>⌨️ Phím Tắt VinylStream (YouTube / Bilibili)</span>
         <button id="close-shortcuts" class="close-btn" style="width:32px;height:32px;" aria-label="Đóng phím tắt">✕</button>
       </div>
       <div class="shortcuts-grid">
@@ -384,159 +439,19 @@
     </div>
   </div>
 
-  <!-- ─── Download Hub Modal (Phân loại định dạng & Trích xuất MP3 / AAC / Video) ─── -->
-  <div id="download-modal" class="download-overlay" role="dialog" aria-modal="true" aria-labelledby="download-modal-title">
-    <div class="download-card">
-      <div class="download-modal-header">
-        <div class="download-modal-title-wrap">
-          <span class="download-modal-icon">⬇️</span>
-          <div>
-            <h3 id="download-modal-title" class="download-modal-title">Tùy Chọn Tải Về</h3>
-            <p id="download-media-name" class="download-media-name">Tên file đang phát</p>
-          </div>
-        </div>
-        <button id="close-download-modal" class="close-btn" style="width:34px;height:34px;" aria-label="Đóng">✕</button>
-      </div>
-
-      <!-- Format Category Tabs -->
-      <div class="download-format-tabs" id="download-format-tabs">
-        <button type="button" class="download-tab-btn active" data-tab="audio" id="dtab-audio">
-          <span>🎵 Âm thanh & MP3</span>
-        </button>
-        <button type="button" class="download-tab-btn" data-tab="video" id="dtab-video">
-          <span>🎬 Video MP4</span>
-        </button>
-      </div>
-
-      <!-- Format Options Body -->
-      <div class="download-options-container" id="download-options-container">
-        <!-- Audio Options Group -->
-        <div class="format-group-pane active" id="pane-audio">
-          <div class="format-list">
-            <label class="format-option-card active">
-              <input type="radio" name="download-format" value="mp3-320" checked>
-              <div class="format-opt-radio-circle"></div>
-              <div class="format-opt-info">
-                <div class="format-opt-header">
-                  <span class="format-opt-name">MP3 — 320 kbps</span>
-                  <span class="format-opt-badge gold">Studio Quality</span>
-                </div>
-                <div class="format-opt-desc">Chất lượng âm thanh cao nhất, âm bass sâu, chi tiết rõ nét (Khuyên dùng)</div>
-              </div>
-            </label>
-
-            <label class="format-option-card">
-              <input type="radio" name="download-format" value="mp3-128">
-              <div class="format-opt-radio-circle"></div>
-              <div class="format-opt-info">
-                <div class="format-opt-header">
-                  <span class="format-opt-name">MP3 — 128 kbps</span>
-                  <span class="format-opt-badge">Tiêu chuẩn</span>
-                </div>
-                <div class="format-opt-desc">Dung lượng nhẹ, tải nhanh, phù hợp lưu trữ số lượng lớn</div>
-              </div>
-            </label>
-
-            <label class="format-option-card">
-              <input type="radio" name="download-format" value="aac">
-              <div class="format-opt-radio-circle"></div>
-              <div class="format-opt-info">
-                <div class="format-opt-header">
-                  <span class="format-opt-name">AAC — 192 kbps</span>
-                  <span class="format-opt-badge green">Apple & Android</span>
-                </div>
-                <div class="format-opt-desc">Chuẩn âm thanh nén hiện đại, tương thích hoàn hảo mọi thiết bị</div>
-              </div>
-            </label>
-
-            <label class="format-option-card">
-              <input type="radio" name="download-format" value="audio-original">
-              <div class="format-opt-radio-circle"></div>
-              <div class="format-opt-info">
-                <div class="format-opt-header">
-                  <span class="format-opt-name">Bản Gốc (Original Audio)</span>
-                  <span class="format-opt-badge raw">Nguyên bản</span>
-                </div>
-                <div class="format-opt-desc">Tải nguyên vẹn file âm thanh gốc (FLAC/WAV/MP3/M4A) không qua nén</div>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <!-- Video Options Group -->
-        <div class="format-group-pane" id="pane-video">
-          <div class="format-list">
-            <label class="format-option-card">
-              <input type="radio" name="download-format" value="video-original">
-              <div class="format-opt-radio-circle"></div>
-              <div class="format-opt-info">
-                <div class="format-opt-header">
-                  <span class="format-opt-name">Bản Gốc Siêu Nét (Full HD / 4K)</span>
-                  <span class="format-opt-badge gold">Tối ưu nhất</span>
-                </div>
-                <div class="format-opt-desc">File video gốc từ Google Drive, độ sắc nét và âm thanh nguyên bản 100%</div>
-              </div>
-            </label>
-
-            <label class="format-option-card">
-              <input type="radio" name="download-format" value="video-720p">
-              <div class="format-opt-radio-circle"></div>
-              <div class="format-opt-info">
-                <div class="format-opt-header">
-                  <span class="format-opt-name">MP4 — 720p HD</span>
-                  <span class="format-opt-badge">Mượt mà</span>
-                </div>
-                <div class="format-opt-desc">Cân bằng hoàn hảo giữa độ nét và dung lượng cho điện thoại / laptop</div>
-              </div>
-            </label>
-
-            <label class="format-option-card">
-              <input type="radio" name="download-format" value="video-480p">
-              <div class="format-opt-radio-circle"></div>
-              <div class="format-opt-info">
-                <div class="format-opt-header">
-                  <span class="format-opt-name">MP4 — 480p Tiêu chuẩn</span>
-                  <span class="format-opt-badge">Tiết kiệm</span>
-                </div>
-                <div class="format-opt-desc">Dung lượng cực nhẹ, phù hợp tải nhanh khi dùng 4G/5G</div>
-              </div>
-            </label>
-          </div>
-        </div>
-      </div>
-
-      <!-- Converting & Processing Status Bar -->
-      <div class="download-progress-box" id="download-progress-box" style="display:none;">
-        <div class="progress-info-row">
-          <span class="progress-status-text" id="download-status-text">Đang chuẩn bị...</span>
-          <span class="progress-percent-text" id="download-percent-text">0%</span>
-        </div>
-        <div class="download-progress-track">
-          <div class="download-progress-fill" id="download-progress-fill"></div>
-        </div>
-        <div class="progress-note" id="download-progress-note">
-          💡 Đang trích xuất và xử lý âm thanh trực tiếp trên trình duyệt của bạn 🍊
-        </div>
-      </div>
-
-      <!-- Action Footer -->
-      <div class="download-modal-footer">
-        <button type="button" class="download-cancel-btn" id="btn-cancel-download">Hủy</button>
-        <button type="button" class="download-submit-btn" id="btn-start-download">
-          <span id="download-submit-label">Tải Về Ngay</span>
-          <span class="btn-arrow">⬇</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
   <!-- ─── Toast Container ─── -->
   <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
-  <!-- ─── Mouse Basket Cursor for Mini Game ─── -->
+  <!-- ─── Mouse Basket Cursor for Orange Mini Game ─── -->
   <div id="game-basket-cursor" class="game-basket-cursor" aria-hidden="true" style="display:none;">
     <div class="basket-cursor-glow"></div>
     <span class="basket-cursor-icon">🧺</span>
+  </div>
+
+  <!-- ─── Mouse DJ Slipmat Cursor for Vinyl Mini Game ─── -->
+  <div id="game-dj-cursor" class="game-dj-cursor" aria-hidden="true" style="display:none;">
+    <div class="dj-cursor-glow"></div>
+    <span class="dj-cursor-icon">💿</span>
   </div>
 
   <!-- ─── Mobile Bottom Navigation (YouTube / Bilibili Style: 4 Nút Trang Chủ - Tất Cả - Video - Audio) ─── -->
@@ -551,7 +466,7 @@
       <span class="bnav-label">Trang Chủ</span>
     </button>
     <button class="bottom-nav-item" data-filter="all" id="bnav-all">
-      <span class="bnav-icon">🍊</span>
+      <span class="bnav-icon">💿</span>
       <span class="bnav-label">Tất Cả</span>
     </button>
     <button class="bottom-nav-item" data-filter="video" id="bnav-video">
@@ -559,18 +474,12 @@
       <span class="bnav-label">Video</span>
     </button>
     <button class="bottom-nav-item" data-filter="audio" id="bnav-audio">
-      <span class="bnav-icon">
-        <svg class="orange-no-leaf-icon" width="18" height="18" viewBox="0 0 24 24" style="vertical-align:middle;display:inline-block;">
-          <circle cx="12" cy="12" r="10" fill="#FF7A00" stroke="#FFAE34" stroke-width="1.6"/>
-          <circle cx="12" cy="12" r="7.5" fill="#FF9000"/>
-          <circle cx="12" cy="12" r="2.2" fill="#FFF" opacity="0.95"/>
-        </svg>
-      </span>
+      <span class="bnav-icon">🎵</span>
       <span class="bnav-label">Audio</span>
     </button>
   </nav>
 
 </div><!-- /app -->
-<script type="module" src="app.js?v=3.7"></script>
+<script type="module" src="app.js?v=4.0"></script>
 </body>
 </html>

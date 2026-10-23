@@ -57,65 +57,47 @@ function createJuiceSplash(x, y) {
   }
 }
 
-// ─── Orange Split / Slice in Half Animation ─────────
-function playOrangeSliceAnimation(x, y) {
+// ─── Pink Vinyl Spin & Soundwave Burst Animation ────
+function playVinylSpinAnimation(x, y) {
   if (!x || !y) {
     x = window.innerWidth / 2;
     y = window.innerHeight / 2;
   }
 
   const wrap = document.createElement('div');
-  wrap.className = 'orange-slice-animation';
+  wrap.className = 'vinyl-spin-animation';
   wrap.style.left = `${x}px`;
   wrap.style.top = `${y}px`;
 
   wrap.innerHTML = `
-    <!-- Left Half of Orange (Slices away to left) -->
-    <svg class="orange-half orange-half-left" viewBox="0 0 40 70">
-      <defs>
-        <radialGradient id="pulp-left" cx="85%" cy="50%" r="75%">
-          <stop offset="0%" stop-color="#FFB703"/>
-          <stop offset="50%" stop-color="#FF7A00"/>
-          <stop offset="100%" stop-color="#E65100"/>
-        </radialGradient>
-      </defs>
-      <path d="M35 5 A30 30 0 0 0 35 65 Z" fill="url(#pulp-left)" stroke="#FFAE34" stroke-width="2.5"/>
-      <line x1="33" y1="5" x2="33" y2="65" stroke="#FFF" stroke-width="2.5" stroke-linecap="round" opacity="0.95"/>
-      <circle cx="26" cy="35" r="3.5" fill="#FFF" opacity="0.95"/>
-      <circle cx="16" cy="24" r="2.2" fill="#FFF" opacity="0.8"/>
-      <circle cx="16" cy="46" r="2.2" fill="#FFF" opacity="0.8"/>
-      <path d="M35 5 C30 0, 20 2, 22 8 Z" fill="#34D399"/>
-    </svg>
+    <!-- Concentric Soundwave Rings -->
+    <div class="vinyl-soundwave-ring" style="animation-delay: 0s;"></div>
+    <div class="vinyl-soundwave-ring" style="animation-delay: 0.12s;"></div>
 
-    <!-- Slash Light Cut Effect -->
+    <!-- Glowing Pink Vinyl Disc Burst -->
+    <div class="vinyl-burst-disc"></div>
+
+    <!-- Neon Pink Flash -->
     <div class="orange-slash-flash"></div>
 
-    <!-- Right Half of Orange (Slices away to right) -->
-    <svg class="orange-half orange-half-right" viewBox="0 0 40 70">
-      <defs>
-        <radialGradient id="pulp-right" cx="15%" cy="50%" r="75%">
-          <stop offset="0%" stop-color="#FFB703"/>
-          <stop offset="50%" stop-color="#FF7A00"/>
-          <stop offset="100%" stop-color="#E65100"/>
-        </radialGradient>
-      </defs>
-      <path d="M5 5 A30 30 0 0 1 5 65 Z" fill="url(#pulp-right)" stroke="#FFAE34" stroke-width="2.5"/>
-      <line x1="7" y1="5" x2="7" y2="65" stroke="#FFF" stroke-width="2.5" stroke-linecap="round" opacity="0.95"/>
-      <circle cx="14" cy="35" r="3.5" fill="#FFF" opacity="0.95"/>
-      <circle cx="24" cy="24" r="2.2" fill="#FFF" opacity="0.8"/>
-      <circle cx="24" cy="46" r="2.2" fill="#FFF" opacity="0.8"/>
-    </svg>
+    <!-- Dancing Musical Notes Sparks -->
+    <span class="vinyl-note-spark" style="--tx:-45px;--ty:-40px;--rot:-25deg;">♪</span>
+    <span class="vinyl-note-spark" style="--tx:45px;--ty:-38px;--rot:20deg;">♫</span>
+    <span class="vinyl-note-spark" style="--tx:-35px;--ty:45px;--rot:-15deg;">♬</span>
+    <span class="vinyl-note-spark" style="--tx:40px;--ty:42px;--rot:30deg;">♩</span>
+    <span class="vinyl-note-spark" style="--tx:0px;--ty:-60px;--rot:0deg;">✨</span>
   `;
 
   document.body.appendChild(wrap);
 
-  // Trigger burst droplets around the cut
+  // Sparkle burst around the vinyl spin
   createJuiceSplash(x, y);
 
   setTimeout(() => {
     if (wrap.parentNode) wrap.remove();
-  }, 560);
+  }, 620);
 }
+const playOrangeSliceAnimation = playVinylSpinAnimation;
 
 // ─── Toast ───────────────────────────────────────────
 function toast(msg, type = 'info') {
@@ -123,7 +105,7 @@ function toast(msg, type = 'info') {
   el.className = `toast toast-${type}`;
   const icon = type === 'error'
     ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`
-    : `<span style="font-size:1.1rem;">🍊</span>`;
+    : `<span style="font-size:1.1rem;">💿</span>`;
   el.innerHTML = `${icon}<span>${msg}</span>`;
   toastContainer.appendChild(el);
   setTimeout(() => el.remove(), 3200);
@@ -230,7 +212,7 @@ function getFilteredMedia() {
 
 // ─── Update Section Header ────────────────────────────
 function updateSectionHeader(items) {
-  const countUnit = state.filter === 'video' ? 'video' : state.filter === 'audio' ? 'audio' : 'quả cam';
+  const countUnit = state.filter === 'video' ? 'video' : state.filter === 'audio' ? 'bài hát' : 'mục đĩa than';
   if (sectionCount) {
     sectionCount.textContent = `${items.length} ${countUnit}`;
   }
@@ -244,11 +226,11 @@ function updateSectionHeader(items) {
         titleEl.textContent = `Thư mục: ${state.currentPath.join(' / ')}`;
       }
     } else if (state.filter === 'video') {
-      titleEl.textContent = 'Phim & Video';
+      titleEl.textContent = 'Phim & Video Clip';
     } else if (state.filter === 'audio') {
-      titleEl.textContent = 'Nhạc & Audio';
+      titleEl.textContent = 'Nhạc & Đĩa Than Audio';
     } else {
-      titleEl.textContent = 'Tất cả quả cam';
+      titleEl.textContent = 'Tất cả đĩa nhạc & video';
     }
   }
 }
@@ -268,7 +250,7 @@ function createMediaCard(media, i) {
     ? `<img src="${media.thumbnail}" alt="${media.title}" loading="lazy">`
     : isVideo
       ? `<svg class="card-default-icon" width="56" height="56" viewBox="0 0 24 24" fill="currentColor"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>`
-      : `<svg class="card-default-icon" width="56" height="56" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" fill="#FF7A00"/><circle cx="12" cy="12" r="7.5" fill="#FF9000"/><circle cx="12" cy="12" r="2.2" fill="#FFF"/></svg>`;
+      : `<svg class="card-default-icon" width="56" height="56" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#140810" stroke="#FF2D75" stroke-width="3"/><circle cx="50" cy="50" r="36" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/><circle cx="50" cy="50" r="26" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/><circle cx="50" cy="50" r="14" fill="#FF2D75"/><circle cx="50" cy="50" r="4" fill="#0A0409"/></svg>`;
 
   const folderBadge = media.folderName && media.folderName !== 'Thư mục gốc'
     ? `<span class="card-meta-item" style="color:var(--text-muted);" title="Đường dẫn: ${(media.folderPath || [media.folderName]).join(' / ')}"><span style="opacity:0.75;">📁</span> ${media.folderName}</span>`
@@ -276,15 +258,12 @@ function createMediaCard(media, i) {
 
   const typeMeta = isVideo
     ? `<span class="card-meta-item meta-video">🎬 Video</span>`
-    : `<span class="card-meta-item meta-audio">
-         <svg class="orange-no-leaf-icon" width="14" height="14" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#FF7A00" stroke="#FFAE34" stroke-width="1.5"/><circle cx="12" cy="12" r="7.5" fill="#FF9000"/><circle cx="12" cy="12" r="2.2" fill="#FFF" opacity="0.95"/></svg>
-         Audio
-       </span>`;
+    : `<span class="card-meta-item meta-audio">🎵 Audio CD</span>`;
 
   card.innerHTML = `
     <div class="card-thumbnail">
       ${thumbContent}
-      <span class="card-type-badge badge-${media.type}">${isVideo ? 'Video' : 'Audio'}</span>
+      <span class="card-type-badge badge-${media.type}">${isVideo ? 'Video' : 'Audio CD'}</span>
       <div class="card-play-overlay">
         <div class="play-circle" title="Xem ngay">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
@@ -301,13 +280,13 @@ function createMediaCard(media, i) {
     </div>`;
 
   card.addEventListener('click', (e) => {
-    playOrangeSliceAnimation(e.clientX, e.clientY);
+    playVinylSpinAnimation(e.clientX, e.clientY);
     openPlayer(media);
   });
   card.addEventListener('keydown', e => {
     if (e.key === 'Enter' || e.key === ' ') {
       const rect = card.getBoundingClientRect();
-      playOrangeSliceAnimation(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      playVinylSpinAnimation(rect.left + rect.width / 2, rect.top + rect.height / 2);
       openPlayer(media);
     }
   });
@@ -325,8 +304,8 @@ function renderGrid() {
     const isAudioFilter = state.filter === 'audio';
     mediaGrid.innerHTML = `
       <div class="empty-state" style="grid-column:1/-1">
-        <span style="font-size:3rem;display:block;margin-bottom:1rem;">🍊</span>
-        <h3>${isAudioFilter ? 'Chưa có file audio nào trong thư mục này' : 'Không tìm thấy file nào trong thư mục này'}</h3>
+        <span style="font-size:3rem;display:block;margin-bottom:1rem;">💿</span>
+        <h3>${isAudioFilter ? 'Chưa có đĩa audio nào trong thư mục này' : 'Không tìm thấy đĩa nhạc hoặc video nào trong thư mục này'}</h3>
         <p>Thử chọn tab thư mục khác hoặc chuyển sang mục Phim & Video</p>
       </div>`;
     return;
@@ -860,11 +839,6 @@ function initOrangeVideoPlayer(media) {
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="2" y1="9" x2="22" y2="9"/><line x1="2" y1="15" x2="22" y2="15"/></svg>
             </button>
 
-            <!-- Download Video Button -->
-            <button class="ctrl-btn" id="ctrl-download" title="Tùy chọn tải về (Video, MP3, AAC)">
-              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            </button>
-
             <!-- Fullscreen -->
             <button class="ctrl-btn" id="ctrl-fullscreen" title="Toàn màn hình (F)">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
@@ -917,13 +891,6 @@ function initOrangeVideoPlayer(media) {
   const mobileCloseBtn = document.getElementById('mobile-player-close-btn');
   if (mobileCloseBtn) {
     mobileCloseBtn.onclick = closePlayer;
-  }
-  const ctrlDl = document.getElementById('ctrl-download');
-  if (ctrlDl) {
-    ctrlDl.onclick = (e) => {
-      e.preventDefault();
-      openDownloadModal(media);
-    };
   }
 
   // Resume Playback from LocalStorage
@@ -1460,19 +1427,7 @@ function openPlayer(media) {
   openNewTab.href = `https://drive.google.com/file/d/${media.fileId}/view`;
   openNewTab.style.display = '';
 
-  // Setup download and Drive links (PC action pills & mobile buttons)
-  const downloadLink = `/stream-media/${media.fileId}`;
   const driveViewUrl = `https://drive.google.com/file/d/${media.fileId}/view`;
-
-  ['action-btn-download', 'mobile-btn-download'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.onclick = (e) => {
-        e.preventDefault();
-        openDownloadModal(media);
-      };
-    }
-  });
 
   ['action-btn-open-drive', 'mobile-btn-open-drive'].forEach(id => {
     const el = document.getElementById(id);
@@ -2151,311 +2106,265 @@ function initOrangeMiniGame() {
   }
 }
 
-// ─── Download Hub & In-Browser Audio/Video Converter ───
-let downloadMediaTarget = null;
-let isConverting = false;
+// ─── Dual Mini-Game Lounge: DJ Vinyl & Classic Orange Garden ───
+function initMiniGameLounge() {
+  const tabVinyl = document.getElementById('tab-game-vinyl');
+  const tabOrange = document.getElementById('tab-game-orange');
+  const panelVinyl = document.getElementById('game-panel-vinyl');
+  const panelOrange = document.getElementById('game-panel-orange');
 
-function loadLameJs() {
-  if (window.lamejs) return Promise.resolve(window.lamejs);
-  return new Promise((resolve, reject) => {
-    const s = document.createElement('script');
-    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.all.min.js';
-    s.onload = () => resolve(window.lamejs);
-    s.onerror = () => {
-      const s2 = document.createElement('script');
-      s2.src = 'https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js';
-      s2.onload = () => resolve(window.lamejs);
-      s2.onerror = reject;
-      document.head.appendChild(s2);
-    };
-    document.head.appendChild(s);
-  });
+  if (tabVinyl && tabOrange && panelVinyl && panelOrange) {
+    tabVinyl.addEventListener('click', () => {
+      tabVinyl.classList.add('active');
+      tabOrange.classList.remove('active');
+      panelVinyl.style.display = 'block';
+      panelOrange.style.display = 'none';
+      toast('Đã chọn chế độ 💿 DJ Đĩa Than!', 'info');
+    });
+
+    tabOrange.addEventListener('click', () => {
+      tabOrange.classList.add('active');
+      tabVinyl.classList.remove('active');
+      panelOrange.style.display = 'block';
+      panelVinyl.style.display = 'none';
+      toast('Đã chọn chế độ 🍊 Vườn Cam!', 'info');
+    });
+  }
 }
 
-function triggerBlobDownload(blob, filename) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  setTimeout(() => URL.revokeObjectURL(url), 5000);
-}
+// ─── Mini-Game 1: DJ Vinyl Beat Drop ───────────────────────────
+function initVinylDJGame() {
+  const turntable = document.getElementById('turntable-wrapper');
+  const cursorEl = document.getElementById('game-dj-cursor');
+  const scoreEl = document.getElementById('vinyl-score-count');
+  const comboEl = document.getElementById('vinyl-combo-tag');
+  const statusEl = document.getElementById('vinyl-status-tag');
+  const dropzone = document.getElementById('vinyl-dropzone') || document.body;
 
-function triggerDirectUrlDownload(url, filename) {
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  a.target = '_blank';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-}
+  let isPlaying = false;
+  let score = 0;
+  let combo = 0;
+  let animFrameId = null;
+  let spawnIntervalId = null;
+  let countdownTimerId = null;
+  let timeLeft = 25;
+  const activeBeats = [];
 
-function audioBufferToWav(buffer) {
-  const numChannels = buffer.numberOfChannels;
-  const sampleRate = buffer.sampleRate;
-  const format = 1;
-  const bitDepth = 16;
-  const bytesPerSample = bitDepth / 8;
-  const blockAlign = numChannels * bytesPerSample;
-  const dataLength = buffer.length * blockAlign;
-  const bufferLength = 44 + dataLength;
+  let mouseX = window.innerWidth / 2;
+  let mouseY = window.innerHeight / 2;
 
-  const arrayBuffer = new ArrayBuffer(bufferLength);
-  const view = new DataView(arrayBuffer);
-
-  function writeString(offset, string) {
-    for (let i = 0; i < string.length; i++) {
-      view.setUint8(offset + i, string.charCodeAt(i));
+  function updateCursorPos(e) {
+    mouseX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : mouseX);
+    mouseY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : mouseY);
+    if (cursorEl) {
+      cursorEl.style.left = `${mouseX}px`;
+      cursorEl.style.top  = `${mouseY}px`;
     }
   }
 
-  writeString(0, 'RIFF');
-  view.setUint32(4, 36 + dataLength, true);
-  writeString(8, 'WAVE');
-  writeString(12, 'fmt ');
-  view.setUint32(16, 16, true);
-  view.setUint16(20, format, true);
-  view.setUint16(22, numChannels, true);
-  view.setUint32(24, sampleRate, true);
-  view.setUint32(28, sampleRate * blockAlign, true);
-  view.setUint16(32, blockAlign, true);
-  view.setUint16(34, bitDepth, true);
-  writeString(36, 'data');
-  view.setUint32(40, dataLength, true);
-
-  let offset = 44;
-  for (let i = 0; i < buffer.length; i++) {
-    for (let channel = 0; channel < numChannels; channel++) {
-      const sample = Math.max(-1, Math.min(1, buffer.getChannelData(channel)[i]));
-      const int16 = sample < 0 ? sample * 32768 : sample * 32767;
-      view.setInt16(offset, int16, true);
-      offset += 2;
+  function toggleDJGame() {
+    if (isPlaying) {
+      stopDJGame();
+    } else {
+      startDJGame();
     }
   }
 
-  return new Blob([view], { type: 'audio/wav' });
-}
+  function startDJGame() {
+    isPlaying = true;
+    score = 0;
+    combo = 0;
+    timeLeft = 25;
 
-function openDownloadModal(media) {
-  downloadMediaTarget = media || state.currentMedia;
-  if (!downloadMediaTarget) return;
+    if (scoreEl) scoreEl.textContent = '0';
+    if (comboEl) comboEl.style.display = 'none';
+    if (statusEl) {
+      statusEl.style.display = 'inline-block';
+      statusEl.textContent = '⏱️ 25s';
+    }
 
-  const modal = document.getElementById('download-modal');
-  const nameEl = document.getElementById('download-media-name');
-  const progressBox = document.getElementById('download-progress-box');
-  const submitBtn = document.getElementById('btn-start-download');
-  const dtabAudio = document.getElementById('dtab-audio');
-  const dtabVideo = document.getElementById('dtab-video');
-  const paneAudio = document.getElementById('pane-audio');
-  const paneVideo = document.getElementById('pane-video');
+    document.body.classList.add('vinyl-game-active');
+    if (cursorEl) {
+      cursorEl.style.display = 'flex';
+      cursorEl.style.left = `${mouseX}px`;
+      cursorEl.style.top  = `${mouseY}px`;
+    }
 
-  if (!modal) return;
+    window.addEventListener('mousemove', updateCursorPos, { passive: true });
+    window.addEventListener('touchmove', updateCursorPos, { passive: true });
 
-  nameEl.textContent = `${downloadMediaTarget.title} (${downloadMediaTarget.type === 'video' ? 'Video' : 'Audio'})`;
-  progressBox.style.display = 'none';
-  submitBtn.disabled = false;
+    toast('Đã bật mâm DJ! Rê mâm đĩa để hứng nốt nhạc & đĩa than rơi nhé! 💿🎧', 'info');
 
-  const isVideo = downloadMediaTarget.type === 'video';
-  if (isVideo) {
-    dtabVideo.style.display = '';
-    dtabAudio.classList.add('active');
-    dtabVideo.classList.remove('active');
-    paneAudio.classList.add('active');
-    paneVideo.classList.remove('active');
-  } else {
-    dtabVideo.style.display = 'none';
-    dtabAudio.classList.add('active');
-    paneAudio.classList.add('active');
-    paneVideo.classList.remove('active');
+    // Spawn falling vinyl items & musical notes
+    spawnIntervalId = setInterval(spawnBeatItem, 420);
+
+    // Countdown timer
+    countdownTimerId = setInterval(() => {
+      timeLeft--;
+      if (statusEl) statusEl.textContent = `⏱️ ${timeLeft}s`;
+      if (timeLeft <= 0) {
+        stopDJGame();
+        toast(`🎉 Hoàn thành DJ Session! Bạn đã đạt ${score} Beat điểm! 💿✨`, 'info');
+      }
+    }, 1000);
+
+    lastTime = performance.now();
+    animFrameId = requestAnimationFrame(gameLoop);
   }
 
-  // Auto-check first visible option
-  const firstRadio = modal.querySelector('.format-group-pane.active input[type="radio"]');
-  if (firstRadio) {
-    firstRadio.checked = true;
-    modal.querySelectorAll('.format-option-card').forEach(c => c.classList.remove('active'));
-    firstRadio.closest('.format-option-card')?.classList.add('active');
+  function stopDJGame() {
+    isPlaying = false;
+    document.body.classList.remove('vinyl-game-active');
+    if (cursorEl) cursorEl.style.display = 'none';
+    if (statusEl) statusEl.style.display = 'none';
+    if (comboEl) comboEl.style.display = 'none';
+
+    window.removeEventListener('mousemove', updateCursorPos);
+    window.removeEventListener('touchmove', updateCursorPos);
+
+    if (spawnIntervalId) clearInterval(spawnIntervalId);
+    if (countdownTimerId) clearInterval(countdownTimerId);
+    if (animFrameId) cancelAnimationFrame(animFrameId);
+
+    activeBeats.forEach(b => {
+      if (b.el && b.el.parentNode) b.el.remove();
+    });
+    activeBeats.length = 0;
   }
 
-  modal.classList.add('active');
-}
+  const beatTypes = [
+    { icon: '💿', points: 15, class: 'beat-vinyl', isBonus: false },
+    { icon: '♪',  points: 10, class: 'beat-note',  isBonus: false },
+    { icon: '♫',  points: 10, class: 'beat-note',  isBonus: false },
+    { icon: '♬',  points: 12, class: 'beat-note',  isBonus: false },
+    { icon: '🎵', points: 15, class: 'beat-music', isBonus: false },
+    { icon: '📀', points: 30, class: 'beat-gold',  isBonus: true },
+    { icon: '💎', points: 50, class: 'beat-gem',   isBonus: true },
+    { icon: '💖', points: 25, class: 'beat-heart', isBonus: true },
+  ];
 
-function closeDownloadModal() {
-  const modal = document.getElementById('download-modal');
-  if (modal) modal.classList.remove('active');
-  isConverting = false;
-}
+  function spawnBeatItem() {
+    if (!isPlaying) return;
 
-function initDownloadHub() {
-  const modal = document.getElementById('download-modal');
-  const closeBtn = document.getElementById('close-download-modal');
-  const cancelBtn = document.getElementById('btn-cancel-download');
-  const submitBtn = document.getElementById('btn-start-download');
-  const dtabAudio = document.getElementById('dtab-audio');
-  const dtabVideo = document.getElementById('dtab-video');
-  const paneAudio = document.getElementById('pane-audio');
-  const paneVideo = document.getElementById('pane-video');
-  const progressBox = document.getElementById('download-progress-box');
-  const statusText = document.getElementById('download-status-text');
-  const percentText = document.getElementById('download-percent-text');
-  const progressFill = document.getElementById('download-progress-fill');
+    const chosen = beatTypes[Math.floor(Math.random() * beatTypes.length)];
+    const el = document.createElement('div');
+    el.className = 'falling-vinyl-beat';
+    el.textContent = chosen.icon;
 
-  if (closeBtn) closeBtn.onclick = closeDownloadModal;
-  if (cancelBtn) cancelBtn.onclick = closeDownloadModal;
-  if (modal) {
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal && !isConverting) closeDownloadModal();
+    // Distribute randomly across current viewport width
+    const minX = 20;
+    const maxX = window.innerWidth - 60;
+    const startX = Math.random() * (maxX - minX) + minX;
+    const startY = -40;
+
+    el.style.left = `${startX}px`;
+    el.style.top  = `${startY}px`;
+    document.body.appendChild(el);
+
+    const speed = Math.random() * 2.8 + 3.2; // Falling velocity
+    const drift = (Math.random() - 0.5) * 1.4; // Horizontal wave
+
+    activeBeats.push({
+      el,
+      x: startX,
+      y: startY,
+      speed,
+      drift,
+      points: chosen.points,
+      isBonus: chosen.isBonus,
+      icon: chosen.icon
     });
   }
 
-  // Tab switching
-  if (dtabAudio && dtabVideo) {
-    dtabAudio.onclick = () => {
-      dtabAudio.classList.add('active');
-      dtabVideo.classList.remove('active');
-      paneAudio.classList.add('active');
-      paneVideo.classList.remove('active');
-    };
-    dtabVideo.onclick = () => {
-      dtabVideo.classList.add('active');
-      dtabAudio.classList.remove('active');
-      paneVideo.classList.add('active');
-      paneAudio.classList.remove('active');
-    };
-  }
+  let lastTime = performance.now();
 
-  // Card select interaction
-  document.querySelectorAll('.format-option-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const radio = card.querySelector('input[type="radio"]');
-      if (radio) {
-        radio.checked = true;
-        document.querySelectorAll('.format-option-card').forEach(c => c.classList.remove('active'));
-        card.classList.add('active');
-      }
-    });
-  });
+  function gameLoop(now) {
+    if (!isPlaying) return;
+    const dt = Math.min((now - lastTime) / 16.6, 2.5);
+    lastTime = now;
 
-  function updateProgress(status, pct) {
-    progressBox.style.display = 'flex';
-    statusText.textContent = status;
-    percentText.textContent = `${pct}%`;
-    progressFill.style.width = `${pct}%`;
-  }
+    for (let i = activeBeats.length - 1; i >= 0; i--) {
+      const b = activeBeats[i];
+      b.y += b.speed * dt;
+      b.x += b.drift * dt;
+      b.el.style.top  = `${b.y}px`;
+      b.el.style.left = `${b.x}px`;
 
-  if (submitBtn) {
-    submitBtn.onclick = async () => {
-      if (!downloadMediaTarget || isConverting) return;
-      const checkedRadio = document.querySelector('input[name="download-format"]:checked');
-      const format = checkedRadio ? checkedRadio.value : 'mp3-320';
-      const media = downloadMediaTarget;
-      const streamUrl = `/stream-media/${media.fileId}`;
+      // Catch detection (within 46px distance of DJ slipmat cursor)
+      const dx = b.x + 16 - mouseX;
+      const dy = b.y + 16 - mouseY;
+      const dist = Math.hypot(dx, dy);
 
-      // Direct download cases
-      if (format === 'video-original' || format === 'audio-original') {
-        toast(`Đang bắt đầu tải bản gốc: ${media.title} 🍊`, 'info');
-        triggerDirectUrlDownload(streamUrl, `${media.title}.${media.type === 'video' ? 'mp4' : 'mp3'}`);
-        closeDownloadModal();
-        return;
-      }
+      if (dist < 46) {
+        combo++;
+        let multiplier = 1;
+        if (combo >= 10) multiplier = 3;
+        else if (combo >= 4) multiplier = 2;
 
-      if (format === 'video-720p' || format === 'video-480p') {
-        const tag = format === 'video-720p' ? '720p_HD' : '480p_SD';
-        toast(`Đang tải video ${tag}: ${media.title} 🎬`, 'info');
-        triggerDirectUrlDownload(streamUrl, `${media.title}_[${tag}].mp4`);
-        closeDownloadModal();
-        return;
-      }
+        const pts = b.points * multiplier;
+        score += pts;
 
-      // In-browser conversion for MP3 / AAC
-      isConverting = true;
-      submitBtn.disabled = true;
-      updateProgress('Đang kết nối luồng dữ liệu...', 5);
-
-      try {
-        const response = await fetch(streamUrl);
-        if (!response.ok) throw new Error('Không thể tải luồng dữ liệu từ máy chủ');
-
-        updateProgress('Đang tải dữ liệu tệp...', 20);
-        const arrayBuffer = await response.arrayBuffer();
-
-        updateProgress('Đang giải mã âm thanh bằng Web Audio...', 50);
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
-
-        const channels = audioBuffer.numberOfChannels;
-        const sampleRate = audioBuffer.sampleRate;
-
-        if (format === 'mp3-320' || format === 'mp3-128') {
-          const kbps = format === 'mp3-320' ? 320 : 128;
-          updateProgress(`Đang nạp bộ mã hóa MP3 (${kbps} kbps)...`, 60);
-
-          const lame = await loadLameJs();
-          const mp3encoder = new lame.Mp3Encoder(channels, sampleRate, kbps);
-
-          const leftFloat = audioBuffer.getChannelData(0);
-          const rightFloat = channels > 1 ? audioBuffer.getChannelData(1) : leftFloat;
-          const numSamples = leftFloat.length;
-
-          const leftInt16 = new Int16Array(numSamples);
-          const rightInt16 = new Int16Array(numSamples);
-
-          for (let i = 0; i < numSamples; i++) {
-            leftInt16[i] = Math.max(-32768, Math.min(32767, leftFloat[i] * 32767));
-            rightInt16[i] = Math.max(-32768, Math.min(32767, rightFloat[i] * 32767));
-          }
-
-          const sampleBlockSize = 1152;
-          const mp3Data = [];
-
-          for (let i = 0; i < numSamples; i += sampleBlockSize) {
-            const leftChunk = leftInt16.subarray(i, i + sampleBlockSize);
-            const rightChunk = rightInt16.subarray(i, i + sampleBlockSize);
-            const mp3buf = channels === 1
-              ? mp3encoder.encodeBuffer(leftChunk)
-              : mp3encoder.encodeBuffer(leftChunk, rightChunk);
-            if (mp3buf.length > 0) mp3Data.push(mp3buf);
-
-            if (i % (sampleBlockSize * 30) === 0) {
-              const pct = Math.min(95, Math.round(65 + (i / numSamples) * 30));
-              updateProgress(`Đang nén MP3 ${kbps} kbps...`, pct);
-              await new Promise(r => setTimeout(r, 0));
-            }
-          }
-
-          const finalBuf = mp3encoder.flush();
-          if (finalBuf.length > 0) mp3Data.push(finalBuf);
-
-          updateProgress('Hoàn tất! Đang lưu file MP3...', 100);
-          const blob = new Blob(mp3Data, { type: 'audio/mp3' });
-          triggerBlobDownload(blob, `${media.title}_[${kbps}kbps].mp3`);
-          toast(`Đã xuất thành công MP3 (${kbps}kbps)! 🎵🍊`, 'success');
-        } else if (format === 'aac') {
-          updateProgress('Đang chuẩn bị file AAC/Audio chất lượng cao...', 80);
-          const wavBlob = audioBufferToWav(audioBuffer);
-          updateProgress('Hoàn tất! Đang lưu file AAC...', 100);
-          triggerBlobDownload(wavBlob, `${media.title}_[HQ].aac`);
-          toast('Đã xuất thành công file AAC chất lượng cao! 🎧🍊', 'success');
+        if (scoreEl) {
+          scoreEl.textContent = score;
+          scoreEl.classList.remove('score-pop');
+          void scoreEl.offsetWidth;
+          scoreEl.classList.add('score-pop');
         }
 
-        setTimeout(() => closeDownloadModal(), 1200);
-      } catch (err) {
-        console.error('[Download Hub Error]', err);
-        updateProgress('Có lỗi xảy ra: ' + err.message, 0);
-        toast('Không thể chuyển đổi: ' + err.message, 'error');
-        submitBtn.disabled = false;
-        isConverting = false;
+        if (comboEl) {
+          if (combo >= 3) {
+            comboEl.style.display = 'inline-block';
+            comboEl.textContent = `Groove x${multiplier}! (${combo})`;
+          } else {
+            comboEl.style.display = 'none';
+          }
+        }
+
+        // Particle sparks & floating popup
+        createJuiceSplash(b.x + 16, b.y + 16);
+        showDJFloatingPopup(b.x, b.y, `+${pts} ${b.icon} ${multiplier > 1 ? '🔥' : ''}`);
+
+        // Catch pop effect
+        b.el.style.transform = 'scale(1.5)';
+        b.el.style.opacity = '0';
+        b.el.style.transition = 'all 0.2s ease-out';
+        setTimeout(() => {
+          if (b.el && b.el.parentNode) b.el.remove();
+        }, 200);
+        activeBeats.splice(i, 1);
+        continue;
       }
-    };
+
+      // Past screen bottom
+      if (b.y > window.innerHeight + 30) {
+        combo = 0;
+        if (comboEl) comboEl.style.display = 'none';
+        if (b.el && b.el.parentNode) b.el.remove();
+        activeBeats.splice(i, 1);
+      }
+    }
+
+    animFrameId = requestAnimationFrame(gameLoop);
+  }
+
+  function showDJFloatingPopup(x, y, text) {
+    const pop = document.createElement('div');
+    pop.className = 'floating-score-popup';
+    pop.style.color = '#FF5C93';
+    pop.style.textShadow = '0 0 10px #FF2D75, 0 0 20px #FFF';
+    pop.textContent = text;
+    pop.style.left = `${x || 100}px`;
+    pop.style.top  = `${y || 100}px`;
+    document.body.appendChild(pop);
+    setTimeout(() => pop.remove(), 850);
+  }
+
+  if (turntable) {
+    turntable.addEventListener('click', toggleDJGame);
   }
 }
 
-// ─── INIT ─────────────────────────────────────────────
-fetchMediaLibrary();
+// ─── Initialize Games & App ──────────────────────────────────
+initMiniGameLounge();
+initVinylDJGame();
 initOrangeMiniGame();
-initDownloadHub();
-
-

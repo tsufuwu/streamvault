@@ -1,6 +1,6 @@
 /* =====================================================
-   Orangestream — Main Stylesheet
-   Citrus Grove Theme & Juicy Orange Aesthetics 🍊
+   VinylStream — Main Stylesheet
+   Pink & Black CD Vinyl Lounge Theme 💿💖
 ===================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap');
@@ -9,35 +9,51 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* Citrus Orange Palette */
-  --orange-500:     #FF7A00;
-  --orange-600:     #EA580C;
-  --orange-400:     #FF9E2C;
-  --orange-300:     #FFB95F;
-  --orange-amber:   #FFB703;
-  --orange-glow:    rgba(255, 122, 0, 0.4);
-  --orange-glow-sm: rgba(255, 122, 0, 0.2);
+  /* Pink & Black Vinyl Theme Palette 💿💖 */
+  --pink-500:       #FF2D75;  /* Neon Cyber Pink */
+  --pink-600:       #E11D48;  /* Deep Rose Crimson */
+  --pink-400:       #FF5C93;  /* Vibrant Hot Pink */
+  --pink-300:       #FF85B3;  /* Soft Pastel Pink */
+  --pink-neon:      #FF007F;  /* Magenta Neon */
+  --pink-glow:      rgba(255, 45, 117, 0.45);
+  --pink-glow-sm:   rgba(255, 45, 117, 0.22);
+  --pink-glow-lg:   0 0 40px rgba(255, 45, 117, 0.35);
 
-  /* Leaf & Botanical Greens */
+  /* Vinyl Record Accents & Metallics */
+  --vinyl-black:    #0B070A;  /* Deep Obsidian Vinyl Grooves */
+  --vinyl-groove:   rgba(255, 255, 255, 0.04);
+  --vinyl-chrome:   #E4D9E2;
+  --gold-accent:    #F59E0B;
+
+  /* Obsidian Pink-Tinged Dark Backgrounds */
+  --bg-primary:     #080507;
+  --bg-secondary:   #120810;
+  --bg-card:        rgba(26, 11, 22, 0.65);
+  --bg-card-hover:  rgba(42, 16, 36, 0.85);
+  --border:         rgba(255, 45, 117, 0.16);
+  --border-active:  rgba(255, 45, 117, 0.65);
+
+  /* Typography & Accents */
+  --text-primary:   #FFF0F5;  /* Lavender Blush White */
+  --text-secondary: #E8B4C8;  /* Dusty Rose */
+  --text-muted:     #8C6373;  /* Muted Mauve */
+  --accent:         var(--pink-500);
+  --accent-light:   var(--pink-400);
+
+  /* Compatibility Aliases (maps all former orange tokens to neon pink) */
+  --orange-500:     var(--pink-500);
+  --orange-600:     var(--pink-600);
+  --orange-400:     var(--pink-400);
+  --orange-300:     var(--pink-300);
+  --orange-amber:   #FF66B2;
+  --orange-glow:    var(--pink-glow);
+  --orange-glow-sm: var(--pink-glow-sm);
+
+  /* Leaf & Green Accents (Music Emerald) */
   --leaf-green:     #10B981;
   --leaf-light:     #34D399;
   --leaf-deep:      #059669;
   --leaf-glow:      rgba(16, 185, 129, 0.25);
-
-  /* Warm Dark Orchard Backgrounds */
-  --bg-primary:     #0c0906;
-  --bg-secondary:   #140e09;
-  --bg-card:        rgba(30, 20, 12, 0.6);
-  --bg-card-hover:  rgba(46, 28, 16, 0.75);
-  --border:         rgba(255, 140, 40, 0.12);
-  --border-active:  rgba(255, 122, 0, 0.55);
-
-  /* Typography & Accents */
-  --text-primary:   #FFF7ED;
-  --text-secondary: #D4A373;
-  --text-muted:     #8C6F56;
-  --accent:         var(--orange-500);
-  --accent-light:   var(--orange-400);
 
   /* Radii & Effects */
   --radius-sm:      10px;
@@ -45,20 +61,22 @@
   --radius-lg:      24px;
   --transition:     0.25s cubic-bezier(0.4, 0, 0.2, 1);
   --glass:          blur(20px) saturate(180%);
-  --shadow-card:    0 10px 30px -10px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 122, 0, 0.05);
-  --shadow-glow:    0 0 35px rgba(255, 122, 0, 0.3);
+  --shadow-card:    0 10px 30px -10px rgba(0, 0, 0, 0.75), 0 0 20px rgba(255, 45, 117, 0.1);
+  --shadow-glow:    0 0 35px rgba(255, 45, 117, 0.35);
 
-  /* Custom Orange Mouse Cursors */
-  --cursor-orange: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'%3E%3Cdefs%3E%3CradialGradient id='g1' cx='35%25' cy='35%25' r='65%25'%3E%3Cstop offset='0%25' stop-color='%23FFAE34'/%3E%3Cstop offset='55%25' stop-color='%23FF7A00'/%3E%3Cstop offset='100%25' stop-color='%23EA580C'/%3E%3C/radialGradient%3E%3Cfilter id='s1' x='-20%25' y='-20%25' width='140%25' height='140%25'%3E%3CfeDropShadow dx='0' dy='1.2' stdDeviation='1.2' flood-color='%23000' flood-opacity='0.65'/%3E%3C/filter%3E%3C/defs%3E%3Cg filter='url(%23s1)'%3E%3Cpath d='M13 5 C10 1, 6 2, 7 4 C8 6, 11 6.5, 13 5 Z' fill='%2334D399'/%3E%3Ccircle cx='13' cy='15' r='8.5' fill='url(%23g1)' stroke='%23FFAE34' stroke-width='1.2'/%3E%3Ccircle cx='10.8' cy='12.8' r='1.8' fill='%23FFF' opacity='0.5'/%3E%3C/g%3E%3C/svg%3E");
+  /* Custom Vinyl & Music Cursors 💿 */
+  --cursor-vinyl: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cdefs%3E%3CradialGradient id='v1' cx='50%25' cy='50%25' r='50%25'%3E%3Cstop offset='0%25' stop-color='%23FF2D75'/%3E%3Cstop offset='38%25' stop-color='%23E11D48'/%3E%3Cstop offset='42%25' stop-color='%23120810'/%3E%3Cstop offset='75%25' stop-color='%23080407'/%3E%3Cstop offset='100%25' stop-color='%23FF2D75'/%3E%3C/radialGradient%3E%3Cfilter id='vs1' x='-25%25' y='-25%25' width='150%25' height='150%25'%3E%3CfeDropShadow dx='0' dy='1.5' stdDeviation='1.5' flood-color='%23FF2D75' flood-opacity='0.6'/%3E%3C/filter%3E%3C/defs%3E%3Cg filter='url(%23vs1)'%3E%3Ccircle cx='14' cy='14' r='10.5' fill='url(%23v1)' stroke='%23FF2D75' stroke-width='1.2'/%3E%3Ccircle cx='14' cy='14' r='8' fill='none' stroke='rgba(255,255,255,0.2)' stroke-width='0.6'/%3E%3Ccircle cx='14' cy='14' r='5.5' fill='none' stroke='rgba(255,255,255,0.15)' stroke-width='0.6'/%3E%3Ccircle cx='14' cy='14' r='3.2' fill='%23FF2D75' stroke='%23FFF' stroke-width='0.8'/%3E%3Ccircle cx='14' cy='14' r='1' fill='%23080407'/%3E%3C/g%3E%3C/svg%3E");
 
-  /* Farmer Harvest Glove Pointer Cursor (Bàn tay đeo găng nông dân thu hoạch cam) */
-  --cursor-farmer-glove: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cdefs%3E%3Cfilter id='sh' x='-25%25' y='-25%25' width='150%25' height='150%25'%3E%3CfeDropShadow dx='1' dy='1.5' stdDeviation='1.2' flood-color='%23000' flood-opacity='0.75'/%3E%3C/filter%3E%3ClinearGradient id='og' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23FFAE34'/%3E%3Cstop offset='45%25' stop-color='%23FF7A00'/%3E%3Cstop offset='100%25' stop-color='%23C2410C'/%3E%3C/linearGradient%3E%3ClinearGradient id='cv' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23FFFDF7'/%3E%3Cstop offset='100%25' stop-color='%23DDD2C1'/%3E%3C/linearGradient%3E%3ClinearGradient id='cg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23166534'/%3E%3Cstop offset='100%25' stop-color='%230B381B'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg filter='url(%23sh)'%3E%3Cpath d='M11 24 L19 28.5 C20.5 29.5 23 28.5 23.5 27 L25.5 21 L15.5 17 Z' fill='url(%23cg)' stroke='%231B3B2B' stroke-width='1.2' stroke-linejoin='round'/%3E%3Cpath d='M12.5 25.5 L22.5 28' stroke='%2334D399' stroke-width='0.9' stroke-dasharray='1.8 1.2'/%3E%3Cpath d='M9.5 13.5 C9.5 11 11 10 13 10 C14.5 10 15.2 10.8 15.8 11.5 C16.5 10.5 17.8 10 19 10.5 C20.2 11 20.8 12 20.8 13 C21.5 12 22.8 11.8 23.8 12.8 C24.8 13.8 24.5 16 23.2 18 L21 22.5 L13 19.5 L9.5 14.5 Z' fill='url(%23cv)' stroke='%233B2613' stroke-width='1.3' stroke-linejoin='round'/%3E%3Cpath d='M14 13 C14.5 11.8 16 11.8 16.8 12.8 C17.5 13.8 17.2 16 16.8 17' fill='none' stroke='%233B2613' stroke-width='1.1'/%3E%3Cpath d='M17.5 13 C18 11.8 19.5 11.8 20.2 12.8 C21 13.8 20.8 16 20.2 17.5' fill='none' stroke='%233B2613' stroke-width='1.1'/%3E%3Cpath d='M21 13.8 C21.5 13 22.8 12.8 23.5 13.5 C24.2 14.5 23.8 16.5 23 18' fill='none' stroke='%233B2613' stroke-width='1.1'/%3E%3Cpath d='M9.5 16 C7.5 16.5 5 18 5.5 20 C6 21.5 8 22.2 10 21.5 L13 19.8 Z' fill='url(%23og)' stroke='%233B2613' stroke-width='1.3' stroke-linejoin='round'/%3E%3Cpath d='M6.2 19 C7.8 18.5 9.8 18.5 10.8 18' stroke='%23FFAE34' stroke-width='0.8' stroke-linecap='round' fill='none'/%3E%3Cpath d='M6.5 5.5 C6.2 2.8 8 1.5 10 1.5 C12 1.5 13 2.8 12.8 5.5 L12 13.5 L8 13.5 Z' fill='url(%23og)' stroke='%233B2613' stroke-width='1.4' stroke-linejoin='round'/%3E%3Cpath d='M7.2 4.5 C8.5 5 11 5 12 4.5' stroke='%23FFAE34' stroke-width='0.8' stroke-linecap='round' fill='none'/%3E%3Cpath d='M7.5 7.5 C8.8 8 11 8 11.8 7.5' stroke='%23FFAE34' stroke-width='0.8' stroke-linecap='round' fill='none'/%3E%3Cpath d='M7.8 10.5 C9 11 11 11 11.8 10.5' stroke='%23FFAE34' stroke-width='0.8' stroke-linecap='round' fill='none'/%3E%3Cpath d='M8 13.5 Q10 15 12 13.5' stroke='%23FFF' stroke-width='1' stroke-linecap='round'/%3E%3C/g%3E%3C/svg%3E");
-  --cursor-orange-pointer: var(--cursor-farmer-glove);
+  --cursor-dj-pointer: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cdefs%3E%3Cfilter id='dsh' x='-25%25' y='-25%25' width='150%25' height='150%25'%3E%3CfeDropShadow dx='1' dy='1.5' stdDeviation='1.2' flood-color='%23000' flood-opacity='0.75'/%3E%3C/filter%3E%3ClinearGradient id='pinkGrip' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23FF5C93'/%3E%3Cstop offset='50%25' stop-color='%23FF2D75'/%3E%3Cstop offset='100%25' stop-color='%23BE123C'/%3E%3C/linearGradient%3E%3ClinearGradient id='blackVelvet' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2322101E'/%3E%3Cstop offset='100%25' stop-color='%230E050C'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg filter='url(%23dsh)'%3E%3Cpath d='M11 24 L19 28.5 C20.5 29.5 23 28.5 23.5 27 L25.5 21 L15.5 17 Z' fill='%23FF2D75' stroke='%239F1239' stroke-width='1.2' stroke-linejoin='round'/%3E%3Cpath d='M12.5 25.5 L22.5 28' stroke='%23FFF' stroke-width='0.9' stroke-dasharray='1.8 1.2'/%3E%3Cpath d='M9.5 13.5 C9.5 11 11 10 13 10 C14.5 10 15.2 10.8 15.8 11.5 C16.5 10.5 17.8 10 19 10.5 C20.2 11 20.8 12 20.8 13 C21.5 12 22.8 11.8 23.8 12.8 C24.8 13.8 24.5 16 23.2 18 L21 22.5 L13 19.5 L9.5 14.5 Z' fill='url(%23blackVelvet)' stroke='%23FF2D75' stroke-width='1.3' stroke-linejoin='round'/%3E%3Cpath d='M14 13 C14.5 11.8 16 11.8 16.8 12.8 C17.5 13.8 17.2 16 16.8 17' fill='none' stroke='%23FF2D75' stroke-width='1.1'/%3E%3Cpath d='M17.5 13 C18 11.8 19.5 11.8 20.2 12.8 C21 13.8 20.8 16 20.2 17.5' fill='none' stroke='%23FF2D75' stroke-width='1.1'/%3E%3Cpath d='M21 13.8 C21.5 13 22.8 12.8 23.5 13.5 C24.2 14.5 23.8 16.5 23 18' fill='none' stroke='%23FF2D75' stroke-width='1.1'/%3E%3Cpath d='M9.5 16 C7.5 16.5 5 18 5.5 20 C6 21.5 8 22.2 10 21.5 L13 19.8 Z' fill='url(%23pinkGrip)' stroke='%23FFF' stroke-width='1.2' stroke-linejoin='round'/%3E%3Cpath d='M6.5 5.5 C6.2 2.8 8 1.5 10 1.5 C12 1.5 13 2.8 12.8 5.5 L12 13.5 L8 13.5 Z' fill='url(%23pinkGrip)' stroke='%23FFF' stroke-width='1.3' stroke-linejoin='round'/%3E%3Cpath d='M7.2 4.5 C8.5 5 11 5 12 4.5' stroke='%23FFF' stroke-width='0.8' stroke-linecap='round' fill='none'/%3E%3Cpath d='M7.5 7.5 C8.8 8 11 8 11.8 7.5' stroke='%23FFF' stroke-width='0.8' stroke-linecap='round' fill='none'/%3E%3Cpath d='M8 13.5 Q10 15 12 13.5' stroke='%23FF85B3' stroke-width='1' stroke-linecap='round'/%3E%3C/g%3E%3C/svg%3E");
+
+  --cursor-orange: var(--cursor-vinyl);
+  --cursor-farmer-glove: var(--cursor-dj-pointer);
+  --cursor-orange-pointer: var(--cursor-dj-pointer);
 }
 
 html {
   scroll-behavior: smooth;
-  cursor: var(--cursor-orange) 4 4, auto;
+  cursor: var(--cursor-vinyl) 14 14, auto;
 }
 
 body {
@@ -68,24 +86,23 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
-  cursor: var(--cursor-orange) 4 4, auto;
+  cursor: var(--cursor-vinyl) 14 14, auto;
 }
 
-/* Interactive elements get farmer harvesting glove pointer cursor */
+/* Interactive elements get DJ pointer cursor */
 a, button, [role="button"], input[type="submit"], input[type="button"],
 select, label, [tabindex="0"],
 .media-card, .format-option-card, .playlist-card, .filter-btn, .mobile-cat-chip,
 .bottom-nav-item, .open-new-tab-btn, .action-pill, .carousel-nav-btn,
 .subfolder-tab, .folder-tab, .breadcrumb-crumb, .quality-opt, .speed-opt,
 .big-play-btn, .ctrl-btn, .close-btn, .orange-seekbar-container, .vol-slider-wrap,
-.download-tab-btn, .download-submit-btn, .download-cancel-btn, .brand,
-.search-clear-btn, .share-copy-btn, .download-trigger-btn, .speed-btn,
-.view-mode-btn, .hero-play-btn, .hero-details-btn, .tree-canvas-wrap,
-.clickable, [onclick] {
-  cursor: var(--cursor-farmer-glove) 10 2, pointer !important;
+.brand, .search-clear-btn, .share-copy-btn, .speed-btn,
+.view-mode-btn, .hero-play-btn, .hero-details-btn, .turntable-wrapper, .tree-canvas-wrap,
+.clickable, [onclick], .game-tab-btn {
+  cursor: var(--cursor-dj-pointer) 10 2, pointer !important;
 }
 
-/* ─── Ambient Citrus Glowing Orbs ─────────────────── */
+/* ─── Ambient Neon Pink & Magenta Glowing Orbs ────── */
 body::before, body::after {
   content: '';
   position: fixed;
@@ -96,48 +113,48 @@ body::before, body::after {
 }
 body::before {
   width: 650px; height: 650px;
-  background: radial-gradient(circle, rgba(255, 122, 0, 0.14) 0%, rgba(234, 88, 12, 0.05) 50%, transparent 70%);
+  background: radial-gradient(circle, rgba(255, 45, 117, 0.16) 0%, rgba(225, 29, 72, 0.05) 50%, transparent 70%);
   top: -150px; left: -100px;
 }
 body::after {
   width: 550px; height: 550px;
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, rgba(255, 183, 3, 0.06) 60%, transparent 70%);
+  background: radial-gradient(circle, rgba(255, 0, 127, 0.12) 0%, rgba(122, 0, 60, 0.07) 60%, transparent 70%);
   bottom: -100px; right: -50px;
 }
 
-/* ─── Floating Citrus Leaves & Slices Background (Sống động & Rực rỡ) ──── */
-.citrus-ambient {
+/* ─── Floating Vinyl Records & Dancing Music Notes Background ──── */
+.vinyl-ambient, .citrus-ambient {
   position: fixed; inset: 0;
   pointer-events: none;
   z-index: 0;
   overflow: hidden;
 }
 
-/* Glowing Aura Orbs */
-.citrus-glow-orb {
+/* Glowing Neon Orbs */
+.vinyl-glow-orb, .citrus-glow-orb {
   position: absolute;
   border-radius: 50%;
   filter: blur(60px);
   pointer-events: none;
-  opacity: 0.16;
+  opacity: 0.2;
 }
 .orb-1 {
-  width: 420px; height: 420px;
-  background: radial-gradient(circle, #FF7A00 0%, rgba(255, 122, 0, 0) 70%);
+  width: 440px; height: 440px;
+  background: radial-gradient(circle, #FF2D75 0%, rgba(255, 45, 117, 0) 70%);
   top: 15%; right: 10%;
   animation: orbGlowDrift 18s ease-in-out infinite alternate;
 }
 .orb-2 {
-  width: 360px; height: 360px;
-  background: radial-gradient(circle, #FFB703 0%, rgba(255, 183, 3, 0) 70%);
+  width: 380px; height: 380px;
+  background: radial-gradient(circle, #FF007F 0%, rgba(255, 0, 127, 0) 70%);
   bottom: 10%; left: 5%;
   animation: orbGlowDrift 22s ease-in-out infinite alternate-reverse;
 }
 .orb-3 {
-  width: 300px; height: 300px;
-  background: radial-gradient(circle, #10B981 0%, rgba(16, 185, 129, 0) 70%);
+  width: 320px; height: 320px;
+  background: radial-gradient(circle, #9F1239 0%, rgba(159, 18, 57, 0) 70%);
   top: 55%; right: 30%;
-  opacity: 0.08;
+  opacity: 0.12;
   animation: orbGlowDrift 25s ease-in-out infinite alternate;
 }
 @keyframes orbGlowDrift {
@@ -146,26 +163,38 @@ body::after {
   100% { transform: translate(-25px, 20px) scale(0.95); }
 }
 
-/* Crisp & Vivid Floating Items */
-.citrus-item {
+/* Floating Vinyl & Music Notes Items */
+.vinyl-item, .citrus-item {
   position: absolute;
   user-select: none;
-  opacity: 0.75;
-  filter: drop-shadow(0 8px 18px rgba(255, 122, 0, 0.45));
+  opacity: 0.8;
+  filter: drop-shadow(0 6px 16px rgba(255, 45, 117, 0.45));
   will-change: transform;
 }
-.item-orange-1  { top: 10%; left: 8%;   font-size: 2.4rem; animation: floatSpin 16s ease-in-out infinite; }
-.item-leaf-1    { top: 20%; left: 3%;   font-size: 1.8rem; animation: floatSway 12s ease-in-out infinite; opacity: 0.65; }
-.item-slice-1   { top: 14%; right: 9%;  font-size: 2.3rem; animation: floatBob 18s ease-in-out infinite; }
-.item-leaf-2    { top: 48%; left: 6%;   font-size: 2rem;   animation: floatSway 15s ease-in-out infinite -4s; opacity: 0.65; }
-.item-sparkle-1 { top: 32%; right: 22%; font-size: 1.6rem; animation: sparklePulse 3.5s ease-in-out infinite; opacity: 0.85; filter: drop-shadow(0 0 10px #FFD166); }
-.item-orange-2  { top: 60%; right: 7%;  font-size: 2.6rem; animation: floatSpin 20s ease-in-out infinite -6s; }
-.item-slice-2   { top: 76%; right: 16%; font-size: 2.1rem; animation: floatBob 15s ease-in-out infinite -3s; }
-.item-leaf-3    { top: 84%; left: 14%;  font-size: 1.7rem; animation: floatSway 14s ease-in-out infinite -2s; opacity: 0.6; }
-.item-sparkle-2 { top: 70%; left: 26%;  font-size: 1.5rem; animation: sparklePulse 4.5s ease-in-out infinite -1s; opacity: 0.8; filter: drop-shadow(0 0 10px #FFAE34); }
-.item-orange-3  { top: 88%; right: 32%; font-size: 2.2rem; animation: floatSpin 17s ease-in-out infinite -8s; }
-.item-slice-3   { top: 42%; right: 40%; font-size: 1.8rem; animation: floatBob 19s ease-in-out infinite -7s; }
-.item-leaf-4    { top: 92%; right: 8%;  font-size: 1.9rem; animation: floatSway 13s ease-in-out infinite -5s; opacity: 0.6; }
+.item-disc-1, .item-orange-1  { top: 12%; left: 8%;   font-size: 2.2rem; animation: vinylSpinFloat 18s ease-in-out infinite; }
+.item-note-1, .item-leaf-1    { top: 18%; left: 4%;   font-size: 1.8rem; color: #FF85B3; animation: noteFloatWave 13s ease-in-out infinite; opacity: 0.8; }
+.item-note-2, .item-slice-1   { top: 14%; right: 10%; font-size: 2.1rem; color: #FF2D75; animation: noteFloatWave 16s ease-in-out infinite -3s; }
+.item-disc-2, .item-orange-2  { top: 46%; left: 7%;   font-size: 2.4rem; animation: vinylSpinFloat 22s ease-in-out infinite -5s; }
+.item-note-3, .item-leaf-2    { top: 35%; right: 20%; font-size: 1.7rem; color: #FF5C93; animation: noteFloatWave 14s ease-in-out infinite -2s; }
+.item-sparkle-1               { top: 28%; right: 32%; font-size: 1.5rem; animation: sparklePulse 3.5s ease-in-out infinite; opacity: 0.85; filter: drop-shadow(0 0 10px #FF85B3); }
+.item-note-4, .item-slice-2   { top: 62%; right: 8%;  font-size: 2rem;   color: #FF85B3; animation: noteFloatWave 15s ease-in-out infinite -6s; }
+.item-disc-3, .item-orange-3  { top: 76%; right: 18%; font-size: 2.5rem; animation: vinylSpinFloat 20s ease-in-out infinite -8s; }
+.item-note-5, .item-leaf-3    { top: 82%; left: 12%;  font-size: 1.9rem; color: #FF2D75; animation: noteFloatWave 12s ease-in-out infinite -4s; }
+.item-sparkle-2               { top: 70%; left: 24%;  font-size: 1.6rem; animation: sparklePulse 4.5s ease-in-out infinite -1s; opacity: 0.8; filter: drop-shadow(0 0 10px #FF2D75); }
+.item-note-6, .item-slice-3   { top: 88%; right: 34%; font-size: 1.7rem; color: #FF5C93; animation: noteFloatWave 17s ease-in-out infinite -7s; }
+.item-note-7, .item-leaf-4    { top: 42%; right: 42%; font-size: 1.8rem; color: #FF85B3; animation: noteFloatWave 19s ease-in-out infinite -5s; }
+
+@keyframes vinylSpinFloat {
+  0%   { transform: translateY(0px) rotate(0deg) scale(1); }
+  50%  { transform: translateY(-35px) rotate(180deg) scale(1.1); }
+  100% { transform: translateY(0px) rotate(360deg) scale(1); }
+}
+
+@keyframes noteFloatWave {
+  0%   { transform: translateY(0px) translateX(0px) rotate(-10deg) scale(1); }
+  50%  { transform: translateY(-30px) translateX(20px) rotate(18deg) scale(1.12); }
+  100% { transform: translateY(0px) translateX(0px) rotate(-10deg) scale(1); }
+}
 
 @keyframes floatSpin {
   0%   { transform: translateY(0px) rotate(0deg) scale(1); }
@@ -1642,289 +1671,151 @@ body.basket-game-active * {
   padding: 2px 7px; border-radius: 4px; color: var(--orange-300); font-weight: 700;
 }
 
-/* ─── Download Hub Modal (Format Selection & Converter) ─── */
-.download-overlay {
-  position: fixed; inset: 0; z-index: 2600;
-  background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px);
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; visibility: hidden; transition: var(--transition);
-  padding: 1rem;
+/* ─── Mini Game Lounge & Switcher ─────────────────── */
+.mini-game-lounge {
+  margin-top: 14px;
 }
-.download-overlay.active { opacity: 1; visibility: visible; }
-.download-card {
-  width: 100%; max-width: 540px;
-  background: #140e09;
-  border: 1px solid rgba(255, 140, 40, 0.35);
-  border-radius: var(--radius-lg);
-  padding: 24px;
-  box-shadow: 0 30px 60px rgba(0,0,0,0.85), 0 0 40px var(--orange-glow-sm);
+.game-mode-switcher {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-  animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  max-height: 90vh;
-  overflow-y: auto;
-}
-.download-modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-.download-modal-title-wrap {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 0;
-}
-.download-modal-icon {
-  font-size: 1.8rem;
-  line-height: 1;
-}
-.download-modal-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: #FFF;
-  margin: 0 0 2px 0;
-}
-.download-media-name {
-  font-size: 0.8rem;
-  color: var(--orange-300);
-  margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 380px;
-}
-.download-format-tabs {
-  display: flex;
-  background: rgba(255, 140, 40, 0.08);
-  border: 1px solid rgba(255, 140, 40, 0.2);
+  background: rgba(255, 45, 117, 0.08);
+  border: 1px solid rgba(255, 45, 117, 0.22);
   border-radius: 12px;
-  padding: 4px;
+  padding: 3px;
   gap: 4px;
+  margin-bottom: 12px;
 }
-.download-tab-btn {
+.game-tab-btn {
   flex: 1;
-  padding: 8px 14px;
+  background: none;
   border: none;
-  background: transparent;
-  color: var(--text-secondary);
-  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.74rem;
   font-weight: 700;
-  border-radius: 8px;
-  cursor: var(--cursor-farmer-glove) 10 2, pointer;
+  padding: 6px 4px;
+  border-radius: 9px;
+  cursor: var(--cursor-dj-pointer) 10 2, pointer !important;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 4px;
+  user-select: none;
 }
-.download-tab-btn:hover {
+.game-tab-btn:hover {
+  color: var(--text-primary);
+}
+.game-tab-btn.active {
+  background: linear-gradient(135deg, #FF2D75, #E11D48);
   color: #FFF;
+  box-shadow: 0 2px 10px rgba(255, 45, 117, 0.45);
 }
-.download-tab-btn.active {
-  background: linear-gradient(135deg, var(--orange-500), #EA580C);
-  color: #FFF;
-  box-shadow: 0 2px 10px rgba(255, 122, 0, 0.4);
-}
-.format-group-pane {
+.game-view-panel {
   display: none;
 }
-.format-group-pane.active {
+.game-view-panel.active {
   display: block;
 }
-.format-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.format-option-card {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 12px 14px;
-  background: rgba(255, 140, 40, 0.05);
-  border: 1px solid rgba(255, 140, 40, 0.18);
-  border-radius: 12px;
-  cursor: var(--cursor-farmer-glove) 10 2, pointer;
-  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+/* Turntable Widget */
+.turntable-wrapper {
   position: relative;
+  width: 135px;
+  height: 100px;
+  margin: 0 auto;
+  cursor: var(--cursor-dj-pointer) 10 2, pointer !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.25s ease;
 }
-.format-option-card:hover {
-  background: rgba(255, 140, 40, 0.12);
-  border-color: var(--orange-400);
-  transform: translateY(-1px);
+.turntable-wrapper:hover {
+  transform: scale(1.05);
 }
-.format-option-card input[type="radio"] {
-  display: none;
+.turntable-svg {
+  filter: drop-shadow(0 6px 20px rgba(255, 45, 117, 0.3));
 }
-.format-opt-radio-circle {
-  width: 18px;
-  height: 18px;
+.spinning-vinyl-disc {
+  transform-origin: 68px 60px;
+  animation: turntableSpin 4s linear infinite;
+}
+@keyframes turntableSpin {
+  100% { transform: rotate(360deg); }
+}
+
+/* DJ Cursor for Vinyl Game */
+.game-dj-cursor {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99999;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  border: 2px solid rgba(255, 140, 40, 0.4);
-  margin-top: 2px;
-  flex-shrink: 0;
+  transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  background: radial-gradient(circle, #FF2D75 0%, #170914 40%, #080306 100%);
+  border: 2px solid #FF5C93;
+  box-shadow: 0 0 20px #FF2D75, 0 0 35px rgba(255, 45, 117, 0.6);
+  animation: djSpinCursor 2.5s linear infinite;
 }
-.format-option-card input[type="radio"]:checked + .format-opt-radio-circle {
-  border-color: var(--orange-500);
-  background: var(--orange-500);
-  box-shadow: 0 0 8px rgba(255, 122, 0, 0.6);
-}
-.format-option-card input[type="radio"]:checked + .format-opt-radio-circle::after {
+.game-dj-cursor::after {
   content: '';
-  width: 6px;
-  height: 6px;
+  position: absolute;
+  width: 8px; height: 8px;
   border-radius: 50%;
   background: #FFF;
+  box-shadow: 0 0 6px #FFF;
 }
-.format-option-card.active {
-  background: rgba(255, 122, 0, 0.12);
-  border-color: var(--orange-500);
-  box-shadow: 0 0 14px rgba(255, 122, 0, 0.2);
-}
-.format-opt-info {
-  flex: 1;
-  min-width: 0;
-}
-.format-opt-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 3px;
-}
-.format-opt-name {
-  font-size: 0.88rem;
-  font-weight: 700;
-  color: #FFF;
-}
-.format-opt-desc {
-  font-size: 0.74rem;
-  color: var(--text-muted);
-  line-height: 1.35;
-}
-.format-opt-badge {
-  font-size: 0.65rem;
-  font-weight: 800;
-  padding: 2px 7px;
-  border-radius: 4px;
-  background: rgba(255, 140, 40, 0.15);
-  color: var(--orange-300);
-  white-space: nowrap;
-}
-.format-opt-badge.gold {
-  background: linear-gradient(135deg, rgba(255, 174, 52, 0.3), rgba(255, 122, 0, 0.2));
-  color: #FFAE34;
-  border: 1px solid rgba(255, 174, 52, 0.4);
-}
-.format-opt-badge.green {
-  background: rgba(16, 185, 129, 0.15);
-  color: #34D399;
-  border: 1px solid rgba(16, 185, 129, 0.3);
-}
-.format-opt-badge.raw {
-  background: rgba(168, 85, 247, 0.15);
-  color: #C084FC;
-  border: 1px solid rgba(168, 85, 247, 0.3);
+@keyframes djSpinCursor {
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* Progress Box */
-.download-progress-box {
-  background: rgba(20, 14, 9, 0.9);
-  border: 1px solid rgba(255, 140, 40, 0.3);
-  border-radius: 12px;
-  padding: 14px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+/* Falling DJ Music Beats / Discs */
+.falling-vinyl-beat {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99998;
+  font-size: 1.8rem;
+  user-select: none;
+  filter: drop-shadow(0 0 10px #FF2D75);
+  animation: beatWobble 1s ease-in-out infinite alternate;
 }
-.progress-info-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.82rem;
-  font-weight: 600;
-}
-.progress-status-text {
-  color: var(--orange-300);
-}
-.progress-percent-text {
-  color: #FFF;
-  font-weight: 800;
-}
-.download-progress-track {
-  width: 100%;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
-  overflow: hidden;
-}
-.download-progress-fill {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, #EA580C, #FF7A00 70%, #FFB703 100%);
-  border-radius: 6px;
-  transition: width 0.2s ease;
-  box-shadow: 0 0 10px rgba(255, 122, 0, 0.6);
-}
-.progress-note {
-  font-size: 0.72rem;
-  color: var(--text-muted);
+@keyframes beatWobble {
+  0% { transform: rotate(-15deg); }
+  100% { transform: rotate(15deg); }
 }
 
-/* Footer Buttons */
-.download-modal-footer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 4px;
+/* Vinyl Sleeve Album Disc Peek Effect on Card Hover */
+.media-card {
+  position: relative;
+  overflow: visible;
 }
-.download-cancel-btn {
-  padding: 9px 18px;
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 10px;
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: var(--cursor-farmer-glove) 10 2, pointer;
-  transition: all 0.2s ease;
+.media-card::before {
+  content: '';
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #FF2D75 0%, #FF2D75 22%, #140810 24%, #080407 65%, #FF2D75 67%, #080407 70%, #080407 100%);
+  border: 1px solid rgba(255, 45, 117, 0.5);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.8), 0 0 10px rgba(255, 45, 117, 0.35);
+  z-index: 0;
+  transform: translate(0, 0) rotate(0deg);
+  transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s;
+  opacity: 0;
+  pointer-events: none;
 }
-.download-cancel-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #FFF;
+.media-card:hover::before {
+  transform: translate(22px, -8px) rotate(140deg);
+  opacity: 1;
 }
-.download-submit-btn {
-  padding: 9px 24px;
-  background: linear-gradient(135deg, var(--orange-500), #EA580C);
-  border: 1px solid var(--orange-400);
-  border-radius: 10px;
-  color: #FFF;
-  font-size: 0.88rem;
-  font-weight: 700;
-  cursor: var(--cursor-farmer-glove) 10 2, pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
-  box-shadow: 0 4px 16px rgba(255, 122, 0, 0.4);
-}
-.download-submit-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 22px rgba(255, 122, 0, 0.55);
-}
-.download-submit-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
+.card-thumbnail {
+  z-index: 1;
+  position: relative;
 }
 
 /* Player Footer */
@@ -2557,61 +2448,92 @@ body.basket-game-active * {
   }
 }
 
-/* ─── Orange Split / Slice in Half Animation ──────── */
-.orange-slice-animation {
+/* ─── Pink Vinyl Spin & Soundwave Burst Animation ──────── */
+.vinyl-spin-animation, .orange-slice-animation {
   position: fixed;
   pointer-events: none;
   z-index: 10000;
-  width: 76px;
-  height: 76px;
+  width: 110px;
+  height: 110px;
   transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.orange-half {
-  width: 36px;
-  height: 64px;
-  filter: drop-shadow(0 4px 14px rgba(255, 122, 0, 0.75));
+.vinyl-burst-disc {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #FF2D75 0%, #FF2D75 24%, #1A0914 26%, #0A0408 65%, #FF2D75 67%, #080306 70%, #050204 100%);
+  border: 2px solid #FF5C93;
+  box-shadow: 0 0 25px #FF2D75, 0 0 45px rgba(255, 0, 127, 0.6);
+  animation: vinylSpinBurst 0.58s cubic-bezier(0.18, 0.9, 0.2, 1) forwards;
+  position: relative;
 }
 
-.orange-half-left {
-  transform-origin: right center;
-  animation: sliceLeft 0.52s cubic-bezier(0.18, 0.9, 0.2, 1) forwards;
+.vinyl-burst-disc::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #000;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 2px #FFF;
 }
 
-.orange-half-right {
-  transform-origin: left center;
-  animation: sliceRight 0.52s cubic-bezier(0.18, 0.9, 0.2, 1) forwards;
-}
-
-@keyframes sliceLeft {
+@keyframes vinylSpinBurst {
   0% {
-    transform: translate(0, 0) rotate(0deg) scale(1);
-    opacity: 1;
+    transform: scale(0.3) rotate(0deg);
+    opacity: 0;
   }
-  28% {
-    transform: translate(-18px, -6px) rotate(-18deg) scale(1.08);
+  35% {
+    transform: scale(1.18) rotate(220deg);
     opacity: 1;
   }
   100% {
-    transform: translate(-65px, -18px) rotate(-45deg) scale(0.85);
+    transform: scale(1.4) rotate(480deg);
     opacity: 0;
   }
 }
 
-@keyframes sliceRight {
+.vinyl-soundwave-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 45, 117, 0.85);
+  box-shadow: 0 0 15px #FF2D75;
+  animation: soundwaveRing 0.52s ease-out forwards;
+}
+
+@keyframes soundwaveRing {
   0% {
-    transform: translate(0, 0) rotate(0deg) scale(1);
+    width: 20px; height: 20px;
     opacity: 1;
+    transform: scale(0.5);
   }
-  28% {
-    transform: translate(18px, 6px) rotate(18deg) scale(1.08);
+  100% {
+    width: 140px; height: 140px;
+    opacity: 0;
+    transform: scale(1.4);
+  }
+}
+
+.vinyl-note-spark {
+  position: absolute;
+  font-size: 1.4rem;
+  color: #FF5C93;
+  text-shadow: 0 0 10px #FF2D75, 0 0 20px #FFF;
+  animation: noteSparkPop 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes noteSparkPop {
+  0% {
+    transform: translate(0, 0) scale(0.5);
     opacity: 1;
   }
   100% {
-    transform: translate(65px, 18px) rotate(45deg) scale(0.85);
+    transform: translate(var(--tx), var(--ty)) scale(1.3) rotate(var(--rot));
     opacity: 0;
   }
 }
@@ -2622,8 +2544,8 @@ body.basket-game-active * {
   left: 50%;
   width: 4px;
   height: 90px;
-  background: linear-gradient(to bottom, transparent, #FFF, #FFAE34, #FFF, transparent);
-  box-shadow: 0 0 16px #FFF, 0 0 24px #FF7A00;
+  background: linear-gradient(to bottom, transparent, #FFF, #FF2D75, #FFF, transparent);
+  box-shadow: 0 0 16px #FFF, 0 0 24px #FF2D75;
   transform: translate(-50%, -50%) rotate(14deg);
   border-radius: 4px;
   animation: slashBurst 0.35s ease-out forwards;
